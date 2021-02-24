@@ -146,15 +146,12 @@ int32_t ya_hal_wlan_get_mac_address(uint8_t *mac_addr)
     wifi_cfg_deinit(cfg_handle);
     
     ya_printf(C_LOG_INFO,"mac=%02X:%02X:%02X:%02X:%02X:%02X\n",mac_addr[0], mac_addr[1], mac_addr[2], mac_addr[3], mac_addr[4], mac_addr[5]);
-#if 0
 	if(mac_addr[0] == 0x44 && mac_addr[1] == 0x57 && mac_addr[2] == 0x18  
 	&& mac_addr[3] == 0x3f && mac_addr[4] == 0x49 && mac_addr[5] == 0x01)	
 	{
 		ya_os_get_random(mac_addr+3,3);
 		int32_t ret = ya_hal_wlan_set_mac_address(mac_addr);
-		ya_printf(C_LOG_INFO, "radom mac is: %02x:%02x:%02x:%02x:%02x:%02x\n", mac_addr[0],mac_addr[1],mac_addr[2], mac_addr[3],mac_addr[4],mac_addr[5]);
 	}
-#endif
 	return 0;
 }
 
@@ -168,15 +165,10 @@ int32_t ya_hal_wlan_set_mac_address(uint8_t *mac_addr)
     }
 
 	snprintf(mac_str, sizeof(mac_str),"%02x:%02x:%02x:%02x:%02x:%02x", mac_addr[0],mac_addr[1],mac_addr[2], mac_addr[3],mac_addr[4],mac_addr[5]);
-
-	ya_printf(0, "replace mac:%s\r\n", mac_str);
 	
-    wifi_cfg_replace_mem_addr2(cfg_handle, mac_addr);
+    wifi_cfg_replace_mem_addr2(cfg_handle, mac_str);
     wifi_cfg_write_cfg(cfg_handle);
     wifi_cfg_deinit(cfg_handle);
-
-
-	ya_printf(0, "replace mac end\r\n");
 
 	return 0;
 }
