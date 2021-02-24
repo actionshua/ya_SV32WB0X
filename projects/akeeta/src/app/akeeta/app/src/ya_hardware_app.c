@@ -20,7 +20,6 @@
 #include "ya_common.h"
 #include "ya_config.h"
 #include "ya_hardware_timer.h"
-#include "ya_hal_uart.h"
 #include "ya_hardware_translate.h"
 #include "ya_thing_data_api.h"
 
@@ -202,12 +201,6 @@ void ya_hardware_app(void *arg)
 				case YA_HARDWARE_HANDLE_TIMER_ACTION:
 				{
 					ya_thing_handle_downlink_data(ms_msg.addr, ms_msg.len);
-				}
-				break;
-
-				case YA_HARDWARE_HANDLE_UART_DATA:
-				{
-					ya_hal_uart_write(ms_msg.addr, ms_msg.len);
 				}
 				break;
 

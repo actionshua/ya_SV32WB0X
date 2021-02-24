@@ -567,6 +567,7 @@ void ya_softap_callback(uint8_t errorcode, ya_ap_router_para_t *ya_para)
 	{
 		msg.type = YA_AP_CONFIG_FAIL;	
 	}
+	
 	ya_hal_os_queue_send(&ya_main_msg_queue, &msg, 100);	
 
 }
@@ -712,6 +713,7 @@ int ya_app_wlan_event_callback(ya_hal_wlan_event_t event, void *data)
 	int32_t ret = 0;
 	msg_t msg;
 	memset(&msg, 0, sizeof(msg_t));
+
 	switch(event)
 	{
 		case YA_HAL_EVT_LINK_LOST:
@@ -743,6 +745,7 @@ int ya_app_wlan_event_callback(ya_hal_wlan_event_t event, void *data)
 
 	if(ret != 0)
 		ya_printf(C_LOG_ERROR, "ya_app_wlan_event_callback queue error\r\n");
+
 	return C_OK;
 }
 
@@ -774,9 +777,7 @@ void ya_init_start_mode(void)
 	{
 		memset(ya_user_data.wlan_token, 0, 16);
 
-		ya_user_data.mode = BLE_CFG_MODE;
 
-		#if 0
 		if (ya_user_data.mode == BLE_CFG_MODE)
 			ya_user_data.mode = AP_MODE;
 		else if (ya_user_data.mode == AP_MODE)
@@ -788,9 +789,8 @@ void ya_init_start_mode(void)
 			else if (ya_app_main_para_obj.ya_init_mode == AP_MODE)
 				ya_user_data.mode = AP_MODE;
 			else
-				ya_user_data.mode = AP_MODE;
+				ya_user_data.mode = BLE_CFG_MODE;
 		}
-		#endif
 		
 		ya_save_user_data();
 	}
@@ -1204,7 +1204,7 @@ void ya_app_main(void *arg)
 	//init other para
 	ya_start_other_apps();
 	ya_printf(C_LOG_INFO, "\r\n start ya_aws_main == state is: %d\r\n", ya_app_state);
-	
+
 	if (ya_app_main_para_obj.enable_low_power == 0)
 	{
 		ya_printf(C_LOG_INFO, "do not enable low power\r\n");
@@ -1230,12 +1230,14 @@ void ya_app_main(void *arg)
 			ya_app_state = YA_APP_FACTORY_TEST;
 		}
 	}
+
 	//enable watch-dog
 	ret = ya_hal_wdt_set_timeout(4000);
 	if(ret != C_OK)
 		ya_hal_sys_reboot();
 
 	ya_hal_wdt_start();
+
 
 	while(1)
 	{

@@ -105,7 +105,7 @@ int32_t ya_add_aly_cloud_event_listener(char *task_name, cloud_event_type_t even
 	else
 		ya_cloud_callback_list = add_node;
 
-	ya_printf(C_LOG_INFO,"ya_add_aly_cloud_event_listener: %s\r\n", task_name);
+	ya_printf(C_LOG_INFO,"%s, %d\r\n", task_name, event_type);
 	return C_OK;
 }
 
@@ -270,7 +270,7 @@ void ya_subscribe_callback_handler(void *pcontext, void *pclient, iotx_mqtt_even
     iotx_mqtt_topic_info_t     *topic_info = (iotx_mqtt_topic_info_pt) msg->msg;
 	int rc = 0;
 
-	char *topic_get = NULL;
+	char *topic_get = NULL, *payload = NULL;
 	char *p;
 	char msg_id[MSG_ID_LEN_MAX + 1]={0};
 
@@ -279,14 +279,23 @@ void ya_subscribe_callback_handler(void *pcontext, void *pclient, iotx_mqtt_even
 	if(!topic_get)
 		return;
 
-	memset(topic_get, 0, topic_info->topic_len + 1);
-	memcpy(topic_get, topic_info->ptopic, topic_info->topic_len);
+	payload = (char *)ya_hal_os_memory_alloc(topic_info->payload_len + 1);
+
+	if(!payload)
+	{
+		ya_hal_os_memory_free(topic_get);
+		return;
+	}
+
+	memset(payload, 0, topic_info->payload_len + 1);
+	memcpy(payload, topic_info->payload, topic_info->payload_len);
 
 	
     switch (msg->event_type) {
         case IOTX_MQTT_EVENT_PUBLISH_RECEIVED:
             /* print topic name and topic message */
-            ya_printf(C_LOG_INFO,"cloud packet: %s\r\n", topic_info->payload);
+			ya_printf(C_LOG_INFO,"cloud packet: %s\r\n", payload);
+
 			rc = ya_aly_subscribe_event_transfer(topic_info->payload,topic_info->payload_len);
 		
 			p = strstr(topic_get, "/rrpc/request/");
@@ -304,6 +313,9 @@ void ya_subscribe_callback_handler(void *pcontext, void *pclient, iotx_mqtt_even
 
 	if(topic_get)
 		ya_hal_os_memory_free(topic_get);
+
+	if(payload)
+		ya_hal_os_memory_free(payload);
 
 }
 

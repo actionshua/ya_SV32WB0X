@@ -44,7 +44,7 @@ typedef enum
 	YA_EVENT_CHANGE_WIFI_MODE	   				= 0x00,
 }ya_light_event_t;
 
-#define YA_LIGHT_FLASH_PARA_ADDR  (0x25000 - 0x2000)//RAW User
+#define YA_LIGHT_FLASH_PARA_ADDR  (0x1cf000)
 
 extern void ya_pwm_led_write(unsigned int r,unsigned int g,unsigned int b,unsigned int c,unsigned int w);
 

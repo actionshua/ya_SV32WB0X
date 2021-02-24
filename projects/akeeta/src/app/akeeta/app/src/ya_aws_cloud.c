@@ -193,7 +193,7 @@ int32_t ya_remove_aws_cloud_event_listener(char *task_name, cloud_event_type_t e
 	if(list_node)
 		ya_hal_os_memory_free(list_node);
 
-	ya_printf(C_LOG_INFO,"listener: %s, event: %d\r\n", task_name, event_type);
+	ya_printf(C_LOG_INFO,"%s, %d\r\n", task_name, event_type);
 
 	return C_OK;
 }
@@ -818,7 +818,6 @@ static void ya_cloud_app(void *arg)
 				{
 					ya_cloud_connected = 1;
 					ya_aws_cloud_state = AWS_CONNECTED_CLOUD;
-					ya_send_cloud_status(YA_CLOUD_ONLINE);
 
 					//update the device version
 					if(ya_get_debind_enable())
@@ -828,8 +827,9 @@ static void ya_cloud_app(void *arg)
 					}
 
 					ya_updata_random_information();
-					
 					ya_updata_device_version();
+
+					ya_send_cloud_status(YA_CLOUD_ONLINE);					
 					ya_printf_remain_heap();					
 					ya_printf(C_LOG_INFO, "connect aws cloud success\r\n");
 

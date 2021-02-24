@@ -347,8 +347,7 @@ int ya_http_body_handle(http_file_para_t *ya_http_file, int socket_id, uint8_t *
 
 			ya_http_file->header_len = 0;
 			ya_printf(C_LOG_INFO, "h-r-l: %d\n ", ya_http_file->body_flie_header_cur_len);
-		}
-		else 
+		}else 
 		{
 			pos = buf + ya_http_file->header_len;
 			ya_http_file->header_len = 0;
@@ -359,14 +358,13 @@ int ya_http_body_handle(http_file_para_t *ya_http_file, int socket_id, uint8_t *
 		{
 			if(ya_http_ota_sector_write(ota_addr + ya_http_file->body_cur_pos, ya_http_file->body_read_len, pos, type) < 0)
 				return -1;
+		
 			ya_http_file->body_cur_pos += ya_http_file->body_read_len;
-		} 
-		else
+		} else
 		{
 			return -1;
 		}
-	}
-	else
+	}else
 	{
 		ya_http_file->header_len = 0;
 	}
@@ -515,7 +513,6 @@ int char_to_int(char *p, uint8_t *value)
 
 int32_t ya_report_ota_result(int32_t code)
 {
-#if 1
 	cJSON *cmd = NULL, *data = NULL;
 	char *buf = NULL;
 	char cur_version[YA_MAX_MCU_VERSION_LEN + 1];
@@ -559,7 +556,7 @@ int32_t ya_report_ota_result(int32_t code)
 
 	if(cmd)
 		cJSON_Delete(cmd);
-#endif
+
 	return 0;
 }
 
@@ -948,7 +945,6 @@ void ya_wifi_ota_download(void)
 		case YA_HTTP_START:
 			if( ya_http_ota_url_para.ya_http_host == NULL || ya_http_ota_url_para.ya_http_resource == NULL)
 			{
-				ya_printf(C_LOG_ERROR, "resource or host null error");
 				ya_wifi_ota_para.ya_http_state = YA_HTTP_IDLE;
 			}else
 			{
@@ -1267,8 +1263,6 @@ void ya_mcu_ota_download(void)
 		case YA_HTTP_START:
 			if( ya_http_mcu_ota_url_para.ya_http_host == NULL || ya_http_mcu_ota_url_para.ya_http_resource == NULL)
 			{
-				ya_printf(C_LOG_ERROR, "resource or host null error");
-
 				ya_mcu_ota_para.ya_http_state = YA_HTTP_IDLE;
 			}else
 			{
@@ -1490,8 +1484,6 @@ void ya_http_ota_app(void *arg)
 	// mcu ota para init
 	memset(&ya_http_mcu_ota_url_para, 0, sizeof(ya_http_ota_url_para_t));
 	memset(&ya_http_mcu_reponse_result, 0, sizeof(ya_http_response_result_t));
-
-	ya_printf(C_LOG_INFO, "start ota app success ok\n");
 	
 	while(1)
 	{
@@ -1575,15 +1567,15 @@ int ya_start_ota_app(void)
 		return -1;
 	}
 
+	cloud_add_event_listener("ya_http_ota_app thread", CLOUD_UPGRADE_EVENT, ya_ota_handle_command);
+	cloud_add_event_listener("ya_http_ota_app thread", CLOUD_ONOFF_EVENT, ya_ota_handle_onoffline);
+
 	ret = ya_hal_os_thread_create(&ya_ota_app, "ya_ota_hardware thread", ya_http_ota_app, 0, (2 * 1024), 5);
 	if(ret != C_OK)
 	{
 		ya_printf(C_LOG_ERROR, "create ya_ota_hardware error\r\n");
 		return -1;
 	}		
-
-	cloud_add_event_listener("ya_http_ota_app thread", CLOUD_UPGRADE_EVENT, ya_ota_handle_command);
-	cloud_add_event_listener("ya_http_ota_app thread", CLOUD_ONOFF_EVENT, ya_ota_handle_onoffline);
 
 	return 0;
 }

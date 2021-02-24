@@ -654,6 +654,7 @@ static void easyjoin_callback(uint8_t* userdata, int data_len)
 
 int ya_smartconfig_decode(void)
 {
+	char default_string[64] = AES_KEY_SMARTCONFIG_STRING;
 	uint8_t *buf = NULL, *p = NULL;
 	uint16_t in_len = 0, out_len = 0;
 
@@ -666,7 +667,7 @@ int ya_smartconfig_decode(void)
 	ROUTER_INFO *ap_info;
 
 	memset(aes, 0, sizeof(aes));
-	ya_mbedtls_md5(AES_KEY_SMARTCONFIG_STRING, aes, strlen(AES_KEY_SMARTCONFIG_STRING));
+	ya_mbedtls_md5((uint8_t *)default_string, aes, strlen(AES_KEY_SMARTCONFIG_STRING));
 	
 	memcpy(iv, aes, 16); 
 

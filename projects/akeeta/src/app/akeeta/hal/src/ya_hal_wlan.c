@@ -276,7 +276,7 @@ void scan_complete_cb(void)
 	{
 	    for (i = 0; i < get_ap_lsit_total_num(); i++)
 	    {
-			//ya_printf(C_AT_CMD,"ap_list[%d].ssid==%s,rssi=%d,p->scan_ssid==%s\r\n",i,ap_list[i].ssid,ap_list[i].rssi,p->scan_ssid);
+			ya_printf(C_AT_CMD,"ap_list[%d].name==%s,rssi=%d,p->scan_ssid==%s\r\n",i,ap_list[i].name,ap_list[i].rssi,p->scan_ssid);
 	    	if(strcmp(ap_list[i].name, p->scan_ssid) == 0)
 	    	{
 				p->scan_result = 1;
