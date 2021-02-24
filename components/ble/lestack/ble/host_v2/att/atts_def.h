@@ -1,0 +1,39 @@
+#ifndef _ATTS_DEF_H_
+#define _ATTS_DEF_H_
+
+
+
+#include "att_def.h"
+#include "l2cap/l2cap_def.h"
+
+
+
+/// ATT server related definition
+#define ATTS_INVALID_CONNECTION_HANDLE              0xFFFF
+#define ATTS_INVALID_ATTR_HANDLE                    0x0000
+#define ATTS_EXECUTE_WRITE_ATTR_HANDLE              ATT_EXECUTE_WRITE_ATTR_HANDLE
+#define ATTS_INVALID_AUTHOR_ID                      ATT_READ_MULTIPLE_NUM_MAX
+#define ATTS_AUTHOR_ID_MAX                          ATT_READ_MULTIPLE_NUM_MAX
+#define ATTS_AUTHEN_TIMEOUT_MS                      30000
+#define ATTS_AUTHOR_TIMEOUT_MS                      30000
+#define ATTS_RETRY_TIMEOUT_MS                       5000
+
+
+
+typedef enum
+{
+    ATTS_RESULT_SUCCESS = ERR_HOST_SUCCESS,
+    ATTS_RESULT_FAIL = ERR_HOST_FAIL,
+    ATTS_RESULT_INVALID_PARAM = ERR_HOST_INVALID_PARAM,
+    ATTS_RESULT_INVALID_OPERATION = ERR_HOST_INVALID_OPERATION,
+    ATTS_RESULT_INSUFF_RESOURCE = ERR_HOST_INSUFF_RESOURCE,
+    ATTS_RESULT_INVALID_CONNECTION = ERR_HOST_INVALID_CONNECTION,
+
+    ATTS_RESULT_MIN = ERR_HOST_ATTS,
+    ATTS_RESULT_MAX,
+
+} ATTS_RESULT;
+
+
+
+#endif  /// end of _ATTS_DEF_H_

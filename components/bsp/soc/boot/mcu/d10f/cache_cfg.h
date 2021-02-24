@@ -1,0 +1,24 @@
+#ifndef _CACHE_CFG_H
+#define _CACHE_CFG_H
+/*
+ * Cache Option
+ */
+#if ( !defined(__NDS32_ISA_V3M__)  && defined(CONFIG_CACHE_SUPPORT ) )
+#define CONFIG_CPU_ICACHE_ENABLE 1
+#define CONFIG_CPU_DCACHE_ENABLE 1
+//#undef CONFIG_CPU_DCACHE_ENABLE
+#else
+#undef CONFIG_CPU_ICACHE_ENABLE
+#undef CONFIG_CPU_DCACHE_ENABLE
+#endif
+
+#if defined(CONFIG_CACHE_WT)
+#define CONFIG_CPU_DCACHE_WRITETHROUGH 1
+#else
+#undef CONFIG_CPU_DCACHE_WRITETHROUGH
+#endif
+#undef CONFIG_CHECK_RANGE_ALIGNMENT
+#undef CONFIG_CACHE_L2
+#undef CONFIG_FULL_ASSOC
+
+#endif

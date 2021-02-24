@@ -1,0 +1,337 @@
+
+Discarded input sections
+
+ .text          0x00000000        0x0 /tmp/ccx43HtD.o
+ .data          0x00000000        0x0 /tmp/ccx43HtD.o
+ .bss           0x00000000        0x0 /tmp/ccx43HtD.o
+ .note.v2abi_compatible
+                0x00000000        0x4 /tmp/ccx43HtD.o
+ .text          0x00000000        0x0 /tmp/cc3ZCE8m.o
+ .data          0x00000000        0x0 /tmp/cc3ZCE8m.o
+ .bss           0x00000000        0x0 /tmp/cc3ZCE8m.o
+ .note.v2abi_compatible
+                0x00000000        0x4 /tmp/cc3ZCE8m.o
+ .text          0x00000000        0x0 /tmp/ccikBbEx.o
+ .data          0x00000000        0x0 /tmp/ccikBbEx.o
+ .bss           0x00000000        0x0 /tmp/ccikBbEx.o
+ .note.v2abi_compatible
+                0x00000000        0x4 /tmp/ccikBbEx.o
+ .text          0x00000000        0x0 /tmp/ccrZv4Ii.o
+ .data          0x00000000        0x0 /tmp/ccrZv4Ii.o
+ .bss           0x00000000        0x0 /tmp/ccrZv4Ii.o
+ .note.v2abi_compatible
+                0x00000000        0x4 /tmp/ccrZv4Ii.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+SRAM_ILM         0x00000000         0x00010000         xrw
+SRAM_DLM         0x00100000         0x00008000         rw
+SRAM_BUS         0x60000000         0x00040000         rw
+RENT_SRAM        0xd9000000         0x00004000         xrw
+FLASH_SIGN       0x30000000         0x00000000         xr
+FLASH_HEADER     0x30000000         0x00000040         xr
+FLASH_BOOT       0x30000040         0x0000ffc0         xr
+FLASH_PARAM      0x30010000         0x00007000         xr
+FLASH_XIP1       0x30017000         0x000a0000         xr
+FLASH_XIP2       0x300b7000         0x000a0000         xr
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/../../../../nds32le-elf/lib/mcmodel-large/mext-dsp/libdsp.a
+LOAD /tmp/ccx43HtD.o
+LOAD /tmp/cc3ZCE8m.o
+LOAD /tmp/ccikBbEx.o
+LOAD /tmp/ccrZv4Ii.o
+LOAD /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/mcmodel-large/mext-dsp/libgcc.a
+START GROUP
+LOAD /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/../../../../nds32le-elf/lib/mcmodel-large/mext-dsp/libc.a
+LOAD /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/../../../../nds32le-elf/lib/mcmodel-large/mext-dsp/libgloss.a
+LOAD /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/../../../../nds32le-elf/lib/mcmodel-large/mext-dsp/libnosys.a
+END GROUP
+LOAD /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/mcmodel-large/mext-dsp/libgcc.a
+                0x00100000                _SDA_BASE_ = 0x100000
+                0x00000000                __executable_start = 0x0
+                0x30000000                NDS_SAG_LMA_ROM = 0x30000000
+                0x30000000                FLASH_BEGIN = NDS_SAG_LMA_ROM
+                0x0000001a                __xtal = 0x1a
+                0x000000a0                __sys_bus_speed = 0xa0
+                0x00000004                __xip_bit = 0x4
+                0x000a0000                __setting_partition_main_size = 0xa0000
+                0x00200000                __setting_flash_total_size = 0x200000
+                0x80000000                __setting_psram_heap_base = 0x80000000
+                0x00000000                __setting_psram_heap_size = 0x0
+                0x30017000                __app_xip1 = ORIGIN (REGION_MAIN1)
+                0x300b7000                __app_xip2 = ORIGIN (REGION_MAIN2)
+                0x30010000                . = ORIGIN (REGION_PARAM)
+
+.fix_table_section
+                0x30010000     0x1000
+                0x30010000                . = ALIGN (0x1000)
+                0x30010000                __lds_ota_data_start = .
+                0x30010000        0x4 LONG 0xffffffff
+ *(.ota_data)
+                0x30010004                __lds_ota_data_end = .
+                0x30011000                . = ALIGN (0x1000)
+ *fill*         0x30010004      0xffc 
+
+.sa_mp_data_section
+                0x30011000     0x1000
+                0x30011000                . = ALIGN (0x1000)
+                0x30011000                __lds_sa_mp_data_start = .
+ *(.sa_mp_data)
+ .sa_mp_data    0x30011000     0x1000 /tmp/ccx43HtD.o
+                0x30011000                g_sa_cfg
+                0x30012000                __lds_sa_mp_data_end = .
+                0x30012000                . = ALIGN (0x1000)
+
+.cfg_mac_data_section
+                0x30012000     0x1000
+                0x30012000                . = ALIGN (0x1000)
+                0x30012000                __lds_cfg_data_start = .
+ *(.cfg_mac_data)
+ .cfg_mac_data  0x30012000     0x1000 /tmp/cc3ZCE8m.o
+                0x30012000                g_wifi_cfg
+                0x30013000                __lds_cfg_data_end = .
+                0x30013000                . = ALIGN (0x1000)
+
+.cfg_pad_data_section
+                0x30013000     0x1000
+                0x30013000                . = ALIGN (0x1000)
+                0x30013000                __lds_pad_data_start = .
+ *(.cfg_pad_data)
+ .cfg_pad_data  0x30013000      0x1e0 /tmp/ccrZv4Ii.o
+                0x30013000                _pad_setting
+                0x300131e0                __lds_pad_data_end = .
+                0x30014000                . = ALIGN (0x1000)
+ *fill*         0x300131e0      0xe20 
+
+.boot_info_section
+                0x30014000     0x1000
+                0x30014000                . = ALIGN (0x1000)
+                0x30014000                __lds_bootinfo_start = .
+                0x30014000        0x1 BYTE 0x2
+                0x30014001        0x1 BYTE 0x4
+                0x30014002        0x1 BYTE 0xa0
+                0x30014003        0x1 BYTE 0x0
+                0x30014004        0x4 LONG 0x0
+                0x30014008        0x4 LONG 0x0
+                0x3001400c        0x4 LONG 0x1
+                0x30014010        0x4 LONG 0x200000
+                0x30014014        0x4 LONG 0x2000
+                0x30014018        0x4 LONG 0xa0000
+                0x3001401c        0x4 LONG 0x0
+                0x30014020                __lds_bootinfo_end = .
+                0x30015000                . = ALIGN (0x1000)
+ *fill*         0x30014020      0xfe0 
+
+.user_data_section
+                0x30015000     0x2000
+                0x30015000                . = ALIGN (0x1000)
+                0x30015000                __lds_user_data_start = .
+ *(.user_data)
+ .user_data     0x30015000        0x0 /tmp/ccikBbEx.o
+                0x30015000                g_user_cfg
+                0x30015000                __lds_user_data_end = .
+                0x30016ffe                . = (((((((ORIGIN (REGION_PARAM) + 0x1000) + 0x1000) + 0x1000) + 0x1000) + 0x1000) + 0x2000) - 0x2)
+ *fill*         0x30015000     0x1ffe 00000000
+                0x30016ffe        0x2 SHORT 0x0
+                0x30017000                . = ALIGN (0x1000)
+                0x00000000                . = 0x0
+                0x00000000                ILM_BEGIN = .
+                0x30000040                __ota_fast_boot_lmastart = LOADADDR (.ota_fast_boot_code)
+                0x00000000                __ota_fast_boot_start = ADDR (.ota_fast_boot_code)
+
+.ota_fast_boot_code
+                0x00000000        0x0 load address 0x30000040
+ *(.ota_fast_boot_code)
+                0x00000000                __ota_fast_boot_end = .
+                0x00000000                ILM_SIZE = (. - ILM_BEGIN)
+                0x00100000                . = 0x100000
+                0x00100000                SDRAM_BEGIN = .
+                0x00100000                DLM_BEGIN = .
+                0x30000040                __data_lmastart = LOADADDR (.eh_frame)
+                0x00100000                __data_start = ADDR (.eh_frame)
+
+.eh_frame       0x00100000        0x0 load address 0x30000040
+ *(.eh_frame)
+
+.data           0x00100000        0x0 load address 0x30000040
+ *(.data .data.* .gnu.linkonce.d.*)
+ *(.gnu.linkonce.d.*personality*)
+                0x00100000                . = ALIGN (0x8)
+                0x00100000                . = ALIGN (0x4)
+
+.got
+ *(.got.plt)
+ *(.got)
+
+.sdata_d
+ *(.sdata_d .sdata_d.*)
+
+.sdata_w
+ *(.sdata_w .sdata_w.*)
+
+.sdata_h
+ *(.sdata_h .sdata_h.*)
+
+.sdata_b
+ *(.sdata_b .sdata_b.*)
+
+.sdata_f        0x00100000        0x0 load address 0x30000040
+ *(.sdata_f .sdata_f.*)
+                0x00100000                . = ALIGN (0x4)
+                0x00100000                _edata = .
+                0x00100000                PROVIDE (edata, .)
+                0x00000000                __check_main_size = ((LOADADDR (.sdata_f) + SIZEOF (.sdata_f)) - ORIGIN (REGION_BOOT))
+                0x00100000                __bss_start = .
+                0x00100000                PROVIDE (__sbss_start, .)
+                0x00100000                PROVIDE (___sbss_start, .)
+
+.bss            0x00100000        0x0 load address 0x30000040
+ *(.tbss .tbss.* .gnu.linkonce.tb.*)
+ *(.tcommon)
+ *(.sbss_f .sbss_f.*)
+ *(.scommon_f .scommon_f.*)
+ *(.sbss_b .sbss_b.*)
+ *(.scommon_b .scommon_b.*)
+                0x00100000                . = ALIGN (0x2)
+ *(.sbss_h .sbss_h.*)
+ *(.scommon_h .scommon_h.*)
+                0x00100000                . = ALIGN (0x4)
+ *(.sbss_w .sbss_w.*)
+ *(.scommon_w .scommon_w.*)
+ *(.dynsbss)
+ *(.scommon)
+                0x00100000                . = ALIGN (0x8)
+ *(.sbss_d .sbss_d.*)
+ *(.scommon_d .scommon_d.*)
+ *(.dynbss)
+ *(.bss .bss.* .gnu.linkonce.b.*)
+ *(COMMON)
+                0x00100000                . = ALIGN (0x4)
+                0x00100000                PROVIDE (__sbss_end, .)
+                0x00100000                PROVIDE (___sbss_end, .)
+                0x00100000                . = ALIGN (0x20)
+                0x00100000                _end = .
+                0x00100000                PROVIDE (end, .)
+                0x00100000                _show_dlm_end = .
+                0x00100000                PROVIDE (_show_dlm_end, .)
+                0x00108000                PROVIDE (_stack, (ORIGIN (REGION_DATA_FAST) + 0x8000))
+                0x00108000                __OS_Exception_Stack = _stack
+                0x00107ec0                __OS_Int_Stack = (__OS_Exception_Stack - 0x140)
+                0x00107b00                __fence__ = (__OS_Int_Stack - 0x3c0)
+                0x00007b00                dlm_remain = (__fence__ - _end)
+                0x00000000                SDRAM_SIZE = (. - SDRAM_BEGIN)
+                0x00000040                FLASH_SIZE = (LOADADDR (.bss) - FLASH_BEGIN)
+
+.stab
+ *(.stab)
+
+.stabstr
+ *(.stabstr)
+
+.stab.excl
+ *(.stab.excl)
+
+.stab.exclstr
+ *(.stab.exclstr)
+
+.stab.index
+ *(.stab.index)
+
+.stab.indexstr
+ *(.stab.indexstr)
+
+.note.nds32
+ *(.note.nds32)
+ *(.note.nds32.*)
+
+.comment        0x00000000       0x3b
+ *(.comment)
+ .comment       0x00000000       0x3b /tmp/ccx43HtD.o
+                                 0x3c (size before relaxing)
+ .comment       0x00000000       0x3c /tmp/cc3ZCE8m.o
+ .comment       0x00000000       0x3c /tmp/ccikBbEx.o
+ .comment       0x00000000       0x3c /tmp/ccrZv4Ii.o
+
+.debug
+ *(.debug)
+
+.line
+ *(.line)
+
+.debug_srcinfo
+ *(.debug_srcinfo)
+
+.debug_sfnames
+ *(.debug_sfnames)
+
+.debug_aranges  0x00000000       0x60
+ *(.debug_aranges)
+ .debug_aranges
+                0x00000000       0x18 /tmp/ccx43HtD.o
+ .debug_aranges
+                0x00000018       0x18 /tmp/cc3ZCE8m.o
+ .debug_aranges
+                0x00000030       0x18 /tmp/ccikBbEx.o
+ .debug_aranges
+                0x00000048       0x18 /tmp/ccrZv4Ii.o
+
+.debug_pubnames
+ *(.debug_pubnames)
+
+.debug_info     0x00000000      0x631
+ *(.debug_info .gnu.linkonce.wi.*)
+ .debug_info    0x00000000       0xb3 /tmp/ccx43HtD.o
+ .debug_info    0x000000b3       0xb3 /tmp/cc3ZCE8m.o
+ .debug_info    0x00000166       0xb0 /tmp/ccikBbEx.o
+ .debug_info    0x00000216      0x41b /tmp/ccrZv4Ii.o
+
+.debug_abbrev   0x00000000      0x1e8
+ *(.debug_abbrev)
+ .debug_abbrev  0x00000000       0x6e /tmp/ccx43HtD.o
+ .debug_abbrev  0x0000006e       0x6e /tmp/cc3ZCE8m.o
+ .debug_abbrev  0x000000dc       0x6c /tmp/ccikBbEx.o
+ .debug_abbrev  0x00000148       0xa0 /tmp/ccrZv4Ii.o
+
+.debug_line     0x00000000      0x2a9
+ *(.debug_line)
+ .debug_line    0x00000000       0x6f /tmp/ccx43HtD.o
+ .debug_line    0x0000006f       0x4b /tmp/cc3ZCE8m.o
+ .debug_line    0x000000ba       0x5a /tmp/ccikBbEx.o
+ .debug_line    0x00000114      0x195 /tmp/ccrZv4Ii.o
+
+.debug_frame
+ *(.debug_frame)
+
+.debug_str      0x00000000      0x7b9
+ *(.debug_str)
+ .debug_str     0x00000000      0x1fd /tmp/ccx43HtD.o
+                                0x23d (size before relaxing)
+ .debug_str     0x000001fd       0x41 /tmp/cc3ZCE8m.o
+                                0x246 (size before relaxing)
+ .debug_str     0x0000023e       0x40 /tmp/ccikBbEx.o
+                                0x245 (size before relaxing)
+ .debug_str     0x0000027e      0x53b /tmp/ccrZv4Ii.o
+                                0x740 (size before relaxing)
+
+.debug_loc
+ *(.debug_loc)
+
+.debug_macinfo
+ *(.debug_macinfo)
+
+.debug_weaknames
+ *(.debug_weaknames)
+
+.debug_funcnames
+ *(.debug_funcnames)
+
+.debug_typenames
+ *(.debug_typenames)
+
+.debug_varnames
+ *(.debug_varnames)
+OUTPUT(/home/yaguan/work/SV32WB0X_new/SSV.tiramisu.sv32wb0x.20Q2.2105.01.01R/image/mac_atcmd_cfg.elf elf32-nds32le)
