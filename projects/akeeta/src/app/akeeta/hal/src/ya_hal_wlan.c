@@ -31,7 +31,8 @@ static ya_hal_wlan_event_handler_t hEventHandler = NULL;
 static uint8_t wlan_connected_flag = 0;
 static uint8_t wlan_disconnected_flag = 0;
 static uint8_t wlan_scan_num = 0;
-static ya_obj_ssid_result_t *ya_obj_ssid_result = NULL;
+static ya_obj_ssid_result_t ya_obj_ssid_result[2] = {0};
+static SemaphoreHandle_t ya_scan_obj_ssid_sem = NULL;
 
 static void wlan_connect_event(void *arg)
 {
@@ -262,13 +263,12 @@ void scan_complete_cb(void)
 {
 	uint8_t i;
 	uint8_t index;
-	ya_obj_ssid_result_t *p = NULL;
-	p = ya_obj_ssid_result;
+	ya_obj_ssid_result_t *p = &ya_obj_ssid_result[0];
 	for	(index = 0; index < wlan_scan_num; index++)
 	{
 	    for (i = 0; i < get_ap_lsit_total_num(); i++)
 	    {
-			ya_printf(C_AT_CMD,"ap_list[%d].name==%s,rssi=%d,p->scan_ssid==%s\r\n",i,ap_list[i].name,ap_list[i].rssi,p->scan_ssid);
+			//ya_printf(C_AT_CMD,"ap_list[%d].name==%s,rssi=%d,p->scan_ssid==%s\r\n",i,ap_list[i].name,ap_list[i].rssi,p->scan_ssid);
 	    	if(strcmp(ap_list[i].name, p->scan_ssid) == 0)
 	    	{
 				p->scan_result = 1;
@@ -280,14 +280,20 @@ void scan_complete_cb(void)
 	}
 END:
 	ya_printf(C_LOG_INFO,"finish scan\r\n");
+	xSemaphoreGive(ya_scan_obj_ssid_sem);
 }
 
 int32_t ya_hal_wlan_scan_obj_ssid(ya_obj_ssid_result_t *obj_scan_ssid, uint8_t num)
 {
 	wlan_scan_num = num;
-	ya_obj_ssid_result = obj_scan_ssid;
-	ya_printf(C_LOG_INFO,"\r\n%s,%d,scan_ssid1==%s,wlan_scan_num==%d\r\n",__FUNCTION__,__LINE__,obj_scan_ssid->scan_ssid,wlan_scan_num);
+	memcpy(ya_obj_ssid_result,obj_scan_ssid,sizeof(ya_obj_ssid_result_t)*num);
+	if(ya_scan_obj_ssid_sem == NULL)
+		ya_scan_obj_ssid_sem = xSemaphoreCreateBinary();
+	DUT_wifi_start(DUT_STA);
 	scan_AP(scan_complete_cb);
+	xSemaphoreTake(ya_scan_obj_ssid_sem, portMAX_DELAY);
+	vSemaphoreDelete(ya_scan_obj_ssid_sem);
+	memcpy(obj_scan_ssid,ya_obj_ssid_result,sizeof(ya_obj_ssid_result_t)*num);
     return 0;
 }
 

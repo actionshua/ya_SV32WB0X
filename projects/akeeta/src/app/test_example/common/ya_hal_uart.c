@@ -26,7 +26,7 @@ UART0 pin mappings used in this test demo:
 #include "hal_hsuart.h"
 
 static ya_hal_os_thread_t  ya_uart_read_thread_handle=NULL;
-static SemaphoreHandle_t ya_uart_read_semaphore;
+static SemaphoreHandle_t ya_uart_read_semaphore = NULL;
 #define MAX_UART_BUFFER_DATA 		1024
 static uint8_t uart_data_buffer[MAX_UART_BUFFER_DATA];
 static uint16_t uart_recv_len = 0;
@@ -55,7 +55,8 @@ int32_t ya_hal_uart_open()
     drv_hsuart_sw_rst ();
     drv_hsuart_set_fifo (HSUART_INT_RX_FIFO_TRIG_LV_16);
     drv_hsuart_set_format (BAUD_RATE, HSUART_WLS_8, HSUART_STB_1, HSUART_PARITY_DISABLE);
-	ya_uart_read_semaphore = xSemaphoreCreateCounting(0xffffffff, 0);
+	if(ya_uart_read_semaphore == NULL)
+		ya_uart_read_semaphore = xSemaphoreCreateBinary();
 	if(ya_uart_read_thread_handle == NULL)
 	{
 		ret = ya_hal_os_thread_create(&ya_uart_read_thread_handle, "ya_uart_read_thread", ya_uart_rx_task, 0, 1024, 5);
