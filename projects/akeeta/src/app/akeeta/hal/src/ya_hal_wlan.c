@@ -289,7 +289,8 @@ int32_t ya_hal_wlan_scan_obj_ssid(ya_obj_ssid_result_t *obj_scan_ssid, uint8_t n
 	memcpy(ya_obj_ssid_result,obj_scan_ssid,sizeof(ya_obj_ssid_result_t)*num);
 	if(ya_scan_obj_ssid_sem == NULL)
 		ya_scan_obj_ssid_sem = xSemaphoreCreateBinary();
-	DUT_wifi_start(DUT_STA);
+	if(get_DUT_wifi_mode() != DUT_STA)
+		DUT_wifi_start(DUT_STA);
 	scan_AP(scan_complete_cb);
 	xSemaphoreTake(ya_scan_obj_ssid_sem, portMAX_DELAY);
 	vSemaphoreDelete(ya_scan_obj_ssid_sem);
