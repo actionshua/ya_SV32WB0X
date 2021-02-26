@@ -1063,14 +1063,14 @@ Rescan:
 			clear_enter_get_rssi_mode();
 			return 0;
 		}
-	}
-	else
-	{
-		scan_specific_ssid_flag++;
-		if(scan_specific_ssid_flag < 5)
-			goto Rescan;
 		else
-			ya_printf(C_AT_CMD,"\nrsp:ERROR\n");
+		{
+			scan_specific_ssid_flag++;
+			if(scan_specific_ssid_flag < 1)
+				goto Rescan;
+			else
+				ya_printf(C_AT_CMD,"\nrsp:ERROR\n");
+		}
 	}
 	scan_specific_ssid_flag = 0;
 	return -1;

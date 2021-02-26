@@ -1153,6 +1153,9 @@ void ya_stripLights_app_udp_Scenehandle(uint8_t *buf, uint16_t len,uint8_t type)
 
 	ya_get_cur_thing_model(&ya_stripLights_thing_mode);
 
+	if (ya_stripLights_thing_mode.switchstate == 0)
+		return;
+
 	if (type == YA_RHYTHM_DEVICE_CONTROL_SET_LED_COLOR_CMD)
 	{
 		ya_stripLights_thing_mode.switchstate = 1;
@@ -1269,10 +1272,40 @@ void ya_stripLights_switchoff(void)
 
 void ya_stripLights_app_sceneInit(void)
 {
+	int ret = 0;
 	int index = 0;
 
 	memset(&ya_stripLigths_workData,0,sizeof(st_ya_stripLigths_workData));
-	if(ya_stripLights_app_sceneRead(&ya_stripLigths_workData,sizeof(st_ya_stripLigths_workData)) != 0)
+	ret = ya_stripLights_app_sceneRead(&ya_stripLigths_workData,sizeof(st_ya_stripLigths_workData));
+
+	if (ret == 0)
+	{
+		if (ya_stripLigths_workData.lightSwitch > 1)
+			ret = -1;
+		else if (ya_stripLigths_workData.workMode >= WORKMODE_MAX)
+			ret = -1;
+		else if (ya_stripLigths_workData.corlor_H > 360 || ya_stripLigths_workData.corlor_S > 100 || 
+			ya_stripLigths_workData.corlor_B > 100 || ya_stripLigths_workData.white_temp > 100 ||
+			ya_stripLigths_workData.white_bright > 100)
+			ret = -1;
+		else if (ya_stripLigths_workData.cur_music_index >= MUSICMODE_MAX)
+			ret = -1;
+		else if (ya_stripLigths_workData.cur_scene_index >= 20)
+			ret = -1;
+		else
+		{
+			for (index = 0; index < 20; index++)
+			{
+				if (ya_stripLigths_workData.sceneInfo[index].groupNum > 8)
+				{
+					ret = -1;
+					break;
+				}
+			}
+		}
+	}
+	
+	if (ret != 0)
 	{
 		ya_printf(C_LOG_ERROR, "read scene data failed, then init again\r\n");
 		

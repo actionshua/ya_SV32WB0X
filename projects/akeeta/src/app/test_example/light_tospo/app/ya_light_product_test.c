@@ -274,29 +274,25 @@ int32_t ya_ligth_router_low_rssi_with_CW()
 			}
 		}
 
-		#if (CW_PWM == 1)
-		ya_pwm_led_write(0,0,0,0,0);
-		#else
-		ya_pwm_led_write(0,0,0,255*100,0);
-		#endif
-		
-		ya_delay(250);
+		for (i=0; i<2; i++)
+		{
+			#if (CW_PWM == 1)
+			ya_pwm_led_write(0,0,0,255*100,0);
+			#else
+			ya_pwm_led_write(0,0,0,255*100,255*100);
+			#endif
+			
+			ya_delay(250);
 
-		#if (CW_PWM == 1)
-		ya_pwm_led_write(0,0,0,255*100,0);
-		#else
-		ya_pwm_led_write(0,0,0,255*100,255*100);
-		#endif
-		
-		ya_delay(250);
+			#if (CW_PWM == 1)
+			ya_pwm_led_write(0,0,0,0,0);
+			#else
+			ya_pwm_led_write(0,0,0,255*100,0);
+			#endif
+			
+			ya_delay(250);
+		}
 
-		#if (CW_PWM == 1)
-		ya_pwm_led_write(0,0,0,0,0);
-		#else
-		ya_pwm_led_write(0,0,0,255*100,0);
-		#endif		
-		
-		ya_delay(250);
 	}
 
 	return 0;

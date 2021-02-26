@@ -284,6 +284,7 @@ void ya_stripLightsDisplay_getChangeStep(void)
 		pChannelInfo = &pCrlInfo->pwmChannelInfo[i];
 		temp = pChannelInfo->pwmDutyNew - pCtrlInfoGroup->pwmDutyCur[i];
 		pChannelInfo->pwmDutyStep = temp/(pCtrlInfoGroup->timerIntervalChangeUp);
+		
 		if(pChannelInfo->pwmDutyStep == 0)
 		{
 			if(temp>0)
@@ -358,8 +359,13 @@ void ya_stripLightsDisplay_start(ya_display_stripsLight_t *pcolorInfo)
 	
 	pCtrlInfoGroup->changeType = pcolorInfo->changeType;
 	pCtrlInfoGroup->pwmGroupLen = pcolorInfo->groupNum;
-	// changeSpeed = 10~100
-	pcolorInfo->changeSpeed = (110 -pcolorInfo->changeSpeed);
+	
+	if (pcolorInfo->changeSpeed > 100)
+		pcolorInfo->changeSpeed = 100;
+	
+	pcolorInfo->changeSpeed = 100 - pcolorInfo->changeSpeed;
+	if (pcolorInfo->changeSpeed < 10)
+		pcolorInfo->changeSpeed = 10;
 	
 	if (pcolorInfo->changeType == IMMEDIATELY_TYPE)
 	{
@@ -374,9 +380,7 @@ void ya_stripLightsDisplay_start(ya_display_stripsLight_t *pcolorInfo)
 		pCtrlInfoGroup->timerIntervalWaiting = 1;
 		pCtrlInfoGroup->timerIntervalHold = 1;
 		pCtrlInfoGroup->timerIntervalChangeDown = 1;
-
-		pCtrlInfoGroup->changeSpeed = 100;
-		pCtrlInfoGroup->timerIntervalChangeUp =  pCtrlInfoGroup->changeSpeed ;
+		pCtrlInfoGroup->timerIntervalChangeUp =  pcolorInfo->changeSpeed;
 		pCtrlInfoGroup->changeSpeed = YA_STRIPLIGHTSDISPLAY_COLORCHANGE_MAXTIME/100;
 
 		if(pcolorInfo->colorInfo[0].type == COLORTYPE_COLOR)		

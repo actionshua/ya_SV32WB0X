@@ -221,6 +221,9 @@ void ya_light_app_cloud_event_into_queue(uint8_t *buf, uint16_t len)
 	msg_t msg;
 	memset(&msg, 0, sizeof(msg_t)); 		
 	msg.addr = (uint8_t *)ya_hal_os_memory_alloc(len + 1);
+	if (!msg.addr)
+		return;
+	
 	memset(msg.addr, 0, len + 1);
 	memcpy(msg.addr, buf, len);
 	msg.len = len + 1;
@@ -484,7 +487,7 @@ void ya_light_app_cloud_handle(uint8_t *buf, uint16_t len)
 void ya_light_app_netConfigDisplay(void)
 {
 	ya_display_value_control.groupNum = 1;
-	ya_display_value_control.changeSpeed = 0;
+	ya_display_value_control.changeSpeed = 30;
 	ya_display_value_control.changeType = STATIC_TYPE;
 	ya_display_value_control.sceneIndex = 0;
 	
@@ -501,7 +504,7 @@ void ya_light_app_netConfigDisplay(void)
 void ya_light_app_ConfigOkDisplay(void)
 {
 	ya_display_value_control.groupNum = 1;
-	ya_display_value_control.changeSpeed = 0;
+	ya_display_value_control.changeSpeed = 30;
 	ya_display_value_control.changeType = STATIC_TYPE;
 	ya_display_value_control.sceneIndex = 0;
 	
@@ -521,7 +524,7 @@ void ya_light_switchoff(void)
 	memset(&ya_display_value_control, 0, sizeof(ya_display_stripsLight_t));
 	ya_display_value_control.cmd = 0xFF;
 	ya_display_value_control.groupNum = 1;
-	ya_display_value_control.changeSpeed = 0;
+	ya_display_value_control.changeSpeed = 30;
 	ya_display_value_control.changeType = STATIC_TYPE;
 	ya_stripLights_pwmUpdate_into_queue((uint8_t *)&ya_display_value_control, sizeof(ya_display_stripsLight_t));
 }
@@ -529,14 +532,38 @@ void ya_light_switchoff(void)
 void ya_light_app_init(void)
 {
 	int index = 0;
+	int ret = -1;
 
 	ya_stripLights_display_start();
-
 	memset(&ya_light_workData,0,sizeof(st_ya_light_workData));
-	if (ya_light_app_sceneRead(&ya_light_workData, sizeof(st_ya_light_workData)) != 0)
+
+	ret = ya_light_app_sceneRead(&ya_light_workData, sizeof(st_ya_light_workData));
+	if (ret == 0)
+	{
+		if (ya_light_workData.lightSwitch > 1)
+			ret = -1;
+		else if (ya_light_workData.corlor_H > 360 || ya_light_workData.corlor_S > 100 || ya_light_workData.corlor_B > 100)
+			ret = -1;
+		else if (ya_light_workData.white_temp > 100 || ya_light_workData.white_bright > 100)
+			ret = -1;
+		else if (ya_light_workData.cur_scene_index >= 4 || ya_light_workData.workMode >= WORKMODE_MAX)
+			ret = -1;
+		else
+		{
+			for (index = 0; index < 4; index++)
+			{
+				if (ya_light_workData.sceneInfo[index].groupNum > 8)
+				{
+					ret = -1;
+					break;
+				}
+			}
+		}
+	}
+	
+	if (ret != 0)
 	{
 		ya_printf(C_LOG_ERROR, "read scene data failed, then init again\n");
-		
 		memset(&ya_light_workData,0,sizeof(st_ya_light_workData));
 		ya_light_workData.lightSwitch = 1;
 
@@ -555,6 +582,8 @@ void ya_light_app_init(void)
 	}
 
 	ya_light_app_updatePwm(&ya_light_workData, 0);
+
+	ya_printf(C_LOG_INFO, "end ya_light_app_updatePwm\n");
 }
 
 

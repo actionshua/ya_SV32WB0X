@@ -299,7 +299,7 @@ void  ya_stripLights_app_updatePwm(st_ya_stripLigths_workData *pworkInfo, uint8_
 			else if (cur_control_data.workMode == WORKMODE_MUSIC)
 			{
 				ya_display_value_control.groupNum = 1;
-				ya_display_value_control.changeSpeed = 10;
+				ya_display_value_control.changeSpeed = 0;
 				ya_display_value_control.changeType = BREAK_TYPE;
 				ya_display_value_control.sceneIndex = 0;
 				ya_display_value_control.colorInfo[0].type = COLORTYPE_COLOR;
@@ -352,9 +352,13 @@ void ya_stripLights_app_cloud_event_into_queue(uint8_t *buf, uint16_t len)
 	memset(&msg, 0, sizeof(msg_t)); 		
 	msg.type = CLOUD_TYPE;
 
-	msg.addr = (uint8_t *)ya_hal_os_memory_alloc(len);
+	msg.addr = (uint8_t *)ya_hal_os_memory_alloc(len + 1);
+	if (!msg.addr)
+		return;
+	
+	memset(msg.addr, 0, len + 1);
 	memcpy(msg.addr, buf, len);
-	msg.len = len;
+	msg.len = len + 1;
 
 	ret = ya_hal_os_queue_send(&ya_striplight_queue, &msg, 0);
 	if (ret != C_OK)
@@ -728,6 +732,9 @@ void ya_stripLights_app_udp_Scenehandle(uint8_t *buf, uint16_t len,uint8_t type)
 
 	ya_get_cur_thing_model(&ya_stripLights_thing_mode);
 
+	if (ya_stripLights_thing_mode.switchstate == 0)
+		return;
+
 	if (type == YA_RHYTHM_DEVICE_CONTROL_SET_LED_COLOR_CMD)
 	{
 		ya_stripLights_thing_mode.switchstate = 1;
@@ -780,7 +787,7 @@ void  ya_stripLights_app_infraredHandle(uint8_t type, uint8_t subtype, uint8_t *
 void ya_stripLights_app_netConfigDisplay(void)
 {
 	ya_display_value_control.groupNum = 1;
-	ya_display_value_control.changeSpeed = 0;
+	ya_display_value_control.changeSpeed = 30;
 	ya_display_value_control.changeType = STATIC_TYPE;
 	ya_display_value_control.sceneIndex = 0;
 	ya_display_value_control.colorInfo[0].type = COLORTYPE_WHITE;
@@ -797,7 +804,7 @@ void ya_stripLights_app_netConfigDisplay(void)
 void ya_stripLights_app_ConfigOkDisplay(void)
 {
 	ya_display_value_control.groupNum = 1;
-	ya_display_value_control.changeSpeed = 0;
+	ya_display_value_control.changeSpeed = 30;
 	ya_display_value_control.changeType = STATIC_TYPE;
 	ya_display_value_control.sceneIndex = 0;
 	
@@ -817,20 +824,51 @@ void ya_stripLights_switchoff(void)
 	memset(&ya_display_value_control, 0, sizeof(ya_display_stripsLight_t));
 	ya_display_value_control.cmd = 0xFF;
 	ya_display_value_control.groupNum = 1;
-	ya_display_value_control.changeSpeed = 0;
+	ya_display_value_control.changeSpeed = 30;
 	ya_display_value_control.changeType = STATIC_TYPE;
 	ya_stripLights_pwmUpdate_into_queue((uint8_t *)&ya_display_value_control, sizeof(ya_display_stripsLight_t));
 }
 
 void ya_stripLights_app_sceneInit(void)
 {
+	int ret = 0;
 	int index = 0;
 
 	ya_stripLights_display_start();
 	memset(&ya_stripLigths_workData,0,sizeof(st_ya_stripLigths_workData));
-	if(ya_stripLights_app_sceneRead(&ya_stripLigths_workData,sizeof(st_ya_stripLigths_workData)) != 0)
+	ret = ya_stripLights_app_sceneRead(&ya_stripLigths_workData,sizeof(st_ya_stripLigths_workData));
+
+	if (ret == 0)
+	{
+		if (ya_stripLigths_workData.lightSwitch > 1)
+			ret = -1;
+		else if (ya_stripLigths_workData.workMode >= WORKMODE_MAX)
+			ret = -1;
+		else if (ya_stripLigths_workData.corlor_H > 360 || ya_stripLigths_workData.corlor_S > 100 || 
+			ya_stripLigths_workData.corlor_B > 100 || ya_stripLigths_workData.white_temp > 100 ||
+			ya_stripLigths_workData.white_bright > 100)
+			ret = -1;
+		else if (ya_stripLigths_workData.cur_music_index >= MUSICMODE_MAX)
+			ret = -1;
+		else if (ya_stripLigths_workData.cur_scene_index >= 20)
+			ret = -1;
+		else
+		{
+			for (index = 0; index < 20; index++)
+			{
+				if (ya_stripLigths_workData.sceneInfo[index].groupNum > 8)
+				{
+					ret = -1;
+					break;
+				}
+			}
+		}
+	}
+	
+	if (ret != 0)
 	{
 		ya_printf(C_LOG_ERROR, "read scene data failed, then init again\r\n");
+		memset(&ya_stripLigths_workData,0,sizeof(st_ya_stripLigths_workData));
 		
 		ya_stripLigths_workData.lightSwitch = 1;
 		ya_stripLigths_workData.workMode = WORKMODE_WHITE;
@@ -848,7 +886,7 @@ void ya_stripLights_app_sceneInit(void)
 		ya_stripLigths_workData.micInfo[MUSICMODE_CLASSIC].mic_sensitivity = 75;
 		ya_stripLigths_workData.micInfo[MUSICMODE_CLASSIC].mic_rate = 80;
 		ya_stripLigths_workData.micInfo[MUSICMODE_SOFT].mic_sensitivity = 50;
-		ya_stripLigths_workData.micInfo[MUSICMODE_SOFT].mic_rate = 60;		
+		ya_stripLigths_workData.micInfo[MUSICMODE_SOFT].mic_rate = 60;	
 
 		for(index=0; index<SCENE_MAX; index++)
 		{
@@ -858,7 +896,6 @@ void ya_stripLights_app_sceneInit(void)
 	
 	ya_stripLigths_workData.sceneInfo_temp_flag = 0;
 	memset(&ya_stripLigths_workData.sceneInfo_temp, 0, sizeof(st_stripLigths_sceneInfo));
-
 	ya_stripLights_app_updatePwm(&ya_stripLigths_workData, 0);
 }
 

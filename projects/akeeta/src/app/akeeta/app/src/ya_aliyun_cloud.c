@@ -279,6 +279,9 @@ void ya_subscribe_callback_handler(void *pcontext, void *pclient, iotx_mqtt_even
 	if(!topic_get)
 		return;
 
+	memset(topic_get, 0, topic_info->topic_len + 1);
+	memcpy(topic_get, topic_info->ptopic, topic_info->topic_len);
+
 	payload = (char *)ya_hal_os_memory_alloc(topic_info->payload_len + 1);
 
 	if(!payload)
@@ -295,8 +298,9 @@ void ya_subscribe_callback_handler(void *pcontext, void *pclient, iotx_mqtt_even
         case IOTX_MQTT_EVENT_PUBLISH_RECEIVED:
             /* print topic name and topic message */
 			ya_printf(C_LOG_INFO,"cloud packet: %s\r\n", payload);
+			ya_printf(C_LOG_INFO,"cloud topic: %s\r\n",topic_get);
 
-			rc = ya_aly_subscribe_event_transfer(topic_info->payload,topic_info->payload_len);
+			rc = ya_aly_subscribe_event_transfer(payload,topic_info->payload_len);
 		
 			p = strstr(topic_get, "/rrpc/request/");
 			if(p)
@@ -330,6 +334,9 @@ int32_t ya_report_msg_to_aly_cloud(uint8_t *data, uint16_t data_len)
 		return -1;
 	}
 	buf = (uint8_t *)HAL_Malloc(data_len + 1);
+	if (!buf)
+		return -1;
+	
 	memset( buf, 0, (data_len + 1));
 	memcpy( buf, data, data_len);
 	
