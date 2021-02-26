@@ -1217,18 +1217,21 @@ void ya_app_main(void *arg)
 		ya_debind_enable();	
 
 	ya_clear_randomnum();
-
-	if(ya_app_main_para_obj.enable_factory_router_scan)
+	
+	if(0 == ya_check_enter_ota_test_mode())
 	{
-		while(!scan_finish)
-			ya_delay(10);
-
-		if (ya_scan_data[0] > 0 || ya_scan_data[2] > 0)
+		if(ya_app_main_para_obj.enable_factory_router_scan)
 		{
-			ya_printf(C_LOG_INFO, "\r\n === get the desired factory ssid == \r\n");
-			ya_thing_handle_router(MODULE_FACTORY_TEST, ya_scan_data);
-			ya_app_state = YA_APP_FACTORY_TEST;
-		}
+			while(!scan_finish)
+				ya_delay(10);
+
+			if (ya_scan_data[0] > 0 || ya_scan_data[2] > 0)
+			{
+				ya_printf(C_LOG_INFO, "\r\n === get the desired factory ssid == \r\n");
+				ya_thing_handle_router(MODULE_FACTORY_TEST, ya_scan_data);
+				ya_app_state = YA_APP_FACTORY_TEST;
+			}
+		}		
 	}
 
 	//enable watch-dog
