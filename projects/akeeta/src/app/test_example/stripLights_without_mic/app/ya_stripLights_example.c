@@ -150,7 +150,6 @@ void ya_handle_server_timer_callback(uint16_t year, uint8_t month, uint8_t day, 
 void ya_striplight_init(void)
 {
 	ya_hal_pwm_init();
-	ya_stripLights_display_start();
 	ya_stripLights_app_sceneInit();
 	ya_button_init();
 	ya_set_button_callback(BUTTON_NAME_M,ya_button_m_callback_handle, 0);

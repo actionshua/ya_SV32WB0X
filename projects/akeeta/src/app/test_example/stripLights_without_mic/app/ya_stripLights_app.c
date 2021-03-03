@@ -1054,9 +1054,10 @@ void ya_stripLights_button_M_handle(void)
 {
 	static uint8_t button_index = 0;
 	st_ya_stripLigths_workData *pworkInfo = &ya_stripLigths_workData;
+
 	if(pworkInfo->lightSwitch == 0)
 		return;
-	pworkInfo->lightSwitch = 1;
+	
 	switch(button_index)
 	{
 		case SCENE_READING:
@@ -1116,12 +1117,14 @@ void ya_stripLights_button_M_handle(void)
 			break;
 
 		default:
+			pworkInfo->workMode = WORKMODE_SCENE;
+			pworkInfo->cur_scene_index = SCENE_READING;
 			break;
 	}
 
 	button_index++;
-	if (button_index > SCENE_MAX)
-		button_index = 0;
+	if (button_index > SCENE_COLORS)
+		button_index = SCENE_READING;
 
 	ya_stripLights_app_updatePwm(&ya_stripLigths_workData, 1);
 
@@ -1232,7 +1235,7 @@ void ya_striplights_app_init_mode(void)
 void ya_stripLights_app_netConfigDisplay(void)
 {
 	ya_display_value_control.groupNum = 1;
-	ya_display_value_control.changeSpeed = 0;
+	ya_display_value_control.changeSpeed = 30;
 	ya_display_value_control.changeType = STATIC_TYPE;
 	ya_display_value_control.sceneIndex = 0;
 	ya_display_value_control.colorInfo[0].type = COLORTYPE_COLOR;
@@ -1249,7 +1252,7 @@ void ya_stripLights_app_netConfigDisplay(void)
 void ya_stripLights_app_factory_test(void)
 {
 	ya_display_value_control.groupNum = 1;
-	ya_display_value_control.changeSpeed = 0;
+	ya_display_value_control.changeSpeed = 30;
 	ya_display_value_control.changeType = STATIC_TYPE;
 	ya_display_value_control.sceneIndex = 0;
 	ya_display_value_control.colorInfo[0].type = COLORTYPE_COLOR;
@@ -1266,6 +1269,10 @@ void ya_stripLights_app_factory_test(void)
 void ya_stripLights_switchoff(void)
 {
 	memset(&ya_display_value_control, 0, sizeof(ya_display_stripsLight_t));
+	ya_display_value_control.cmd = 0xFF;
+	ya_display_value_control.groupNum = 1;
+	ya_display_value_control.changeSpeed = 30;
+	ya_display_value_control.changeType = STATIC_TYPE;
 	ya_stripLights_pwmUpdate_into_queue((uint8_t *)&ya_display_value_control, sizeof(ya_display_stripsLight_t));
 
 }
@@ -1276,6 +1283,7 @@ void ya_stripLights_app_sceneInit(void)
 	int index = 0;
 
 	memset(&ya_stripLigths_workData,0,sizeof(st_ya_stripLigths_workData));
+	ya_stripLights_display_start();
 	ret = ya_stripLights_app_sceneRead(&ya_stripLigths_workData,sizeof(st_ya_stripLigths_workData));
 
 	if (ret == 0)
@@ -1308,6 +1316,7 @@ void ya_stripLights_app_sceneInit(void)
 	if (ret != 0)
 	{
 		ya_printf(C_LOG_ERROR, "read scene data failed, then init again\r\n");
+		memset(&ya_stripLigths_workData,0,sizeof(st_ya_stripLigths_workData));
 		
 		ya_stripLigths_workData.lightSwitch = 1;
 		ya_stripLigths_workData.workMode = WORKMODE_COLOR;

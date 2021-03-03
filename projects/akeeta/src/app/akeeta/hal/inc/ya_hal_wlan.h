@@ -190,7 +190,16 @@ int32_t ya_hal_wlan_set_channel(uint32_t channel);
  *
  * @return success: 0, faile: -1
  */
- int32_t ya_hal_wlan_scan_obj_ssid(ya_obj_ssid_result_t *obj_scan_ssid, uint8_t num);
+int32_t ya_hal_wlan_scan_obj_ssid(ya_obj_ssid_result_t *obj_scan_ssid, uint8_t num);
+
+
+/**
+ * @brief This function is used to scan the obj ssid in channel 6
+ *
+ * @return success: 0, faile: -1
+ */
+int32_t ya_hal_wlan_scan_obj_ssid_with_fix_channel(ya_obj_ssid_result_t *obj_scan_ssid, uint8_t num);
+
 
 /**
  * @brief This function is used to connect to router.
@@ -198,6 +207,7 @@ int32_t ya_hal_wlan_set_channel(uint32_t channel);
  * @param connect_param: obj connect param
  * @return success: 0, faile: -1
  */
+ 
 int32_t ya_hal_wlan_connect_ap(ya_hal_wlan_ap_connect_param_t *connect_param);
 
 

@@ -31,6 +31,7 @@ static ya_hal_wlan_event_handler_t hEventHandler = NULL;
 static uint8_t wlan_connected_flag = 0;
 static uint8_t wlan_disconnected_flag = 0;
 static uint8_t wlan_scan_num = 0;
+static uint8_t wlan_scan_cur_index = 0;
 static ya_obj_ssid_result_t ya_obj_ssid_result[2] = {0};
 static SemaphoreHandle_t ya_scan_obj_ssid_sem = NULL;
 
@@ -259,7 +260,48 @@ int32_t ya_hal_wlan_set_channel(uint32_t channel)
 	return 0;
 }
 
-void scan_complete_cb(void)
+static void scan_complete_cb_with_fix_channel(void)
+{
+	uint8_t i;
+	ya_obj_ssid_result_t *p = &ya_obj_ssid_result[wlan_scan_cur_index];
+    for (i = 0; i < get_ap_lsit_total_num(); i++)
+    {
+		//ya_printf(C_AT_CMD,"ap_list[%d].name==%s,rssi=%d,p->scan_ssid==%s\r\n",i,ap_list[i].name,ap_list[i].rssi,p->scan_ssid);
+    	if(strcmp(ap_list[i].name, p->scan_ssid) == 0)
+    	{
+			p->scan_result = 1;
+			p->rssi = ap_list[i].rssi;
+			goto END;
+    	}
+    }
+END:
+	ya_printf(C_LOG_INFO,"finish scan\r\n");
+	xSemaphoreGive(ya_scan_obj_ssid_sem);
+}
+
+int32_t ya_hal_wlan_scan_obj_ssid_with_fix_channel(ya_obj_ssid_result_t *obj_scan_ssid, uint8_t num)
+{
+	wlan_scan_num = num;
+	memcpy(ya_obj_ssid_result,obj_scan_ssid,sizeof(ya_obj_ssid_result_t)*num);
+	if(ya_scan_obj_ssid_sem == NULL)
+		ya_scan_obj_ssid_sem = xSemaphoreCreateBinary();
+	if(get_DUT_wifi_mode() != DUT_STA)
+		DUT_wifi_start(DUT_STA);
+	wlan_scan_cur_index = 0;
+	ya_printf(C_LOG_INFO,"start scan CH 5 6 7\r\n");
+	scan_AP_custom(ya_obj_ssid_result[0].scan_ssid,scan_complete_cb_with_fix_channel,0b1110000,0b1110000,300,0,0);
+	xSemaphoreTake(ya_scan_obj_ssid_sem, portMAX_DELAY);
+	if(2 == num && 0 == ya_obj_ssid_result[0].scan_result)
+	{
+		wlan_scan_cur_index = 1;
+		scan_AP_custom(ya_obj_ssid_result[1].scan_ssid,scan_complete_cb_with_fix_channel,0b1110000,0b1110000,300,0,0);	
+		xSemaphoreTake(ya_scan_obj_ssid_sem, portMAX_DELAY);
+	}
+	vSemaphoreDelete(ya_scan_obj_ssid_sem);
+	memcpy(obj_scan_ssid,ya_obj_ssid_result,sizeof(ya_obj_ssid_result_t)*num);
+    return 0;
+}
+static void scan_complete_cb(void)
 {
 	uint8_t i;
 	uint8_t index;
@@ -291,6 +333,7 @@ int32_t ya_hal_wlan_scan_obj_ssid(ya_obj_ssid_result_t *obj_scan_ssid, uint8_t n
 		ya_scan_obj_ssid_sem = xSemaphoreCreateBinary();
 	if(get_DUT_wifi_mode() != DUT_STA)
 		DUT_wifi_start(DUT_STA);
+	ya_printf(C_LOG_INFO,"\r\nstart scan\r\n");
 	scan_AP(scan_complete_cb);
 	xSemaphoreTake(ya_scan_obj_ssid_sem, portMAX_DELAY);
 	vSemaphoreDelete(ya_scan_obj_ssid_sem);

@@ -34,6 +34,7 @@
 #ifndef _YA_HAL_PWM_H_
 #define _YA_HAL_PWM_H_
 #include "hal_pwm.h"
+#if (LIGHT_TYPE == 0)
 
 #define PWM_NUM					5
 
@@ -69,16 +70,41 @@
 							 {PWM4_PIN_NAME, PWM4_CHANNEL, PWM4_PERIOD_FRE, PWM4_PERCENT},\
 							 {PWM5_PIN_NAME, PWM5_CHANNEL, PWM5_PERIOD_FRE, PWM5_PERCENT}}
 
+
 typedef enum
 {
-	PWM_R = 0,
-	PWM_G = 1,
-	PWM_B = 2,
+	PWM_R_INDEX = 0,
+	PWM_G_INDEX = 1,
+	PWM_B_INDEX = 2,
 
-	PWM_COOL = 3,
-	PWM_WARM = 4,
+	PWM_COOL_INDEX = 3,
+	PWM_WARM_INDEX = 4,
+}YA_PWM_NAME;
+	
+#else
+
+#define PWM_NUM					2
+
+#define PWM4_PIN_NAME           19
+#define PWM4_CHANNEL			HAL_PWM_4
+#define PWM4_PERIOD_FRE			5000
+#define PWM4_PERCENT			1
+
+#define PWM5_PIN_NAME           20
+#define PWM5_CHANNEL			HAL_PWM_5
+#define PWM5_PERIOD_FRE			5000
+#define PWM5_PERCENT			1
+
+#define YA_PWM_PARA_INIT	 {{PWM4_PIN_NAME, PWM4_CHANNEL, PWM4_PERIOD_FRE, PWM4_PERCENT},\
+							 {PWM5_PIN_NAME, PWM5_CHANNEL, PWM5_PERIOD_FRE, PWM5_PERCENT}}
+
+typedef enum
+{
+	PWM_COOL_INDEX = 0,
+	PWM_WARM_INDEX = 1,
 }YA_PWM_NAME;
 
+#endif
 
 #if (PWM_NUM > 0)
 

@@ -254,17 +254,17 @@ void ya_stripLightsDisplay_CWtoRGB(unsigned char*r, unsigned char*g, unsigned ch
 void  ya_stripLightsDisplay_writePwm(unsigned int r,unsigned int g,unsigned int b,unsigned int c,unsigned int w)
 {
 #if (FLOAT_SUPPORT == 1)
-	ya_hal_pwm_write(PWM_R,(float)(r/255.0));
-	ya_hal_pwm_write(PWM_G,(float)(g/255.0));
-	ya_hal_pwm_write(PWM_B,(float)(b/255.0));
-	ya_hal_pwm_write(PWM_COOL,(float)(c/255.0));
-	ya_hal_pwm_write(PWM_WARM,(float)(w/255.0));
+	ya_hal_pwm_write(PWM_R_INDEX,(float)(r/255.0));
+	ya_hal_pwm_write(PWM_G_INDEX,(float)(g/255.0));
+	ya_hal_pwm_write(PWM_B_INDEX,(float)(b/255.0));
+	ya_hal_pwm_write(PWM_COOL_INDEX,(float)(c/255.0));
+	ya_hal_pwm_write(PWM_WARM_INDEX,(float)(w/255.0));
 #else
-	ya_hal_pwm_write(PWM_R,(float)(r/255));
-	ya_hal_pwm_write(PWM_G,(float)(g/255));
-	ya_hal_pwm_write(PWM_B,(float)(b/255));
-	ya_hal_pwm_write(PWM_COOL,(float)(c/255));
-	ya_hal_pwm_write(PWM_WARM,(float)(w/255));
+	ya_hal_pwm_write(PWM_R_INDEX,(float)(r/255));
+	ya_hal_pwm_write(PWM_G_INDEX,(float)(g/255));
+	ya_hal_pwm_write(PWM_B_INDEX,(float)(b/255));
+	ya_hal_pwm_write(PWM_COOL_INDEX,(float)(c/255));
+	ya_hal_pwm_write(PWM_WARM_INDEX,(float)(w/255));
 
 #endif
 }
@@ -297,10 +297,10 @@ void ya_stripLightsDisplay_getChangeStep(void)
 
 	#if (CW_PWM == 0)
 	// off
-	if (pCrlInfo->pwmChannelInfo[PWM_WARM].pwmDutyNew == 0)
+	if (pCrlInfo->pwmChannelInfo[PWM_WARM_INDEX].pwmDutyNew == 0)
 	{
-		pCrlInfo->pwmChannelInfo[PWM_COOL].pwmDutyStep = 0;
-		pCtrlInfoGroup->pwmDutyCur[PWM_COOL] = pCrlInfo->pwmChannelInfo[PWM_COOL].pwmDutyNew;
+		pCrlInfo->pwmChannelInfo[PWM_COOL_INDEX].pwmDutyStep = 0;
+		pCtrlInfoGroup->pwmDutyCur[PWM_COOL_INDEX] = pCrlInfo->pwmChannelInfo[PWM_COOL_INDEX].pwmDutyNew;
 	}
 	#endif
 }
@@ -333,10 +333,10 @@ void ya_stripLightsDisplay_getcloseStep(void)
 
 #if (CW_PWM == 0)
 	// off
-	if (pCrlInfo->pwmChannelInfo[PWM_WARM].pwmDutyNew == 0)
+	if (pCrlInfo->pwmChannelInfo[PWM_WARM_INDEX].pwmDutyNew == 0)
 	{
-		pCrlInfo->pwmChannelInfo[PWM_COOL].pwmDutyStep = 0;
-		pCtrlInfoGroup->pwmDutyCur[PWM_COOL] = pCrlInfo->pwmChannelInfo[PWM_COOL].pwmDutyNew;
+		pCrlInfo->pwmChannelInfo[PWM_COOL_INDEX].pwmDutyStep = 0;
+		pCtrlInfoGroup->pwmDutyCur[PWM_COOL_INDEX] = pCrlInfo->pwmChannelInfo[PWM_COOL_INDEX].pwmDutyNew;
 	}
 #endif
 
@@ -427,19 +427,19 @@ void ya_stripLightsDisplay_start(ya_display_stripsLight_t *pcolorInfo)
 	{
 		pCrlInfo = &pCtrlInfoGroup->pwmGroupInfo[i];
 	
-		pChannelInfo = &pCrlInfo->pwmChannelInfo[PWM_R];
+		pChannelInfo = &pCrlInfo->pwmChannelInfo[PWM_R_INDEX];
 		pChannelInfo->pwmDutyNew= pcolorInfo->colorInfo[i].color_H*100;
 
-		pChannelInfo = &pCrlInfo->pwmChannelInfo[PWM_G];
+		pChannelInfo = &pCrlInfo->pwmChannelInfo[PWM_G_INDEX];
 		pChannelInfo->pwmDutyNew= pcolorInfo->colorInfo[i].color_S*100;
 
-		pChannelInfo = &pCrlInfo->pwmChannelInfo[PWM_B];
+		pChannelInfo = &pCrlInfo->pwmChannelInfo[PWM_B_INDEX];
 		pChannelInfo->pwmDutyNew= pcolorInfo->colorInfo[i].color_B*100;
 		
-		pChannelInfo = &pCrlInfo->pwmChannelInfo[PWM_COOL];
+		pChannelInfo = &pCrlInfo->pwmChannelInfo[PWM_COOL_INDEX];
 		pChannelInfo->pwmDutyNew= pcolorInfo->colorInfo[i].white_temp*100;
 		
-		pChannelInfo = &pCrlInfo->pwmChannelInfo[PWM_WARM];
+		pChannelInfo = &pCrlInfo->pwmChannelInfo[PWM_WARM_INDEX];
 		pChannelInfo->pwmDutyNew= pcolorInfo->colorInfo[i].white_bright*100;
 	}
 	
@@ -585,7 +585,7 @@ int ya_stripLightsDisplay_loop(void)
 	//set pwm
 	if(flag_updatePwm)
 	{
-		ya_stripLightsDisplay_writePwm(pCtrlInfoGroup->pwmDutyCur[PWM_R],pCtrlInfoGroup->pwmDutyCur[PWM_G], pCtrlInfoGroup->pwmDutyCur[PWM_B], pCtrlInfoGroup->pwmDutyCur[PWM_COOL], pCtrlInfoGroup->pwmDutyCur[PWM_WARM]);
+		ya_stripLightsDisplay_writePwm(pCtrlInfoGroup->pwmDutyCur[PWM_R_INDEX],pCtrlInfoGroup->pwmDutyCur[PWM_G_INDEX], pCtrlInfoGroup->pwmDutyCur[PWM_B_INDEX], pCtrlInfoGroup->pwmDutyCur[PWM_COOL_INDEX], pCtrlInfoGroup->pwmDutyCur[PWM_WARM_INDEX]);
 		#if 0
 		ya_printf(C_LOG_INFO," \r\n pwm %d %d,%d = %d %d  %d %d %d\r\n",
 		pCtrlInfoGroup->pwmGroupIndex,

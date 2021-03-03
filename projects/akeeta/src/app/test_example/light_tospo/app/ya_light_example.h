@@ -18,14 +18,14 @@
 
 #define MIN_BRIGHT_PERCENT		5
 
-#define YA_LIGHT_FLASH_PARA_ADDR  (0x1e0000)
+#define YA_LIGHT_FLASH_PARA_ADDR  (0x25000 - 0x2000)//RAW User
 
 #define YA_LIGHT_DATA_ADDR 	  	  (YA_LIGHT_FLASH_PARA_ADDR + 0x1000)
 
 #if (LIGHT_TYPE == 0) //5pwm
-#define TEST_WIFI_LIGHT_VERSION	"bl.light.db5.001"
+#define TEST_WIFI_LIGHT_VERSION	"SV.light.db5.001"
 #else
-#define TEST_WIFI_LIGHT_VERSION	"bl.light.db2.001"
+#define TEST_WIFI_LIGHT_VERSION	"SV.light.db2.001"
 #endif
 
 

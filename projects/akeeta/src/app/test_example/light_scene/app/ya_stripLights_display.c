@@ -28,6 +28,16 @@
 
 typedef enum
 {
+	PWM_R = 0,
+	PWM_G = 1,
+	PWM_B = 2,
+
+	PWM_COOL = 3,
+	PWM_WARM = 4,
+}YA_PWM;
+
+typedef enum
+{
 	PWM_DISPLAY_IDLE,
 	PWM_DISPLAY_START,
 	PWM_DISPLAY_WATING,
@@ -254,18 +264,27 @@ void ya_stripLightsDisplay_CWtoRGB(unsigned char*r, unsigned char*g, unsigned ch
 void  ya_stripLightsDisplay_writePwm(unsigned int r,unsigned int g,unsigned int b,unsigned int c,unsigned int w)
 {
 #if (FLOAT_SUPPORT == 1)
-	ya_hal_pwm_write(PWM_R,(float)(r/255.0));
-	ya_hal_pwm_write(PWM_G,(float)(g/255.0));
-	ya_hal_pwm_write(PWM_B,(float)(b/255.0));
-	ya_hal_pwm_write(PWM_COOL,(float)(c/255.0));
-	ya_hal_pwm_write(PWM_WARM,(float)(w/255.0));
+#if (LIGHT_TYPE == 0)
+	  ya_hal_pwm_write(PWM_R_INDEX,(float)(r/255.0));
+	  ya_hal_pwm_write(PWM_G_INDEX,(float)(g/255.0));
+	  ya_hal_pwm_write(PWM_B_INDEX,(float)(b/255.0));
+	  ya_hal_pwm_write(PWM_COOL_INDEX,(float)(c/255.0));
+	  ya_hal_pwm_write(PWM_WARM_INDEX,(float)(w/255.0));
 #else
-	ya_hal_pwm_write(PWM_R,(float)(r/255));
-	ya_hal_pwm_write(PWM_G,(float)(g/255));
-	ya_hal_pwm_write(PWM_B,(float)(b/255));
-	ya_hal_pwm_write(PWM_COOL,(float)(c/255));
-	ya_hal_pwm_write(PWM_WARM,(float)(w/255));
-
+	  ya_hal_pwm_write(PWM_COOL_INDEX,(float)(c/255.0));
+	  ya_hal_pwm_write(PWM_WARM_INDEX,(float)(w/255.0));
+#endif
+#else
+#if (LIGHT_TYPE == 0)
+	  ya_hal_pwm_write(PWM_R_INDEX,(uint32_t)(r/255));
+	  ya_hal_pwm_write(PWM_G_INDEX,(uint32_t)(g/255));
+	  ya_hal_pwm_write(PWM_B_INDEX,(uint32_t)(b/255));
+	  ya_hal_pwm_write(PWM_COOL_INDEX,(uint32_t)(c/255));
+	  ya_hal_pwm_write(PWM_WARM_INDEX,(uint32_t)(w/255));
+#else
+	  ya_hal_pwm_write(PWM_COOL_INDEX,(uint32_t)(c/255));
+	  ya_hal_pwm_write(PWM_WARM_INDEX,(uint32_t)(w/255));
+#endif
 #endif
 }
 

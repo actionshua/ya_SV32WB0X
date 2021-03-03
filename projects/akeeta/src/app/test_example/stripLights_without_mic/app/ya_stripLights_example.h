@@ -6,7 +6,7 @@
 
 #define STRIPLIGHT_CLOUD				 UNKNOWN_CLOUD_TYPE   
 
-#define TEST_WIFI_STRIPLIGHT_VERSION	"niao.light.005.004"
+#define TEST_WIFI_STRIPLIGHT_VERSION	"akeeta.light.5pwm.025"
 
 #define MCU_STRIPLIGHT_VERSION			""
 

@@ -381,6 +381,11 @@ void ya_light_app_cloud_handle(uint8_t *buf, uint16_t len)
 			value = atoi(json_key->valuestring);
 			if (value < WORKMODE_MAX)
 				ya_light_thing_mode.work_mode = atoi(json_key->valuestring);
+
+			#if (LIGHT_TYPE == 1)
+			if (value == WORKMODE_COLOR)
+				ya_light_thing_mode.work_mode = WORKMODE_WHITE;
+			#endif
 		} 
 
 		json_key = cJSON_GetObjectItem(root, "ColorTemperature");
@@ -405,8 +410,9 @@ void ya_light_app_cloud_handle(uint8_t *buf, uint16_t len)
 				ya_light_thing_mode.work_mode = WORKMODE_WHITE;
 				ya_light_thing_mode.switchstate = 1;
 			}
-		} 	
+		} 
 
+		#if (LIGHT_TYPE == 0)
 		json_key = cJSON_GetObjectItem(root, "Hue");
 		if (json_key && json_key->type == cJSON_String)
 		{
@@ -428,6 +434,7 @@ void ya_light_app_cloud_handle(uint8_t *buf, uint16_t len)
 			ya_light_thing_mode.switchstate = 1;
 			ya_light_thing_mode.work_mode = WORKMODE_COLOR;
 		}
+		#endif
 
 		json_key = cJSON_GetObjectItem(root, "LightScene");
 		if (json_key && json_key->type == cJSON_String)

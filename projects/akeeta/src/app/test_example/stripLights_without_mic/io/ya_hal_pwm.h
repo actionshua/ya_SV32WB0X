@@ -71,12 +71,12 @@
 
 typedef enum
 {
-	PWM_R = 0,
-	PWM_G = 1,
-	PWM_B = 2,
+	PWM_R_INDEX = 0,
+	PWM_G_INDEX = 1,
+	PWM_B_INDEX = 2,
 
-	PWM_COOL = 3,
-	PWM_WARM = 4,
+	PWM_COOL_INDEX = 3,
+	PWM_WARM_INDEX = 4,
 }YA_PWM_NAME;
 
 

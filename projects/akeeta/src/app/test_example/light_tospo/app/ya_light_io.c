@@ -27,17 +27,17 @@
 void ya_pwm_led_write(unsigned int r,unsigned int g,unsigned int b,unsigned int c,unsigned int w)
 {
 #if (FLOAT_SUPPORT == 1)
-	ya_hal_pwm_write(PWM_R,(float)(r/255.0));
-	ya_hal_pwm_write(PWM_G,(float)(g/255.0));
-	ya_hal_pwm_write(PWM_B,(float)(b/255.0));
-	ya_hal_pwm_write(PWM_COOL,(float)(c/255.0));
-	ya_hal_pwm_write(PWM_WARM,(float)(w/255.0));
+	ya_hal_pwm_write(PWM_R_INDEX,(float)(r/255.0));
+	ya_hal_pwm_write(PWM_G_INDEX,(float)(g/255.0));
+	ya_hal_pwm_write(PWM_B_INDEX,(float)(b/255.0));
+	ya_hal_pwm_write(PWM_COOL_INDEX,(float)(c/255.0));
+	ya_hal_pwm_write(PWM_WARM_INDEX,(float)(w/255.0));
 #else
-	ya_hal_pwm_write(PWM_R,(uint32_t)(r/255));
-	ya_hal_pwm_write(PWM_G,(uint32_t)(g/255));
-	ya_hal_pwm_write(PWM_B,(uint32_t)(b*/255));
-	ya_hal_pwm_write(PWM_COOL,(uint32_t)(c/255));
-	ya_hal_pwm_write(PWM_WARM,(uint32_t)(w/255));
+	ya_hal_pwm_write(PWM_R_INDEX,(uint32_t)(r/255));
+	ya_hal_pwm_write(PWM_G_INDEX,(uint32_t)(g/255));
+	ya_hal_pwm_write(PWM_B_INDEX,(uint32_t)(b*/255));
+	ya_hal_pwm_write(PWM_COOL_INDEX,(uint32_t)(c/255));
+	ya_hal_pwm_write(PWM_WARM_INDEX,(uint32_t)(w/255));
 #endif
 
 }
@@ -108,12 +108,12 @@ void ya_pwm_led_write_with_step(unsigned char r,unsigned char g,unsigned char b,
 {
 	//ya_printf(C_LOG_INFO, "2r=%d, g=%d, b=%d, c=%d, w=%d\n",r,g,b,c,w);
 
-	ya_pwm_control_step(PWM_R, R_set, r);
-	ya_pwm_control_step(PWM_G, G_set, g);
-	ya_pwm_control_step(PWM_B, B_set, b);
+	ya_pwm_control_step(PWM_R_INDEX, R_set, r);
+	ya_pwm_control_step(PWM_G_INDEX, G_set, g);
+	ya_pwm_control_step(PWM_B_INDEX, B_set, b);
 	
-	ya_pwm_control_step(PWM_COOL, C_set, c);
-	ya_pwm_control_step(PWM_WARM, W_set, w);
+	ya_pwm_control_step(PWM_COOL_INDEX, C_set, c);
+	ya_pwm_control_step(PWM_WARM_INDEX, W_set, w);
 
 
 	R_set = r;

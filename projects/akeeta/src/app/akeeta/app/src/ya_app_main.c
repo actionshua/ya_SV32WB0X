@@ -1077,9 +1077,9 @@ Rescan:
 }
 
 
-static int32_t ya_scan_data[4] = {0};
 int ya_check_enter_factory_mode(void)
 {
+	int32_t data[4];
 	int ret = -1;
 	uint8_t index = 0;	
 	ya_obj_ssid_result_t obj_scan_ssid[2];
@@ -1097,16 +1097,18 @@ int ya_check_enter_factory_mode(void)
 			strcpy(obj_scan_ssid[index].scan_ssid, TEST_WIFI_2_SSID);
 	}
 
-	ret = ya_hal_wlan_scan_obj_ssid(obj_scan_ssid, 2);
+	ret = ya_hal_wlan_scan_obj_ssid_with_fix_channel(obj_scan_ssid, 2);
 
 	if (ret == 0)
 	{
 		if (obj_scan_ssid[0].scan_result == 1 || obj_scan_ssid[1].scan_result == 1)
 		{
-			ya_scan_data[0] = obj_scan_ssid[0].scan_result;
-			ya_scan_data[1] = obj_scan_ssid[0].rssi;
-			ya_scan_data[2] = obj_scan_ssid[1].scan_result;
-			ya_scan_data[3] = obj_scan_ssid[1].rssi;
+			data[0] = obj_scan_ssid[0].scan_result;
+			data[1] = obj_scan_ssid[0].rssi;
+			data[2] = obj_scan_ssid[1].scan_result;
+			data[3] = obj_scan_ssid[1].rssi;
+		
+			ya_thing_handle_router(MODULE_FACTORY_TEST, data);
 			return 0;
 		}
 	}
@@ -1114,14 +1116,6 @@ int ya_check_enter_factory_mode(void)
 	return -1;
 }
 
-uint8_t scan_finish = 0;
-
-static void ya_start_scan_mode(void *param)
-{
-	ya_check_enter_factory_mode();
-	scan_finish = 1;
-	vTaskDelete(NULL);
-}
 
 extern int32_t ya_disable_wifi_power_saving(void);
 
@@ -1200,6 +1194,18 @@ void ya_app_main(void *arg)
 		ya_save_user_data();
 		at_cmd_log_ON();
 	}
+	if(0 == ya_check_enter_ota_test_mode())
+	{
+		if (ya_app_main_para_obj.enable_factory_router_scan) 
+		{
+			ya_printf(C_LOG_INFO, "\r\n enter scanning now \r\n");
+			if (ya_check_enter_factory_mode() == 0)
+			{
+				ya_printf(C_LOG_INFO, "\r\n === get the desired factory ssid == \r\n");
+				ya_app_state = YA_APP_FACTORY_TEST;
+			}
+		}		
+	}
 	
 	//init other para
 	ya_start_other_apps();
@@ -1218,22 +1224,6 @@ void ya_app_main(void *arg)
 
 	ya_clear_randomnum();
 	
-	if(0 == ya_check_enter_ota_test_mode())
-	{
-		if(ya_app_main_para_obj.enable_factory_router_scan)
-		{
-			while(!scan_finish)
-				ya_delay(10);
-
-			if (ya_scan_data[0] > 0 || ya_scan_data[2] > 0)
-			{
-				ya_printf(C_LOG_INFO, "\r\n === get the desired factory ssid == \r\n");
-				ya_thing_handle_router(MODULE_FACTORY_TEST, ya_scan_data);
-				ya_app_state = YA_APP_FACTORY_TEST;
-			}
-		}		
-	}
-
 	//enable watch-dog
 	ret = ya_hal_wdt_set_timeout(4000);
 	if(ret != C_OK)
@@ -1407,13 +1397,13 @@ void ya_app_main(void *arg)
 					ya_printf(C_LOG_INFO,"YA_AP_CONFIG_SUCCESS\r\n");
 					ya_save_user_data();
 					ya_clear_timer_flash_into_hardware_queue();
+					ya_hal_wlan_stop_ap();
 
 					if (ya_check_cloud_support(ya_user_data.cloud_select) == 0)
 						ya_start_cloud_apps(ya_app_main_para_obj.cloud_type);
 					else
 						support_cloud = 0;
 
-					ya_hal_wlan_stop_ap();
 					ya_hal_set_sta_mode();
 					ya_app_state = YA_APP_TO_CONNECT;
 				break;
@@ -1502,15 +1492,6 @@ void ya_start_app_main(ya_app_main_para_t *ya_app_main_para)
 
 	memset(&ya_app_main_para_obj, 0, sizeof(ya_app_main_para_t));
 	memcpy(&ya_app_main_para_obj, ya_app_main_para, sizeof(ya_app_main_para_t));
-
-#if 1
-	if(ya_app_main_para_obj.enable_factory_router_scan)
-	{
-		scan_finish = 0;
-		if(xTaskCreate(ya_start_scan_mode, "ya_start_scan_mode", (512), NULL, tskIDLE_PRIORITY + 3, NULL) != pdPASS)
-			return;
-	}
-#endif
 
 	//printf system para
 	ya_printf_verion();

@@ -28,6 +28,16 @@
 
 typedef enum
 {
+	PWM_R = 0,
+	PWM_G = 1,
+	PWM_B = 2,
+
+	PWM_COOL = 3,
+	PWM_WARM = 4,
+}YA_PWM;
+
+typedef enum
+{
 	PWM_DISPLAY_IDLE,
 	PWM_DISPLAY_START,
 	PWM_DISPLAY_WATING,
@@ -254,18 +264,27 @@ void ya_stripLightsDisplay_CWtoRGB(unsigned char*r, unsigned char*g, unsigned ch
 void  ya_stripLightsDisplay_writePwm(unsigned int r,unsigned int g,unsigned int b,unsigned int c,unsigned int w)
 {
 #if (FLOAT_SUPPORT == 1)
-	ya_hal_pwm_write(PWM_R,(float)(r/255.0));
-	ya_hal_pwm_write(PWM_G,(float)(g/255.0));
-	ya_hal_pwm_write(PWM_B,(float)(b/255.0));
-	ya_hal_pwm_write(PWM_COOL,(float)(c/255.0));
-	ya_hal_pwm_write(PWM_WARM,(float)(w/255.0));
+#if (LIGHT_TYPE == 0)
+		 ya_hal_pwm_write(PWM_R_INDEX,(float)(r/255.0));
+		 ya_hal_pwm_write(PWM_G_INDEX,(float)(g/255.0));
+		 ya_hal_pwm_write(PWM_B_INDEX,(float)(b/255.0));
+		 ya_hal_pwm_write(PWM_COOL_INDEX,(float)(c/255.0));
+		 ya_hal_pwm_write(PWM_WARM_INDEX,(float)(w/255.0));
 #else
-	ya_hal_pwm_write(PWM_R,(float)(r/255));
-	ya_hal_pwm_write(PWM_G,(float)(g/255));
-	ya_hal_pwm_write(PWM_B,(float)(b/255));
-	ya_hal_pwm_write(PWM_COOL,(float)(c/255));
-	ya_hal_pwm_write(PWM_WARM,(float)(w/255));
-
+		 ya_hal_pwm_write(PWM_COOL_INDEX,(float)(c/255.0));
+		 ya_hal_pwm_write(PWM_WARM_INDEX,(float)(w/255.0));
+#endif
+#else
+#if (LIGHT_TYPE == 0)
+		 ya_hal_pwm_write(PWM_R_INDEX,(uint32_t)(r/255));
+		 ya_hal_pwm_write(PWM_G_INDEX,(uint32_t)(g/255));
+		 ya_hal_pwm_write(PWM_B_INDEX,(uint32_t)(b/255));
+		 ya_hal_pwm_write(PWM_COOL_INDEX,(uint32_t)(c/255));
+		 ya_hal_pwm_write(PWM_WARM_INDEX,(uint32_t)(w/255));
+#else
+		 ya_hal_pwm_write(PWM_COOL_INDEX,(uint32_t)(c/255));
+		 ya_hal_pwm_write(PWM_WARM_INDEX,(uint32_t)(w/255));
+#endif
 #endif
 }
 
@@ -358,9 +377,16 @@ void ya_stripLightsDisplay_start(ya_display_stripsLight_t *pcolorInfo)
 	
 	pCtrlInfoGroup->changeType = pcolorInfo->changeType;
 	pCtrlInfoGroup->pwmGroupLen = pcolorInfo->groupNum;
-	// changeSpeed = 10~100
-	pcolorInfo->changeSpeed = (110 -pcolorInfo->changeSpeed);
 	
+	if (pcolorInfo->changeSpeed > 100)
+		pcolorInfo->changeSpeed = 100;
+	
+	pcolorInfo->changeSpeed = 100 - pcolorInfo->changeSpeed;
+	if (pcolorInfo->changeSpeed < 10)
+		pcolorInfo->changeSpeed = 10;
+
+	printf("speed: %d\r\n", pcolorInfo->changeSpeed);
+
 	if (pcolorInfo->changeType == IMMEDIATELY_TYPE)
 	{
 		pCtrlInfoGroup->timerIntervalWaiting = 1;
@@ -374,9 +400,7 @@ void ya_stripLightsDisplay_start(ya_display_stripsLight_t *pcolorInfo)
 		pCtrlInfoGroup->timerIntervalWaiting = 1;
 		pCtrlInfoGroup->timerIntervalHold = 1;
 		pCtrlInfoGroup->timerIntervalChangeDown = 1;
-
-		pCtrlInfoGroup->changeSpeed = 100;
-		pCtrlInfoGroup->timerIntervalChangeUp =  pCtrlInfoGroup->changeSpeed ;
+		pCtrlInfoGroup->timerIntervalChangeUp =  pcolorInfo->changeSpeed;
 		pCtrlInfoGroup->changeSpeed = YA_STRIPLIGHTSDISPLAY_COLORCHANGE_MAXTIME/100;
 
 		if(pcolorInfo->colorInfo[0].type == COLORTYPE_COLOR)		
