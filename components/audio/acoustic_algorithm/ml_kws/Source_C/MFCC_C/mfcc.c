@@ -21,9 +21,10 @@
  */
 
 #include <string.h>
-
+#include <stdio.h>
 #include "mfcc.h"
 #include "float.h"
+#include "osal.h"
 
 static int num_mfcc_features;
 static int frame_len;
@@ -59,16 +60,40 @@ void mfcc_init(int _num_mfcc_features, int _frame_len, int _mfcc_dec_bits)
   frame_len_padded = pow(2,ceil((log(frame_len)/log(2))));
 
   frame = malloc(sizeof(float) * frame_len_padded);
+  if(!frame) {
+    printf("[%d] %s malloc fail\n", __LINE__,  __func__);
+    configASSERT(frame);
+  }
   buffer = malloc(sizeof(float) * frame_len_padded);
+  if(!buffer) {
+    printf("[%d] %s malloc fail\n", __LINE__,  __func__);
+    configASSERT(buffer);
+  }
   mel_energies = malloc(sizeof(float) * NUM_FBANK_BINS);
+  if(!mel_energies) {
+    printf("[%d] %s malloc fail\n", __LINE__,  __func__);
+    configASSERT(mel_energies);
+  }
   //create window function
   window_func = malloc(sizeof(float) * frame_len);
+  if(!window_func) {
+    printf("[%d] %s malloc fail\n", __LINE__,  __func__);
+    configASSERT(window_func);
+  }
   for (int i = 0; i < frame_len; i++)
     window_func[i] = 0.5 - 0.5*cos(M_2PI * ((float)i) / (frame_len));
 
   //create mel filterbank
   fbank_filter_first = malloc(sizeof(int32_t) * NUM_FBANK_BINS);
-  fbank_filter_last = malloc(sizeof(int32_t) * NUM_FBANK_BINS);;
+  if(!fbank_filter_first) {
+    printf("[%d] %s malloc fail\n", __LINE__,  __func__);
+    configASSERT(fbank_filter_first);
+  }
+  fbank_filter_last = malloc(sizeof(int32_t) * NUM_FBANK_BINS);
+  if(!fbank_filter_last) {
+    printf("[%d] %s malloc fail\n", __LINE__,  __func__);
+    configASSERT(fbank_filter_last);
+  }
   mel_fbank = create_mel_fbank();
 
   //create DCT matrix
@@ -76,26 +101,44 @@ void mfcc_init(int _num_mfcc_features, int _frame_len, int _mfcc_dec_bits)
 
   //initialize FFT
   rfft = malloc(sizeof(arm_rfft_fast_instance_f32));
+  if(!rfft) {
+    printf("[%d] %s malloc fail\n", __LINE__,  __func__);
+    configASSERT(rfft);
+  }
   arm_rfft_fast_init_f32(rfft, frame_len_padded);
 }
 
 void mfcc_deinit() {
-  free(frame);
-  free(buffer);
-  free(mel_energies);
-  free(window_func);
-  free(fbank_filter_first);
-  free(fbank_filter_last);
-  free(dct_matrix);
-  free(rfft);
+  if(frame)
+    free(frame);
+  if(buffer)
+    free(buffer);
+  if(mel_energies)
+    free(mel_energies);
+  if(window_func)
+    free(window_func);
+  if(fbank_filter_first)
+    free(fbank_filter_first);
+  if(fbank_filter_last)
+    free(fbank_filter_last);
+  if(fbank_filter_last)
+    free(fbank_filter_last);
+  if(rfft)
+    free(rfft);
   for(int i=0;i<NUM_FBANK_BINS;i++)
-    free(mel_fbank[i]);
-  free(mel_fbank);
+    if(mel_fbank[i])
+      free(mel_fbank[i]);
+  if(mel_fbank)
+    free(mel_fbank);
 }
 
 static float * create_dct_matrix(int32_t input_length, int32_t coefficient_count) {
   int32_t k, n;
   float * M = malloc(sizeof(float) * input_length*coefficient_count);
+  if(!M) {
+    printf("[%d] %s malloc fail\n", __LINE__,  __func__);
+    configASSERT(M);
+  }
   float normalizer;
   arm_sqrt_f32(2.0/(float)input_length,&normalizer);
   for (k = 0; k < coefficient_count; k++) {
@@ -117,7 +160,15 @@ static float ** create_mel_fbank() {
   float mel_freq_delta = (mel_high_freq - mel_low_freq) / (NUM_FBANK_BINS+1);
 
   float *this_bin = malloc(sizeof(float) * num_fft_bins);
+  if(!this_bin) {
+    printf("[%d] %s malloc fail\n", __LINE__,  __func__);
+    configASSERT(this_bin);
+  }
   float ** mel_fbank =  malloc(sizeof(float*) * NUM_FBANK_BINS);
+  if(!mel_fbank) {
+    printf("[%d] %s malloc fail\n", __LINE__,  __func__);
+    configASSERT(mel_fbank);
+  }
   for (bin = 0; bin < NUM_FBANK_BINS; bin++) {
 
     float left_mel = mel_low_freq + bin * mel_freq_delta;
@@ -149,13 +200,18 @@ static float ** create_mel_fbank() {
     fbank_filter_first[bin] = first_index;
     fbank_filter_last[bin] = last_index;
     mel_fbank[bin] = malloc(sizeof(float) * last_index-first_index+1);
+    if(!mel_fbank[bin]) {
+      printf("[%d] %s malloc fail\n", __LINE__,  __func__);
+      configASSERT(mel_fbank[bin]);
+    }
     int32_t j = 0;
     //copy the part we care about
     for (i = first_index; i <= last_index; i++) {
       mel_fbank[bin][j++] = this_bin[i];
     }
   }
-  free(this_bin);
+  if(this_bin)
+    free(this_bin);
   return mel_fbank;
 }
 extern q7_t *mfcc_buffer;

@@ -52,23 +52,9 @@ void ssvradio_init_task(void *pdata)
     OS_TaskDelete(NULL);
 }
 
-extern unsigned int __fota_option;
-
-void alive_test(void *param) {
-    while(1) {
-        OS_MsDelay(500);
-        printf("this is alive %d\n", OS_GetUsSysTick());
-    }
-    OS_TaskDelete(NULL);
-}
-
 void APP_Init(void)
 {
     bsp_init();
-
-#if(CHIP_ID == 6020) && (CHIP_SUB_ID == 1)
-    REG32(0xccb0a418) = 0x158002aa;
-#endif
 
     rf_table_init();
 

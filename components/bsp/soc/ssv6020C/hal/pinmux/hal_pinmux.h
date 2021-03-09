@@ -97,5 +97,6 @@ void hal_pinmux_pin_manual_force_gpio(uint32_t manual_gpio);
 void hal_pinmux_pin_manual_force_gpio_32(uint32_t manual_gpio32);
 void hal_pinmux_pin_manual_restore_gpio(uint32_t manual_gpio);
 void hal_pinmux_pin_manual_restore_gpio_32(uint32_t manual_gpio32);
+void hal_pinmux_push_pull(uint32_t *push_pull);
 
 #endif  // __HAL_PINMUX_H__

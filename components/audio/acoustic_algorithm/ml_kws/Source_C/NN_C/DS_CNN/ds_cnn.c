@@ -18,6 +18,8 @@
 
 #include "ds_cnn.h"
 #include "stdlib.h"
+#include <stdio.h>
+#include "osal.h"
 
 static int frame_len;
 static int frame_shift;
@@ -79,6 +81,10 @@ int nn_get_in_dec_bits() {
 void nn_init()
 {
   scratch_pad = malloc(sizeof(q7_t) * SCRATCH_BUFFER_SIZE);
+  if(!scratch_pad) {
+    printf("[%d] %s malloc fail\n", __LINE__,  __func__);
+    configASSERT(scratch_pad);
+  }
   memset(scratch_pad, 0, sizeof(q7_t) * SCRATCH_BUFFER_SIZE);
   buffer1 = scratch_pad;
   buffer2 = buffer1 + (CONV1_OUT_CH*CONV1_OUT_X*CONV1_OUT_Y);
@@ -93,7 +99,9 @@ void nn_init()
 
 void nn_deinit()
 {
-  free(scratch_pad);
+  if(scratch_pad) {
+    free(scratch_pad);
+  }
 }
 
 void nn_run_nn(q7_t* in_data, q7_t* out_data)

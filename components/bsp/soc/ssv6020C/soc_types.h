@@ -125,6 +125,9 @@ typedef union uip_ipaddr_t {
 #endif
 
 #define BUS_MEM_NO_CACHE(ptr)           ((void *)(((unsigned int)(ptr))+0x40040000))
-#define MEM_NO_CACHE(ptr)               (((((unsigned int)(ptr)) & 0x60000000)==0x60000000)?(BUS_MEM_NO_CACHE(ptr)):(ptr))
+#define MEM_NO_CACHE(ptr)               (((((unsigned int)(ptr)) & 0x60000000) == 0x60000000)?(BUS_MEM_NO_CACHE(ptr)):(ptr))
+
+#define BUS_MEM_CACHED(ptr)             ((void *)(((unsigned int)(ptr))-0x40040000))
+#define MEM_CACHED(ptr)                 (((((unsigned int)(ptr)) & 0xA0040000) == 0xA0040000)?(BUS_MEM_CACHED(ptr)):(ptr))
 
 #endif /* end of include guard: TYPES_H */

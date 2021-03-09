@@ -61,13 +61,13 @@
 #define M_CUSTOM_P26_MODE       M_CUSTOM_ALT7                                                                                                       
 
 //ALT0 : GPIO27		/ALT1 : NONE    		/ALT2 : UART1_NCTS		    /ALT3 : PDMRX0_CLK_ii	/ALT4 : NONE			/ALT5 : I2S1_WS			    /ALT6 : NONE              /ALT7 : GPIO27
-#define M_CUSTOM_P27_MODE       M_CUSTOM_ALT7                                                                                                       
+#define M_CUSTOM_P27_MODE       M_CUSTOM_ALT0                                                                                                       
 
 //ALT0 : SIO28		/ALT1 : NONE			/ALT2 : NONE			    /ALT3 : NONE        	/ALT4 : NONE			/ALT5 : I2S0_MCLK		    /ALT6 : NONE              /ALT7 : SIO28
 #define M_CUSTOM_P28_MODE       M_CUSTOM_ALT7                                                                                                       
 
 //ALT0 : GPIO29		/ALT1 : ADC3			/ALT2 : UART1_NRTS		    /ALT3 : PDMRX0_DIN_ii	/ALT4 : UART1_RXD_ii	/ALT5 : I2S1_SDI		    /ALT6 : NONE              /ALT7 : GPIO29
-#define M_CUSTOM_P29_MODE       M_CUSTOM_ALT7                                                                                                       
+#define M_CUSTOM_P29_MODE       M_CUSTOM_ALT0                                                                                                       
 
 //ALT0 : GPIO32		/ALT1 : BTCX_BT_PTI3	/ALT2 : NONE    		    /ALT3 : SPIMAS2_SCLK	/ALT4 : NONE			/ALT5 : NONE        	    /ALT6 : NONE              /ALT7 : GPIO32
 #define M_CUSTOM_P32_MODE       M_CUSTOM_ALT7                                                                                                       

@@ -116,11 +116,13 @@ SUPPORT_SDC                     := 0
 # Misc setting
 ################################################################
 UART_IO_NUM                     := defined_by_chip
+
 # 0 ==> Debug UART, 1 ==> HSUART1, 2==> HSUART2
 UART_BAUD_RATE                  := 115200
 SUPPORT_CXX						:= 0
 ISR_STACK_SIZE                  := 2048
 
+SUPPORT_PERIPHERAL_TOUCH        := 1
 ################################################################
 # Security setting
 ################################################################

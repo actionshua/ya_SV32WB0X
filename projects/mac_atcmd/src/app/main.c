@@ -19,9 +19,13 @@
 #include <sysconf_api.h>
 #include <toolbox.h>
 #include <bsp.h>
+#ifdef BLE_EN
+#include "ble_api.h"
+#endif
 
 void Cli_Task( void *args );
 
+extern void ble_hci_rx_ssv(uint8_t *data, uint16_t len);
 
 /**********************************************************/
 
@@ -47,20 +51,6 @@ void wifirspcbfunc(WIFI_RSP *msg)
     }
 }
 
-void tcptask(void *args)
-{
-	while(1){
-		if(1==get_wifi_status()) {
-			break;
-		} else {
-			OS_MsDelay(500);
-		}
-
-	}
-
-	OS_TaskDelete(NULL);
-}
-
 void wifi_auto_connect_task(void *pdata)
 {  
     if( get_auto_connect_flag() == 1 )
@@ -78,10 +68,36 @@ void wifi_auto_connect_task(void *pdata)
 
 void ssvradio_init_task(void *pdata)
 {
+#ifdef BLE_EN
+    RADIO_INIT(DEFAULT_COUNTRY_CODE, DEFAULT_RATE_MASK_VALUE,TRUE); 
+#else
     RADIO_INIT(DEFAULT_COUNTRY_CODE, DEFAULT_RATE_MASK_VALUE,FALSE); 
+#endif
+
 #ifdef TCPIPSTACK_EN
     netstack_init(NULL);
 #endif
+
+#ifdef BLE_EN
+    if (get_ble_dtm_enable() == EN_BLE_DTM) {
+        ble_enable(DTM_MODE);
+
+    }
+    else if (get_ble_dtm_enable() == EN_BLE_HOST) {
+        ble_register_hcievent_callback(ble_hci_rx_ssv);
+        ble_enable(HCI_RAM_MODE);
+        #if MESH_BLE_EN
+        app_mesh_ble_init();
+        #else
+        #if (BLE_GATTS_API_TEST || BLE_GATTC_API_TEST)
+        app_ble_init();
+        #endif
+        #endif
+    }
+    else
+        ble_enable(HCI_UART_MODE);
+#endif//BLE_EN end
+
     OS_TaskDelete(NULL);
 }
 
@@ -91,9 +107,7 @@ void APP_Init(void)
 
     rf_table_init();
 
-#if 1
     OS_TaskCreate(Cli_Task, "cli", 1024, NULL, OS_TASK_LOW_PRIO, NULL);
-#endif
 
     OS_TaskCreate(ssvradio_init_task, "ssvradio_init", 512, NULL, OS_TASK_MIDDLE_PRIO, NULL);
 

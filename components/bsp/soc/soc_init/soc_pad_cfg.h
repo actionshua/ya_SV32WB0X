@@ -15,6 +15,7 @@ struct _pad_struct {
 #if (CHIP_ID == 6020)
     uint32_t force_gpio[4];
     uint32_t pad_5v_force_3v;
+    uint32_t push_pull[4];
 #endif
     uint32_t gpio_startup_setting_enable_mask;
     uint32_t gpio_manual_pu[4];

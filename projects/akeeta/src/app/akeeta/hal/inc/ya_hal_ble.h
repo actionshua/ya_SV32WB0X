@@ -34,9 +34,9 @@ extern int ya_hal_ble_send_bytes(uint8_t *data, uint16_t len);
 
 extern char *ya_hal_ble_get_name(void);
 
-extern void ya_hal_ble_start_adv(uint8_t *adv_ff_string, uint8_t len);
+extern int ya_hal_ble_start_adv(uint8_t *adv_ff_string, uint8_t len);
 
-extern void ya_hal_ble_init(void);
+extern int ya_hal_ble_init(void);
 
 extern void ya_hal_stop_ble(void);
 

@@ -88,31 +88,35 @@ IPERF2_EN                       := 0
 PING_EN                         := 1
 TFTP_EN                         := 1
 # 0: none, 1:pvmp3, 2:helix
-SETTING_MP3_DECODER             := 2
+SETTING_MP3_DECODER             := 1
 # 0: none, 1:shine
 SETTING_MP3_ENCODER             := 0
-ACOUSTIC_EN                     := 0
-CMSIS_EN                        := 0
+ACOUSTIC_EN                     := 1
+CMSIS_EN                        := 1
 # 0: none, 1:es8374, 2:es8311 3: es8388
 AUDIO_CODEC_EN                  := 1
 CODEC_TYPE                      ?= 2
 
-# 0: none, 1:player demo 2: kws not ds demo 3: kws use ds demo
-DEMO_TYPE                       ?= 0
+# 0: none, 2: kws not ds demo 
+DEMO_TYPE                       ?= 2
 
+SUPPORT_LITTLEVGL               := 6.1.2
+#SUPPORT_LITTLEVGL               := 7.1.0
 
 SETTING_CACHE_WT                := 1
+SUPPORT_SPI_LCM                 := 1
 ###################################################################
 # Filesystem feature
 ###################################################################
 SUPPORT_FFS                     := 2
 # SD Card
-SUPPORT_SDC                     := 0
+SUPPORT_SDC                     := 1
 
 ################################################################
 # Misc setting
 ################################################################
-UART_IO_NUM                     := defined_by_chip
+#UART_IO_NUM                     := defined_by_chip
+UART_IO_NUM                     := 0
 # 0 ==> Debug UART, 1 ==> HSUART1, 2==> HSUART2
 UART_BAUD_RATE                  := 115200
 SUPPORT_CXX                     := 0

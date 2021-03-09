@@ -38,36 +38,41 @@ void adc_btn_task(void *pdata)
     uint32_t press_cnt = 0;
     break_ready = 0;
         
-    while (break_task == 0){
-
+    while (break_task == 0)
+    {
         uint32_t voltage = adc_btn_get_voltage(g_adc_ch); //adc_btn_get_voltage(adc_ch)
 
         uint32_t btn_id = adc_btn_get_button_id (voltage);
 
         uint32_t cur_btn_st = adc_btn_get_state (btn_id,press_cnt);
         
-        if (btn_id == 0){
+        if (btn_id == 0)
+        {
             cur_btn_st = ADC_BTN_STATE_IDLE;
-            if(g_cb){   //if g_cb=NULL(0), don't do cb. if g_cb=1, do cb.
+            if(g_cb)
+            {   //if g_cb=NULL(0), don't do cb. if g_cb=1, do cb.
                 g_cb(NULL, g_adc_ch, btn_id, ADC_BTN_STATE_IDLE);
             }
-            
             press_cnt = 0;
         }
-        else 
+        else
+        {
             press_cnt++;
+        }
         
-        if (cur_btn_st == ADC_BTN_STATE_PRESSED) {
-            if(g_cb){
+        if (cur_btn_st == ADC_BTN_STATE_PRESSED)
+        {
+            if(g_cb)
+            {
                 g_cb(NULL, g_adc_ch, btn_id, ADC_BTN_STATE_PRESSED);
             }
-            
         }
-        else if (cur_btn_st == ADC_BTN_STATE_LONG_PRESSED){
-            if(g_cb){
+        else if (cur_btn_st == ADC_BTN_STATE_LONG_PRESSED)
+        {
+            if(g_cb)
+            {
                 g_cb(NULL, g_adc_ch, btn_id, ADC_BTN_STATE_LONG_PRESSED);
             }
-            
         }
     OS_MsDelay(10);        
     }
@@ -84,7 +89,7 @@ void adc_btn_init (adc_arr_t *p_btn, int num, uint16_t ch, adc_button_callback c
     g_adc_ch = ch;
     g_cb = cb;
     drv_adc_init(ch);               //init adc channel
-        
+    drv_adc_enable();    
     for (int i = 0; i < num; i++) {    //init every btn's voltage level
         p_btn[i].adc_level_step = btn_voltage_level[i];
         //printf ("adc_btn[%d].adc_level_step=%d\n", i, p_btn[i].adc_level_step);

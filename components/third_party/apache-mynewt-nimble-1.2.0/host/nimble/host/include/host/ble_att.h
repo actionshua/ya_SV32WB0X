@@ -105,7 +105,7 @@ struct os_mbuf;
 #if MESH_BLE_EN
 #define BLE_ATT_MTU_DFLT                    69//23 fix can not pairing with nRF after v2.2.0
 #else
-#define BLE_ATT_MTU_DFLT                    69//250//23 fix can not pairing with nRF after v2.2.0
+#define BLE_ATT_MTU_DFLT                    23//250//23 fix can not pairing with nRF after v2.2.0
 #endif
 
 /**

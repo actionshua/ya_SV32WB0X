@@ -5,6 +5,7 @@
 #include "ble/ctrl_v2/ble_ll_master_common.h"
 
 s16 ble_llcp_master(ble_ll_master_info_st *master_info, ble_ll_op_un op);
+s16 ble_llcp_master_reset();
 
 /**
  * latch information from cpdu

@@ -702,11 +702,18 @@ int vprintf(const char *format, va_list arg)
 __attribute__((used))
 int printf(const char* format, ...)
 {
+#if defined(SUPPORT_LOG_RINGBUFFER) && (SUPPORT_LOG_RINGBUFFER == 1)
+    OS_DeclareCritical();
+    OS_EnterCritical();
+#endif
   va_list va;
   va_start(va, format);
   char buffer[1];
   const int ret = _vsnprintf(_out_char, buffer, (size_t)-1, format, va);
   va_end(va);
+#if defined(SUPPORT_LOG_RINGBUFFER) && (SUPPORT_LOG_RINGBUFFER == 1)
+    OS_ExitCritical();
+#endif
   return ret;
 }
 

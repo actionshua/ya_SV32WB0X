@@ -166,6 +166,9 @@
 #define ATCMD_BLEDISCONNECT      ("AT+bledisconnect")
 #endif
 
+#define ATCMD_BLE_UART_START        ("AT+ble_uart_start")
+#define ATCMD_BLE_UART_TX           ("AT+ble_uart_send")
+
 #if BLE_GATTS_ATCMD_EN
 #define ATCMD_BLEADDSERVICE         ("AT+bleaddservice")
 #define ATCMD_BLESENDINDICATION     ("AT+blesendindication")

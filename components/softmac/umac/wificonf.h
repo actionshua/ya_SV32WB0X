@@ -523,6 +523,7 @@ typedef struct t_AP_DETAIL_INFO
     u8                    checkAPCnt;
     u8                    forcenmode;
     u8                    host_ethpkt_offset;
+	struct netif          *pwlan;
 } AP_DETAIL_INFO;
 
 typedef struct ssv_reg_st {
@@ -559,6 +560,7 @@ typedef struct t_IEEE80211STATUS
     u8  conn_tx_deauth_en;
     u8  force_24G_ht40;      
     u8  txpkt_pbuftype;      
+    u8  check_morebit;      
     OsTaskHandle scantask;
     
     //softap status!!

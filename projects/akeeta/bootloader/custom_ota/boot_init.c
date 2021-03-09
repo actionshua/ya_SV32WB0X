@@ -9,7 +9,7 @@
 
 // this function will execute before boot system start.
 void _boot_init() {
-    tiny_printf_display(1);
+    tiny_printf_display(0);
 
     //set pinmux for uart fw upgrade
 	uint32_t pin_mode = 0;

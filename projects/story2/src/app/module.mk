@@ -22,5 +22,10 @@ LOCAL_INC += -I$(PROJ_DIR)/src/cli
 LOCAL_INC += -Icomponents/audio/acoustic_algorithm
 LOCAL_INC += -Icomponents/audio/codec_common
 LOCAL_INC += -Icomponents/third_party/shine/lib
+LOCAL_INC += -Icomponents/third_party/littlevgl-$(SUPPORT_LITTLEVGL)/lv_sim_eclipse_sdl/lvgl
+LOCAL_INC += -Icomponents/third_party/littlevgl-$(SUPPORT_LITTLEVGL)/
+#LOCAL_INC += -I$(PROJ_DIR)/src/board/param
+LOCAL_INC += -Icomponents/drivers/spi_lcm
+
 
 $(eval $(call build-lib,$(LIBRARY_NAME),$(LIB_SRC),$(LIB_ASRC),$(LOCAL_CFLAGS),$(LOCAL_INC),$(LOCAL_AFLAGS),$(MYDIR)))

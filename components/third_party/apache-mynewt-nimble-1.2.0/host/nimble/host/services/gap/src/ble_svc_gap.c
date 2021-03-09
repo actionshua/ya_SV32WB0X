@@ -263,6 +263,11 @@ ble_svc_gap_device_name_set(const char *name)
     return 0;
 }
 
+char *ble_svc_gap_device_name_get(void)
+{
+    return ble_svc_gap_name;
+}
+
 uint16_t
 ble_svc_gap_device_appearance(void)
 {

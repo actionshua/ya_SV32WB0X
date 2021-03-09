@@ -11,8 +11,13 @@ typedef struct RingBuf {
     uint8_t* volatile p_w;   /**< Write pointer */
     volatile int32_t fill_cnt;  /**< Number of filled slots */
     int32_t size;       /**< Buffer size */
+#if 0
     OsMutex can_read;
     OsMutex can_write;
+#else
+    OsSemaphore can_read;
+    OsSemaphore can_write;
+#endif
     OsMutex mux;
     size_t total_sz;
     int abort;

@@ -200,6 +200,7 @@ int mbedtls_net_connect( mbedtls_net_context *ctx, const char *host,
     return( ret );
 }
 #endif
+#if 1
 int mbedtls_net_connect( mbedtls_net_context *ctx, const char *host, const char *port, int proto )
 {
 	/*******************************************/
@@ -299,7 +300,7 @@ out:
 
     return( ret );
 }
-
+#endif
 /*
  * Create a listening socket on bind_ip:port
  */

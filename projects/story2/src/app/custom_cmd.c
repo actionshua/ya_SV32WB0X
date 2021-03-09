@@ -69,6 +69,7 @@ static int socket_fd_back = 0;
 
 extern void helix_fsal_player(void *param);
 extern int g_mp3_fsal_player_stop;
+extern int g_mp3_fsal_player_exit;
 static int sg_tx_use[2] = {0,0};
 static int sg_rx_use[2] = {0,0};
 static SSV_DIR *sg_cli_folder;
@@ -150,7 +151,7 @@ static int sg_sin_1k_44100_8b_wave[] = {
 
 #define RND_MAX_SIZE        (1024)
 #define RND_FNAME_MAX_LEN   (8)
-#define USE_BUF_NUM   36
+#define USE_BUF_NUM   8
 #define RECORD_FILE_NAME "/sdcard/record.pcm"
 #define CHANNELS        2
 #define RECORD_SAMPLE    576
@@ -579,6 +580,9 @@ void start_mp3(void *param)
 
     if(check_start_input_parameter(module, data_mode, pdm_en, 0) < 0)
         goto EXIT;
+
+    g_mp3_fsal_player_stop = 0;
+    g_mp3_fsal_player_exit = 0;
 
     OS_TaskCreate(helix_fsal_player, "helix", 1024*3+2048, args, OS_TASK_HIGH_PRIO, NULL);
 

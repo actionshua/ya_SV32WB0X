@@ -157,6 +157,20 @@ LOCAL_INC += -I$(TOPDIR)/components/tools/utility/SSV_cJSON
 LOCAL_INC += -I$(TOPDIR)/components/bsp/soc/lowpower
 LOCAL_INC += -I$(TOPDIR)/components/tools/fota_api
 
+LOCAL_INC += -I$(TOPDIR)/components/ble/inc/common
+LOCAL_INC += -I$(TOPDIR)/components/third_party/apache-mynewt-nimble-1.2.0/ble_mesh/ssv_ble_mesh/mesh_core
+LOCAL_INC += -I$(TOPDIR)/components/third_party/apache-mynewt-nimble-1.2.0/ble_mesh/ssv_common/include
+LOCAL_INC += -I$(TOPDIR)/components/third_party/apache-mynewt-nimble-1.2.0/ble_mesh/ssv_ble_mesh/mesh_common/include
+LOCAL_INC += -I$(TOPDIR)/components/third_party/apache-mynewt-nimble-1.2.0/ble_mesh/log/include
+LOCAL_INC += -I$(TOPDIR)/components/third_party/apache-mynewt-nimble-1.2.0/ble_mesh
+LOCAL_INC += -I$(TOPDIR)/components/third_party/apache-mynewt-nimble-1.2.0/ble_mesh/ssv_ble_mesh/mesh_core/include
+LOCAL_INC += -I$(TOPDIR)/components/third_party/apache-mynewt-nimble-1.2.0/nimble/host/include
+LOCAL_INC += -I$(TOPDIR)/components/third_party/apache-mynewt-nimble-1.2.0/porting/nimble/include
+LOCAL_INC += -I$(TOPDIR)/components/third_party/apache-mynewt-nimble-1.2.0/nimble/include
+LOCAL_INC += -I$(TOPDIR)/components/third_party/apache-mynewt-nimble-1.2.0/porting/npl/freertos/include
+LOCAL_INC += -I$(TOPDIR)/components/third_party/apache-mynewt-nimble-1.2.0/common/include
+LOCAL_INC += -I$(TOPDIR)/components/third_party/apache-mynewt-nimble-1.2.0/host/bluedroid/api/include
+
 LOCAL_INC += -I$(TOPDIR)/projects/akeeta/src/app/user
 LOCAL_INC += -I$(TOPDIR)/projects/akeeta/src/app/akeeta/hal/inc
 LOCAL_INC += -I$(TOPDIR)/projects/akeeta/src/app/akeeta/app/inc

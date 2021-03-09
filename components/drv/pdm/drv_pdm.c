@@ -95,6 +95,7 @@ void pdm_downsampler_enable(drv_pdm_port port, int src_sample, int dest_sample)
     hal_pdm_ctl_rx_mono_ctl(port, HAL_PDM_ONLY_L);
     hal_pdm_ctl_rx_ds_enable(port);
     hal_pdm_rx_stereo_enable(port);
+    hal_pdm_rx_mask_enable(port);
     hal_pdm_rx_ch_enable(port);
 }
 #endif

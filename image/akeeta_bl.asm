@@ -1,5 +1,5 @@
 
-/home/yaguan/work/SV32WB0X_new/SSV.tiramisu.sv32wb0x.20Q2.2105.01.01R/image/akeeta_bl.elf:     file format elf32-nds32le
+/home/yaguan/work/SSV.tiramisu.sv32wb0x.20Q2.2110.01.01R/SSV.tiramisu.sv32wb0x.20Q2.2110.01.01R/image/akeeta_bl.elf:     file format elf32-nds32le
 
 
 Disassembly of section .ota_boot_hdr:
@@ -106,92 +106,117 @@ Disassembly of section .ota_boot_hdr:
 30000174:	6a 00 07 09 	fmtcsr $r0
 30000178:	64 00 00 08 	dsb
 3000017c:	3f f8 80 00 	addi.gp $sp,#0x8000
-30000180:	84 0f       	movi55 $r0,#0xf
-30000182:	64 04 c0 03 	mtsr $r0,$ilmb
-30000186:	64 00 00 09 	isb
-3000018a:	46 00 01 00 	sethi $r0,#0x100
-3000018e:	58 00 00 09 	ori $r0,$r0,#0x9
-30000192:	64 04 e0 03 	mtsr $r0,$dlmb
-30000196:	64 00 00 09 	isb
-3000019a:	46 0c 00 00 	sethi $r0,#0xc0000
-3000019e:	58 00 01 00 	ori $r0,$r0,#0x100
-300001a2:	84 3f       	movi55 $r1,#-1
-300001a4:	14 10 00 14 	swi $r1,[$r0+#0x50]
-300001a8:	14 10 00 15 	swi $r1,[$r0+#0x54]
-300001ac:	49 00 00 50 	jal 3000024c <_ota_move_fast_boot_code>
-300001b0:	46 f0 00 00 	sethi $r15,#0x0
-300001b4:	58 f7 80 90 	ori $r15,$r15,#0x90
-300001b8:	4b e0 3c 01 	jral $lp,$r15
+30000180:	46 0d 90 03 	sethi $r0,#0xd9003
+30000184:	58 00 0f f8 	ori $r0,$r0,#0xff8
+30000188:	b4 00       	lwi450 $r0,[$r0]
+3000018a:	92 1e       	srli45 $r0,#0x1e
+3000018c:	c0 14       	beqz38 $r0,300001b4 <__no_volt_patch>
+3000018e:	46 1c cb 0b 	sethi $r1,#0xccb0b
+30000192:	58 10 80 10 	ori $r1,$r1,#0x10
+30000196:	b4 41       	lwi450 $r2,[$r1]
+30000198:	44 3f ff c7 	movi $r3,#-57
+3000019c:	fe 9e       	and33 $r2,$r3
+3000019e:	9e 01       	subi333 $r0,$r0,#0x1
+300001a0:	4e 02 00 07 	beqz $r0,300001ae <__1_volt_patch>
 
-300001bc <OTA_Init_Nds32>:
-300001bc:	64 02 00 02 	mfsr $r0,$psw
-300001c0:	44 1f f0 00 	movi $r1,#-4096
-300001c4:	fe 0e       	and33 $r0,$r1
-300001c6:	84 28       	movi55 $r1,#0x8
-300001c8:	fe 0f       	or33 $r0,$r1
-300001ca:	64 02 00 03 	mtsr $r0,$psw
-300001ce:	64 00 00 09 	isb
-300001d2:	46 f0 00 02 	sethi $r15,#0x2
-300001d6:	58 f7 85 64 	ori $r15,$r15,#0x564
-300001da:	dd 2f       	jral5 $r15
-300001dc:	46 f0 00 02 	sethi $r15,#0x2
-300001e0:	58 f7 85 10 	ori $r15,$r15,#0x510
-300001e4:	dd 2f       	jral5 $r15
-300001e6:	46 f0 00 02 	sethi $r15,#0x2
-300001ea:	58 f7 84 c0 	ori $r15,$r15,#0x4c0
-300001ee:	dd 2f       	jral5 $r15
-300001f0:	46 f0 00 00 	sethi $r15,#0x0
-300001f4:	58 f7 80 c0 	ori $r15,$r15,#0xc0
-300001f8:	dd 2f       	jral5 $r15
-300001fa:	46 f0 00 00 	sethi $r15,#0x0
-300001fe:	58 f7 82 58 	ori $r15,$r15,#0x258
-30000202:	dd 2f       	jral5 $r15
-30000204:	46 f0 00 00 	sethi $r15,#0x0
-30000208:	58 f7 80 c8 	ori $r15,$r15,#0xc8
-3000020c:	dd 2f       	jral5 $r15
-3000020e:	46 f0 00 00 	sethi $r15,#0x0
-30000212:	58 f7 80 cc 	ori $r15,$r15,#0xcc
-30000216:	dd 2f       	jral5 $r15
-30000218:	96 44       	xlsb33 $r1,$r0
-3000021a:	c9 02       	bnez38 $r1,3000021e <__sys_fota>
-3000021c:	dd 00       	jr5 $r0
+300001a4 <__2_volt_patch>:
+300001a4:	44 30 00 30 	movi $r3,#0x30
+300001a8:	fe 9f       	or33 $r2,$r3
+300001aa:	b6 41       	swi450 $r2,[$r1]
+300001ac:	d5 04       	j8 300001b4 <__no_volt_patch>
 
-3000021e <__sys_fota>:
-3000021e:	84 21       	movi55 $r1,#0x1
-30000220:	46 03 00 25 	sethi $r0,#0x30025
-30000224:	58 00 00 00 	ori $r0,$r0,#0x0
-30000228:	5a 10 00 06 	beqc $r1,#0x0,30000234 <__fota_fs>
-3000022c:	5a 10 01 04 	beqc $r1,#0x1,30000234 <__fota_fs>
-30000230:	5a 10 02 03 	beqc $r1,#0x2,30000236 <__fota_ab>
+300001ae <__1_volt_patch>:
+300001ae:	fa 78       	movpi45 $r3,#0x28
+300001b0:	fe 9f       	or33 $r2,$r3
+300001b2:	b6 41       	swi450 $r2,[$r1]
 
-30000234 <__fota_fs>:
-30000234:	dd 00       	jr5 $r0
+300001b4 <__no_volt_patch>:
+300001b4:	84 0f       	movi55 $r0,#0xf
+300001b6:	64 04 c0 03 	mtsr $r0,$ilmb
+300001ba:	64 00 00 09 	isb
+300001be:	46 00 01 00 	sethi $r0,#0x100
+300001c2:	58 00 00 09 	ori $r0,$r0,#0x9
+300001c6:	64 04 e0 03 	mtsr $r0,$dlmb
+300001ca:	64 00 00 09 	isb
+300001ce:	46 0c 00 00 	sethi $r0,#0xc0000
+300001d2:	58 00 01 00 	ori $r0,$r0,#0x100
+300001d6:	84 3f       	movi55 $r1,#-1
+300001d8:	14 10 00 14 	swi $r1,[$r0+#0x50]
+300001dc:	14 10 00 15 	swi $r1,[$r0+#0x54]
+300001e0:	49 00 00 50 	jal 30000280 <_ota_move_fast_boot_code>
+300001e4:	46 f0 00 00 	sethi $r15,#0x0
+300001e8:	58 f7 80 90 	ori $r15,$r15,#0x90
+300001ec:	4b e0 3c 01 	jral $lp,$r15
 
-30000236 <__fota_ab>:
-30000236:	46 23 00 10 	sethi $r2,#0x30010
-3000023a:	58 21 00 00 	ori $r2,$r2,#0x0
-3000023e:	b4 62       	lwi450 $r3,[$r2]
-30000240:	cb 05       	bnez38 $r3,3000024a <__fota_ab_go_a>
-30000242:	46 03 00 fc 	sethi $r0,#0x300fc
-30000246:	58 00 00 00 	ori $r0,$r0,#0x0
+300001f0 <OTA_Init_Nds32>:
+300001f0:	64 02 00 02 	mfsr $r0,$psw
+300001f4:	44 1f f0 00 	movi $r1,#-4096
+300001f8:	fe 0e       	and33 $r0,$r1
+300001fa:	84 28       	movi55 $r1,#0x8
+300001fc:	fe 0f       	or33 $r0,$r1
+300001fe:	64 02 00 03 	mtsr $r0,$psw
+30000202:	64 00 00 09 	isb
+30000206:	46 f0 00 02 	sethi $r15,#0x2
+3000020a:	58 f7 85 64 	ori $r15,$r15,#0x564
+3000020e:	dd 2f       	jral5 $r15
+30000210:	46 f0 00 02 	sethi $r15,#0x2
+30000214:	58 f7 85 10 	ori $r15,$r15,#0x510
+30000218:	dd 2f       	jral5 $r15
+3000021a:	46 f0 00 02 	sethi $r15,#0x2
+3000021e:	58 f7 84 c0 	ori $r15,$r15,#0x4c0
+30000222:	dd 2f       	jral5 $r15
+30000224:	46 f0 00 00 	sethi $r15,#0x0
+30000228:	58 f7 80 c0 	ori $r15,$r15,#0xc0
+3000022c:	dd 2f       	jral5 $r15
+3000022e:	46 f0 00 00 	sethi $r15,#0x0
+30000232:	58 f7 82 58 	ori $r15,$r15,#0x258
+30000236:	dd 2f       	jral5 $r15
+30000238:	46 f0 00 00 	sethi $r15,#0x0
+3000023c:	58 f7 80 c8 	ori $r15,$r15,#0xc8
+30000240:	dd 2f       	jral5 $r15
+30000242:	46 f0 00 00 	sethi $r15,#0x0
+30000246:	58 f7 80 cc 	ori $r15,$r15,#0xcc
+3000024a:	dd 2f       	jral5 $r15
+3000024c:	96 44       	xlsb33 $r1,$r0
+3000024e:	c9 02       	bnez38 $r1,30000252 <__sys_fota>
+30000250:	dd 00       	jr5 $r0
 
-3000024a <__fota_ab_go_a>:
-3000024a:	dd 00       	jr5 $r0
+30000252 <__sys_fota>:
+30000252:	84 21       	movi55 $r1,#0x1
+30000254:	46 03 00 25 	sethi $r0,#0x30025
+30000258:	58 00 00 00 	ori $r0,$r0,#0x0
+3000025c:	5a 10 00 06 	beqc $r1,#0x0,30000268 <__fota_fs>
+30000260:	5a 10 01 04 	beqc $r1,#0x1,30000268 <__fota_fs>
+30000264:	5a 10 02 03 	beqc $r1,#0x2,3000026a <__fota_ab>
 
-3000024c <_ota_move_fast_boot_code>:
-3000024c:	84 a0       	movi55 $r5,#0x0
-3000024e:	44 40 00 bc 	movi $r4,#0xbc
-30000252:	8a 85       	sub45 $r4,$r5
-30000254:	47 03 00 00 	sethi $r16,#0x30000
-30000258:	59 08 02 74 	ori $r16,$r16,#0x274
-3000025c:	80 64       	mov55 $r3,$r4
-3000025e:	80 25       	mov55 $r1,$r5
-30000260:	80 50       	mov55 $r2,$r16
-30000262:	0c 01 00 01 	lwi.bi $r0,[$r2],#0x4
-30000266:	1c 00 80 01 	swi.bi $r0,[$r1],#0x4
-3000026a:	50 31 ff fc 	addi $r3,$r3,#-4
-3000026e:	4e 36 ff fa 	bgtz $r3,30000262 <_ota_move_fast_boot_code+0x16>
-30000272:	dd 9e       	ret5 $lp
+30000268 <__fota_fs>:
+30000268:	dd 00       	jr5 $r0
+
+3000026a <__fota_ab>:
+3000026a:	46 23 00 10 	sethi $r2,#0x30010
+3000026e:	58 21 00 00 	ori $r2,$r2,#0x0
+30000272:	b4 62       	lwi450 $r3,[$r2]
+30000274:	cb 05       	bnez38 $r3,3000027e <__fota_ab_go_a>
+30000276:	46 03 00 fc 	sethi $r0,#0x300fc
+3000027a:	58 00 00 00 	ori $r0,$r0,#0x0
+
+3000027e <__fota_ab_go_a>:
+3000027e:	dd 00       	jr5 $r0
+
+30000280 <_ota_move_fast_boot_code>:
+30000280:	84 a0       	movi55 $r5,#0x0
+30000282:	44 40 00 bc 	movi $r4,#0xbc
+30000286:	8a 85       	sub45 $r4,$r5
+30000288:	47 03 00 00 	sethi $r16,#0x30000
+3000028c:	59 08 02 a8 	ori $r16,$r16,#0x2a8
+30000290:	80 64       	mov55 $r3,$r4
+30000292:	80 25       	mov55 $r1,$r5
+30000294:	80 50       	mov55 $r2,$r16
+30000296:	0c 01 00 01 	lwi.bi $r0,[$r2],#0x4
+3000029a:	1c 00 80 01 	swi.bi $r0,[$r1],#0x4
+3000029e:	50 31 ff fc 	addi $r3,$r3,#-4
+300002a2:	4e 36 ff fa 	bgtz $r3,30000296 <_ota_move_fast_boot_code+0x16>
+300002a6:	dd 9e       	ret5 $lp
 
 Disassembly of section .ota_fast_boot_code:
 
@@ -238,7 +263,7 @@ Disassembly of section .ota_fast_boot_code:
   94:	44 40 b4 c8 	movi $r4,#0xb4c8
   98:	8a 85       	sub45 $r4,$r5
   9a:	47 03 00 00 	sethi $r16,#0x30000
-  9e:	59 08 03 30 	ori $r16,$r16,#0x330
+  9e:	59 08 03 64 	ori $r16,$r16,#0x364
   a2:	80 64       	mov55 $r3,$r4
   a4:	80 25       	mov55 $r1,$r5
   a6:	80 50       	mov55 $r2,$r16
@@ -252,7 +277,7 @@ Disassembly of section .ota_fast_boot_code:
 Disassembly of section .fast_code:
 
 000000c0 <_boot_init>:
-      c0:	84 01       	movi55 $r0,#0x1
+      c0:	84 00       	movi55 $r0,#0x0
       c2:	48 00 02 c3 	j 648 <tiny_printf_display>
       c6:	92 00       	nop16
 
@@ -364,7 +389,7 @@ Disassembly of section .fast_code:
      228:	14 01 00 33 	swi $r0,[$r2+#0xcc]
      22c:	3c 3c 00 18 	lwi.gp $r3,[+#0x60]
      230:	46 13 00 00 	sethi $r1,#0x30000
-     234:	58 10 83 30 	ori $r1,$r1,#0x330
+     234:	58 10 83 64 	ori $r1,$r1,#0x364
      238:	44 00 00 c0 	movi $r0,#0xc0
      23c:	9a 08       	sub333 $r0,$r1,$r0
      23e:	88 03       	add45 $r0,$r3
@@ -3283,7 +3308,7 @@ Disassembly of section .fast_code:
     2514:	3e 48 00 88 	addi.gp $r4,#0x88
     2518:	8a 85       	sub45 $r4,$r5
     251a:	47 03 00 0b 	sethi $r16,#0x3000b
-    251e:	59 08 07 38 	ori $r16,$r16,#0x738
+    251e:	59 08 07 6c 	ori $r16,$r16,#0x76c
     2522:	80 64       	mov55 $r3,$r4
     2524:	80 25       	mov55 $r1,$r5
     2526:	80 50       	mov55 $r2,$r16

@@ -10,8 +10,7 @@
  *
  */
 
-
-/**
+ /**
  * @brief  Enable pinmux settings of GPIO pin for selected function.
  *
  * @param  function [IN] Selected function[0:31] of GPIO pin.
@@ -23,19 +22,12 @@ int8_t drv_pinmux_manual_function_select_enable(pinmux_fun_t function);
 
 
 /**
- * @brief  Disable pinmux settings of GPIO pin for selected function.
+ * @brief  force digit pinout to GPIO mode.
  *
- * @param  function [IN] Selected function[0:31] of GPIO pin.
- *
- * @return  -1              select function error!
- * @return   0              The operation completed successfully.
+ * @param  pin [IN] select pin to GPIO mode.
+ * @param  isForceGPIO  1 to Force GPIO.
+ *                      0 remove Force GPIO.
  */
-int8_t drv_pinmux_manual_function_select_disable(pinmux_fun_t function);
-void drv_pinmux_pin_manual_io(uint32_t manual_gpio);
-void drv_pinmux_pin_manual_io_32(uint32_t manual_gpio32);
-void drv_pinmux_pin_manual_force_gpio(uint32_t manual_gpio);
-void drv_pinmux_pin_manual_force_gpio_32(uint32_t manual_gpio32);
-void drv_pinmux_pin_manual_restore_gpio(uint32_t manual_gpio);
-void drv_pinmux_pin_manual_restore_gpio_32(uint32_t manual_gpio32);
+void drv_pinmux_force_gpio(uint32_t pin, int isForceGPIO);
 
 #endif  // __DRV_PINMUX_H__

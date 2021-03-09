@@ -89,6 +89,9 @@ int adjust_music = 0;
 uint32_t btn_begin_time = 0;
 adc_arr_t btns[USER_BUTTON_MAX];
 
+void guiTask(void *arg);
+void terminal_add(const char * txt_in);
+
 static char *getExtension(char *fileName){
     int len = strlen(fileName);
     int i = len;
@@ -227,7 +230,7 @@ void kws_adc_button_callback (void *user_data, int adc, int id, adc_btn_state_t 
 {
     uint32_t btn_end_time = OS_GetSysTick();
     int vol = 0;
-
+    //printf("%d btna is %d (%d)\n", id, state, g_mp3_fsal_player_pause);
     if((id >= 1) && (id <= 6)) {
         if((btn_end_time -btn_begin_time) > 500) {
             btn_begin_time = OS_GetSysTick();
@@ -345,13 +348,17 @@ uint32_t VADFrameCalculateZeroCrossingRate(int16_t*frame, int size) {
     return zcr;
 }
 
-void kws_init()
+void kws_task_init()
 {
 #if 1
 #if 1
-    kws_audio_buffer = malloc(sizeof(int16_t) * 16000);
+    kws_audio_buffer = (int16_t *)OS_MemAlloc(sizeof(int16_t) * 16000);
+    if(kws_audio_buffer != NULL) {
     memset(kws_audio_buffer, 0, (sizeof(int16_t) * 16000));
     kws_nn_init_with_buffer(kws_audio_buffer);
+    } else {
+        printf("kws_task_init malloc fail\n");
+    }
 #else
     kws_nn_init(recording_win,averaging_window_len);
     kws_audio_buffer = malloc(sizeof(int16_t) * kws_audio_buffer_size);
@@ -364,7 +371,7 @@ void kws_deinit()
 {
 #if 1
     kws_nn_deinit();
-    free(kws_audio_buffer);
+    OS_MemFree(kws_audio_buffer);
 #endif
 }
 
@@ -509,8 +516,7 @@ void kws_task(void *param)
     int read = (RECORD_SAMPLE*BYTES_WIDTH*60);
     uint8_t buf[len];
     int kws_re_en = 0, real_voice = 0;
-
-    kws_init();
+    kws_task_init();
     OS_EnterCritical();
     printf("\n==enter kws: %d %d==\n", sizeof(int16_t) * kws_audio_buffer_size, len);
     OS_ExitCritical();
@@ -615,6 +621,9 @@ void echo_player(void *param)
     OS_MsDelay(1000);
     printf("\n==enter echo player==\n");    
 
+    //REG32(0xc0000590)  = 0xffffffff;
+    //OS_TaskCreate(guiTask, "gui_init", 512, NULL, ( OS_TASK_MIDDLE_PRIO ), NULL);
+
     adc_btn_init(btns ,USER_BUTTON_MAX, ADC_EXT_VOLTAGE_GPIO_GPIO02, kws_adc_button_callback);
 
     while(sg_tx_use[0] == 1) {
@@ -648,7 +657,9 @@ void echo_player(void *param)
         strcpy(cmd_args->argv[3], "1");
         strcpy(cmd_args->argv[4], "0");
         printf("play[%d]: %s (%d)\n",now_music, name);
-        OS_TaskCreate(helix_fsal_player, "helix", 1024, cmd_args, OS_TASK_MIDDLE_PRIO, NULL);
+        //terminal_add(name);
+        //terminal_add("\n");
+        OS_TaskCreate(helix_fsal_player, "helix", 1024*2, cmd_args, OS_TASK_MIDDLE_PRIO, NULL);
 
         while(g_mp3_fsal_player_stop == 0) {
             OS_MsDelay(1);

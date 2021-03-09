@@ -16,6 +16,8 @@
 #include <stddef.h>  // size_t
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
+#include "osal.h"
 
 enum Wrap {
   SAME_WRAP,
@@ -73,11 +75,15 @@ RingBuffer* WebRtc_CreateBuffer(size_t element_count, size_t element_size) {
 
   self = malloc(sizeof(RingBuffer));
   if (!self) {
+    printf("[%d] %s malloc fail\n", __LINE__,  __func__);
+    configASSERT(self);
     return NULL;
   }
 
   self->data = malloc(element_count * element_size);
   if (!self->data) {
+    printf("[%d] %s malloc fail\n", __LINE__,  __func__);
+    configASSERT(self->data);
     free(self);
     self = NULL;
     return NULL;
@@ -109,9 +115,12 @@ void WebRtc_FreeBuffer(void* handle) {
   if (!self) {
     return;
   }
-
-  free(self->data);
-  free(self);
+  if (self->data) {
+    free(self->data);
+  }
+  if (self) {  
+    free(self);
+  }
 }
 
 size_t WebRtc_ReadBuffer(RingBuffer* self,

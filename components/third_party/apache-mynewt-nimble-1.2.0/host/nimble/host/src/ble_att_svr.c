@@ -71,7 +71,7 @@ ble_att_print_ha_cb(void)
     for (entry = STAILQ_FIRST(&ble_att_svr_list);
          entry != NULL;
          entry = STAILQ_NEXT(entry, ha_next)) {
-        printf("handle id = %d uuid=0x%x cb_arg=0x%x\n",entry->ha_handle_id, (int) BLE_UUID16(entry->ha_uuid)->value);             
+        printf("handle id = %d uuid=0x%x cb_arg=0x%x\n",entry->ha_handle_id, (int) BLE_UUID16(entry->ha_uuid)->value);
     }
 
     return;
@@ -1735,7 +1735,7 @@ ble_att_svr_read_group_type_entry_write(struct os_mbuf *om, uint16_t mtu,
     }
     //printf("entry_write start_group_handle %d, end_group_handle %d\n", start_group_handle, end_group_handle);
     //printf("service_uuid->type %d\n", service_uuid->type);
-    
+
     put_le16(buf + 0, start_group_handle);
     put_le16(buf + 2, end_group_handle);
     ble_uuid_flat(service_uuid, buf + 4);
@@ -1816,7 +1816,7 @@ ble_att_svr_build_read_group_type_rsp(uint16_t conn_handle,
                 /*printf("txom om_pkthdr_len = %d, txom->om_len %d\n", txom->om_pkthdr_len, txom->om_len);
                 printf("txom = 0x%02X %02X %02X %02X %02X\n", txom->om_data[0], txom->om_data[1], txom->om_data[2], txom->om_data[3], txom->om_data[4]);
                 printf("txom = 0x%02X %02X %02X %02X %02X\n", txom->om_data[5], txom->om_data[6], txom->om_data[7], txom->om_data[8], txom->om_data[9]);*/
-                
+
                 start_group_handle = 0;
                 end_group_handle = 0;
                 if (rc != 0) {
@@ -1892,7 +1892,7 @@ done:
                  * end handle of 0xffff so that the client knows there are no
                  * more attributes without needing to send a follow-up request.
                  */
-                end_group_handle = 0xffff;
+                end_group_handle = 0xffff;//mark here if you don't want to return end handle ffffff
             }
             rc = ble_att_svr_read_group_type_entry_write(txom, mtu,
                                                          start_group_handle,

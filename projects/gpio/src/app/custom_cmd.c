@@ -4,14 +4,19 @@
 #include "soc_types.h"
 #include "soc_defs.h"
 #include "osal.h"
-
 #include "cli.h"
 #include "error.h"
 
 #include <hal_gpio.h>
+                          
+#include <hal_gpio.h>
 #include <drv_gpio.h>
 #include "hal_pinmux.h"
 #include "drv_pinmux.h"
+
+#if defined(SUPPORT_PERIPHERAL_TOUCH) && (SUPPORT_PERIPHERAL_TOUCH==1)
+#include <drv_touch.h>
+#endif
 
 #include "logger.h"
 #include <bsp.h>
@@ -520,7 +525,7 @@ int Cmd_ReadReg32 (s32 argc, char *argv[])
 }
 
 int Cmd_set_force_gpio(int32_t argc, char *argv[]) {
-    
+
     uint32_t gpio_id = 0;
     	
     if (argc != 2) {
@@ -534,53 +539,384 @@ int Cmd_set_force_gpio(int32_t argc, char *argv[]) {
         printf("Usage   : set_force_gpio <id>\n");
         printf("<id>    : gpio id(0-%d)\n", GPIO_MAX);
         return -1;
+
     }
 
-    if ((gpio_id >=0) && (gpio_id <=31))
-    {
-        drv_pinmux_pin_manual_force_gpio(gpio_id);
-    }
-    else
-    {
-        drv_pinmux_pin_manual_force_gpio_32(gpio_id);
-    }
+    drv_pinmux_force_gpio(gpio_id, 1);
 
     CMD_LOG_I("gpio_id = %d\n", gpio_id);
 
     return 0;
 }
 
-int Cmd_set_restore_gpio(int32_t argc, char *argv[]) {
+int Cmd_set_remove_force_gpio(int32_t argc, char *argv[]) {
     
     uint32_t gpio_id = 0;
     	
     if (argc != 2) {
+     
         printf("Usage   : set_restore_gpio <id>\n");
+
         return -1;
     }
 
 	gpio_id = strtoul(argv[1], NULL, 10);
 
     if (gpio_id > GPIO_MAX) {
+     
         printf("Usage   : set_restore_gpio <id>\n");
         printf("<id>    : gpio id(0-%d)\n", GPIO_MAX);
+
         return -1;
     }
 
-    if ((gpio_id >=0) && (gpio_id <=31))
-    {
-        drv_pinmux_pin_manual_restore_gpio(gpio_id);
-    }
-    else
-    {
-        drv_pinmux_pin_manual_restore_gpio_32(gpio_id);
-    }
+    drv_pinmux_force_gpio(gpio_id, 0);
 
     CMD_LOG_I("gpio_id = %d\n", gpio_id);
 
     return 0;
 }
 
+/*---------------------Touch example code (START)-----------------------------*/
+#if defined(SUPPORT_PERIPHERAL_TOUCH) && (SUPPORT_PERIPHERAL_TOUCH==1)
+
+//#if defined(PERI_IO_PWM7)
+//#else 
+//    #error "Please check padmux for PWM7."
+//#endif
+
+//#if defined(PERI_IO_UART0)
+//#else 
+//    #error "Please check padmux for UART0."
+//#endif
+
+void Cmd_touch_task(void *pdata)    
+{
+    //Define the touchpad pin on which GPIO pin
+    drv_touch_init(TOUCH_0,GPIO_29);
+    drv_touch_init(TOUCH_1,GPIO_33);
+    drv_touch_init(TOUCH_2,GPIO_36);
+    drv_touch_init(TOUCH_3,GPIO_37);
+    //drv_touch_init(TOUCH_4,GPIO_18);
+    //drv_touch_init(TOUCH_5,GPIO_19);
+    //drv_touch_init(TOUCH_6,GPIO_20);
+
+    uint32_t touch_0_threshold = 1809;
+    uint32_t touch_1_threshold = 1630;
+    uint32_t touch_2_threshold = 1653;
+    uint32_t touch_3_threshold = 1681;
+    uint32_t touch_4_threshold = 2100;
+    uint32_t touch_5_threshold = 2100;
+    uint32_t touch_6_threshold = 2100;
+    
+    while (1)
+    {
+        drv_touch_src_config();
+        drv_touch_enable();
+
+        //PWM f=1kHz, min delay=50ms
+        OS_MsDelay(60);
+
+        //Query CTMR_0 timer value
+        uint16_t touch_0_query = drv_touch_query_raw(TOUCH_0);
+        //printf("CTMR_0 Timer=%d\n",touch_0_query);
+        if (touch_0_query >= touch_0_threshold) { 
+            printf("CTMR_0 Timer=%d PLAY\n",touch_0_query);
+        }
+                
+        //Query CTMR_1 timer value
+        uint16_t touch_1_query = drv_touch_query_raw(TOUCH_1);
+        //printf("CTMR_1 Timer=%d\n",touch_1_query);
+        if (touch_1_query >= touch_1_threshold) {
+            printf("CTMR_1 Timer=%d SET\n",touch_1_query);      
+        }
+
+        //Query CTMR_2 timer value
+        uint16_t touch_2_query = drv_touch_query_raw(TOUCH_2);
+        //printf("CTMR_2 Timer=%d\n",touch_2_query);
+        if (touch_2_query >= touch_2_threshold) { 
+            printf("CTMR_2 Timer=%d VOL-\n",touch_2_query);
+        }
+
+        //Query CTMR_3 timer value
+        uint16_t touch_3_query = drv_touch_query_raw(TOUCH_3);
+        //printf("CTMR_3 Timer=%d\n",touch_3_query);
+        if (touch_3_query >= touch_3_threshold) { 
+            printf("CTMR_3 Timer=%d VOL+\n",touch_3_query);
+        }
+
+        //Query CTMR_4 timer value
+        uint16_t touch_4_query = drv_touch_query_raw(TOUCH_4);
+        if (touch_4_query >= touch_4_threshold) { 
+            printf("CTMR_4 Timer=%d Pad4\n",touch_4_query);
+        }  
+
+        //Query CTMR_5 timer value
+        uint16_t touch_5_query = drv_touch_query_raw(TOUCH_5);
+        if (touch_5_query >= touch_5_threshold) { 
+            printf("CTMR_5 Timer=%d Pad5\n",touch_5_query);
+        }
+
+        //Query CTMR_6 timer value
+        uint16_t touch_6_query = drv_touch_query_raw(TOUCH_6);
+        if (touch_6_query >= touch_6_threshold) { 
+            printf("CTMR_6 Timer=%d Pad6\n",touch_6_query);
+        }
+        
+        drv_touch_clear();
+    }
+    
+    OS_TaskDelete(NULL);
+    return;
+}
+
+int Cmd_touchpad (s32 argc, char *argv[])
+{
+    OS_TaskCreate(Cmd_touch_task, "Touch task", 512, NULL, OS_TASK_LOW_PRIO, NULL);
+    return 0;
+}
+
+int Cmd_touch_cali(int32_t argc, char *argv[])    
+{
+    
+    if (argc != 3)
+    {
+        printf("Usage     : touch_cali <touch_id> <gpio_pin>\n");
+        printf("<touch_id>: 0 ~ 5\n");
+        printf("<gpio_pin>: 0 ~ 37\n");
+        return -1;
+    }
+
+	uint32_t touch_id = strtoul(argv[1], NULL, 10);
+    uint32_t pin = strtoul(argv[2], NULL, 10);
+
+    if ((touch_id < 0) && (touch_id > 5))
+    {
+        printf("Usage     : touch_cali <touch_id> <gpio_pin>\n");
+        printf("<touch_id>: 0 ~ 5\n");
+        printf("<gpio_pin>: 0 ~ 37\n");
+        return -1;
+    }
+    
+    if (pin > 37)
+    {
+        printf("Usage     : touch_cali <touch_id> <gpio_pin>\n");
+        printf("<touch_id>: 0 ~ 5\n");
+        printf("<gpio_pin>: 0 ~ 37\n");
+        return -1;
+    }
+    
+    drv_touch_clear();
+    drv_touch_disable();
+    drv_touch_init(touch_id,pin);
+    
+    
+    uint32_t count = 51;
+
+    //Cali. "no touch" threshold
+    uint32_t no_touch_total = 0;
+    uint32_t no_total_avg = 0;
+    uint32_t no_touch[count];
+        
+    printf("Please do NOT touch for 3 seconds.\n");
+    printf("... ... ...\n");
+    
+    for (int i=0;i<count;i++)
+    {
+        drv_touch_src_config();
+        drv_touch_enable();
+
+        OS_MsDelay(60);
+        
+        if (touch_id == TOUCH_0)
+        {
+            //Query CTMR_0 timer value
+            uint16_t touch_0_query = drv_touch_query_raw(TOUCH_0);
+            //printf("CTMR_0 Timer=%d\n",touch_0_query);
+            //no_touch_total = no_touch_total + touch_0_query;
+            no_touch[i] = touch_0_query;
+        }
+        else if (touch_id == TOUCH_1)
+        {
+            //Query CTMR_1 timer value
+            uint16_t touch_1_query = drv_touch_query_raw(TOUCH_1);
+            //printf("CTMR_1 Timer=%d\n",touch_1_query);
+            //no_touch_total = no_touch_total + touch_1_query;
+            no_touch[i] = touch_1_query;
+        }
+        else if (touch_id == TOUCH_2)
+        {
+            //Query CTMR_2 timer value
+            uint16_t touch_2_query = drv_touch_query_raw(TOUCH_2);
+            //printf("CTMR_2 Timer=%d\n",touch_2_query);
+            //no_touch_total = no_touch_total + touch_2_query;
+            no_touch[i] = touch_2_query;
+        }
+        else if (touch_id == TOUCH_3)
+        {
+            //Query CTMR_3 timer value
+            uint16_t touch_3_query = drv_touch_query_raw(TOUCH_3);
+            //printf("CTMR_3 Timer=%d\n",touch_3_query);
+            //no_touch_total = no_touch_total + touch_3_query;
+            no_touch[i] = touch_3_query;
+        }
+        else if (touch_id == TOUCH_4)
+        {
+            //Query CTMR_4 timer value
+            uint16_t touch_4_query = drv_touch_query_raw(TOUCH_4);
+            //printf("CTMR_4 Timer=%d\n",touch_4_query);
+            //no_touch_total = no_touch_total + touch_4_query;
+            no_touch[i] = touch_4_query;
+        }
+        else if (touch_id == TOUCH_5)
+        {
+            //Query CTMR_5 timer value
+            uint16_t touch_5_query = drv_touch_query_raw(TOUCH_5);
+            //printf("CTMR_5 Timer=%d\n",touch_5_query);
+            //no_touch_total = no_touch_total + touch_5_query;
+            no_touch[i] = touch_5_query;
+        }
+        else if (touch_id == TOUCH_6)
+        {
+            //Query CTMR_6 timer value
+            uint16_t touch_6_query = drv_touch_query_raw(TOUCH_6);
+            //printf("CTMR_6 Timer=%d\n",touch_6_query);
+            //no_touch_total = no_touch_total + touch_6_query;
+            no_touch[i] = touch_6_query;
+        }
+        
+        drv_touch_clear();
+        
+    }
+
+    //Sort the data from min to max.
+    for (int i=0;i<count;i++)
+    {
+        uint32_t no_touch_min_index = i;
+        for (int j=i+1;j<count;j++)
+        {
+                if (no_touch[j] < no_touch[no_touch_min_index])
+                    no_touch_min_index = j;
+        }
+        uint32_t tmp = no_touch[i];
+        no_touch[i] = no_touch[no_touch_min_index];
+        no_touch[no_touch_min_index] = tmp;
+        
+    }
+
+    printf("\n");
+
+    printf("The 'no touch' calibration is completed.\n");
+    
+    printf("TOUCH_%d no touch value = %d\n",touch_id,no_touch[(count-1)/2]);
+
+    //Cali. "touch" threshold 
+    uint32_t touch_total = 0;
+    uint32_t total_avg = 0;
+    uint32_t touch[count];
+    
+    drv_touch_disable();
+
+    printf("\n");
+    printf("Please touch for 3 seconds.\n");
+    printf("... ... ...\n");
+    
+    for (int i=0;i<count;i++)
+    {
+        drv_touch_src_config();
+        drv_touch_enable();
+
+        OS_MsDelay(60);
+        
+        if (touch_id == TOUCH_0)
+        {
+            //Query CTMR_0 timer value
+            uint16_t touch_0_query = drv_touch_query_raw(TOUCH_0);
+            //printf("CTMR_0 Timer=%d\n",touch_0_query);
+            //touch_total = touch_total + touch_0_query;
+            touch[i] = touch_0_query;
+        }
+        else if (touch_id == TOUCH_1)
+        {
+            //Query CTMR_1 timer value
+            uint16_t touch_1_query = drv_touch_query_raw(TOUCH_1);
+            //printf("CTMR_1 Timer=%d\n",touch_1_query);
+            //touch_total = touch_total + touch_1_query;
+            touch[i] = touch_1_query;
+        }
+        else if (touch_id == TOUCH_2)
+        {
+            //Query CTMR_2 timer value
+            uint16_t touch_2_query = drv_touch_query_raw(TOUCH_2);
+            //printf("CTMR_2 Timer=%d\n",touch_2_query);
+            //touch_total = touch_total + touch_2_query;
+            touch[i] = touch_2_query;
+        }
+        else if (touch_id == TOUCH_3)
+        {
+            //Query CTMR_3 timer value
+            uint16_t touch_3_query = drv_touch_query_raw(TOUCH_3);
+            //printf("CTMR_3 Timer=%d\n",touch_3_query);
+            //touch_total = touch_total + touch_3_query;
+            touch[i] = touch_3_query;
+        }
+        else if (touch_id == TOUCH_4)
+        {
+            //Query CTMR_4 timer value
+            uint16_t touch_4_query = drv_touch_query_raw(TOUCH_4);
+            //printf("CTMR_4 Timer=%d\n",touch_4_query);
+            //touch_total = touch_total + touch_4_query;
+            touch[i] = touch_4_query;
+        }
+        else if (touch_id == TOUCH_5)
+        {
+            //Query CTMR_5 timer value
+            uint16_t touch_5_query = drv_touch_query_raw(TOUCH_5);
+            //printf("CTMR_5 Timer=%d\n",touch_5_query);
+            //touch_total = touch_total + touch_5_query;
+            touch[i] = touch_5_query;
+        }
+        else if (touch_id == TOUCH_6)
+        {
+            //Query CTMR_6 timer value
+            uint16_t touch_6_query = drv_touch_query_raw(TOUCH_6);
+            //printf("CTMR_6 Timer=%d\n",touch_6_query);
+            //touch_total = touch_total + touch_6_query;
+            touch[i] = touch_6_query;
+        }
+        
+        drv_touch_clear();
+        
+    }
+
+    //Sort the data from min to max.
+    for (int i=0;i<count;i++)
+    {
+        uint32_t touch_min_index = i;
+        for (int j=i+1;j<count;j++)
+        {
+                if (touch[j] < touch[touch_min_index])
+                    touch_min_index = j;
+        }
+        uint32_t tmp = touch[i];
+        touch[i] = touch[touch_min_index];
+        touch[touch_min_index] = tmp;
+        
+    }
+
+    printf("\n");
+
+    printf("The 'touch' calibration is completed.\n");
+    printf("TOUCH_%d touch value = %d\n",touch_id,touch[(count-1)/2]);
+    printf("Calibration done.\n");
+    
+    drv_touch_disable();
+    
+    return 0;
+}
+
+#endif
+/*---------------------Touch example code (END)-----------------------------*/
 
 /* ---------------------- Registered CMDs to CMD Table ---------------------- */
 const CLICmds gCustomCmdTable[] =
@@ -594,12 +930,16 @@ const CLICmds gCustomCmdTable[] =
     { "set_gpio_mode",              Cmd_set_gpio_mode,              "set_gpio_mode <id>"                        },
     { "get_gpio_direction",         Cmd_get_gpio_direction,		    "get_gpio_direction <id>"			        },
     { "set_gpio_direction",         Cmd_set_gpio_direction,		    "set_gpio_direction <id> <input> <output>"  },
-    { "set_gpio_isr",               Cmd_set_gpio_isr,               "set_gpio_isr <id> <mode>"   },
-    { "regw",                       Cmd_WriteReg32,                 "regw"                       },
-    { "regr",                       Cmd_ReadReg32,                  "regr"                       },
-    { "force_gpio",                 Cmd_set_force_gpio,             "force_gpio <id>"            },
-    { "restore_gpio",               Cmd_set_restore_gpio,           "restore_gpio <id>"          },
-        
+    { "set_gpio_isr",               Cmd_set_gpio_isr,               "set_gpio_isr <id> <mode>"                  },
+    { "regw",                       Cmd_WriteReg32,                 "regw"                                      },
+    { "regr",                       Cmd_ReadReg32,                  "regr"                                      },
+    { "force_gpio",                 Cmd_set_force_gpio,             "force_gpio <id>"                           },
+    { "remove_force_gpio",          Cmd_set_remove_force_gpio,      "remove_force_gpio <id>"                    },    
+    #if defined(SUPPORT_PERIPHERAL_TOUCH) && (SUPPORT_PERIPHERAL_TOUCH==1)
+    { "touch",                      Cmd_touchpad,                   "Touchpad function enable."                 },
+    { "touch_cali",                 Cmd_touch_cali,                 "Touchpad calibration."                     },    
+    #endif
+            
     { (const char *)NULL, (CliCmdFunc)NULL,   (const char *)NULL },
 };
 

@@ -220,3 +220,9 @@ ifneq ($(strip $(SUPPORT_PERIPHERAL_PINMUX)),1)
 $(error please define SUPPORT_PERIPHERAL_PINMUX when SUPPORT_SDC = 1.)
 endif
 endif
+
+ifeq ($(strip $(SUPPORT_LOG_RINGBUFFER)),1)
+ifeq ($(strip $(UART_IO_NUM)),0)
+$(error please check UART_IO_NUM & SUPPORT_LOG_RINGBUFFER only hsuart support ringbuffer mode)
+endif
+endif

@@ -422,164 +422,164 @@ void Cli_Start( void )
 	            if(ch == 0x5b)
 	            {
 
-	                ch = __get_char();
-					if(0x41 == ch)//up arrow key
-					{
-						Cli_MovetoNextHistoryCmdBuf();
-					}
-					else if(0x42 == ch)//down arrow key
-					{
-
-						Cli_MovetoPrevHistoryCmdBuf();
-					}
-					else
-					{
-
-					}
-	             }
-
-#endif
-	            break;
-	        case 0x08: /* Backspace key */
-			case 0x7f: /* del key */	
-	            if ( 0 < sgCurPos )
-	            {
-	                sgCurPos --;
-	                sgCmdBuffer[sgCurPos] = 0x00;
-	                __put_char(0x08);
-	                __put_char(0x20);
-	                __put_char(0x08);
-	            }
-	            break;
-	//#ifdef __linux__
-		case 0x0a: /* Enter */
-	//#else
-	        case 0x0d: /* Enter */
-	//#endif
-	//#if (CLI_HISTORY_ENABLE==1)
-	//			Cli_RecordInHistoryCmdBuf();
-	//#endif
-#ifdef SUPPORT_ATCMD  
-				if(strlen(sgCmdBuffer) > 0)
+                ch = __get_char();
+				if(0x41 == ch)//up arrow key
 				{
-					//printf("\n^sgCmdBuffer=%s^,len=%d, buf_len=%d\n",sgCmdBuffer,strlen(sgCmdBuffer), cli_buffer_size);
-	                sgCmdBuffer[strlen(sgCmdBuffer)] = 0; //due to OS_MemRealloc would not do memset after realloc new buffer.
-					int cmd_ret = At_Parser(sgCmdBuffer,strlen(sgCmdBuffer));
-	                            if( cmd_ret != ERROR_UNKNOWN_COMMAND)
-	                                goto cmd_exit;
+					Cli_MovetoNextHistoryCmdBuf();
 				}
+				else if(0x42 == ch)//down arrow key
+				{
+
+					Cli_MovetoPrevHistoryCmdBuf();
+				}
+				else
+				{
+
+				}
+             }
+
+#endif
+            break;
+        case 0x08: /* Backspace key */
+		case 0x7f: /* del key */	
+            if ( 0 < sgCurPos )
+            {
+                sgCurPos --;
+                sgCmdBuffer[sgCurPos] = 0x00;
+                __put_char(0x08);
+                __put_char(0x20);
+                __put_char(0x08);
+            }
+            break;
+//#ifdef __linux__
+	case 0x0a: /* Enter */
+//#else
+        case 0x0d: /* Enter */
+//#endif
+//#if (CLI_HISTORY_ENABLE==1)
+//			Cli_RecordInHistoryCmdBuf();
+//#endif
+#ifdef SUPPORT_ATCMD  
+			if(strlen(sgCmdBuffer) > 0)
+			{
+				//printf("\n^sgCmdBuffer=%s^,len=%d, buf_len=%d\n",sgCmdBuffer,strlen(sgCmdBuffer), cli_buffer_size);
+                sgCmdBuffer[strlen(sgCmdBuffer)] = 0; //due to OS_MemRealloc would not do memset after realloc new buffer.
+				int cmd_ret = At_Parser(sgCmdBuffer,strlen(sgCmdBuffer));
+                            if( cmd_ret != ERROR_UNKNOWN_COMMAND)
+                                goto cmd_exit;
+			}
 #endif
 
 
-	            for( sgArgC=0,ch=0, pch=sgCmdBuffer; (*pch!=0x00)&&(sgArgC<CLI_ARG_SIZE); pch++ )
-	            {
-	                if ( (ch==0) && (*pch!=' ') )
-	                {
-	                    ch = 1;
-	                    sgArgV[sgArgC] = pch;
-	                }
+            for( sgArgC=0,ch=0, pch=sgCmdBuffer; (*pch!=0x00)&&(sgArgC<CLI_ARG_SIZE); pch++ )
+            {
+                if ( (ch==0) && (*pch!=' ') )
+                {
+                    ch = 1;
+                    sgArgV[sgArgC] = pch;
+                }
 
-	                if ( (ch==1) && (*pch==' ') )
-	                {
-	                    *pch = 0x00;
-	                    ch = 0;
-	                    sgArgC ++;
-	                }
-	                //parser for "="
-			if ( (ch==1) && (*pch=='=') && (sgArgC == 0))
-	                {
-	                    *pch = 0x00;
-	                    ch = 0;
-	                    sgArgC ++;
-	                }
-	            //parser for ","
-			if ( (ch==1) && (*pch==',') && (sgArgC != 0))
-	                {
-	                    *pch = 0x00;
-	                    ch = 0;
-	                    sgArgC ++;
-	                }
-	            }
-	            if ( ch == 1)
-	            {
-	                sgArgC ++;
-	            }
-	            else if ( sgArgC > 0 )
-	            {
-	                *(pch-1) = ' ';
-	            }
+                if ( (ch==1) && (*pch==' ') )
+                {
+                    *pch = 0x00;
+                    ch = 0;
+                    sgArgC ++;
+                }
+                //parser for "="
+		if ( (ch==1) && (*pch=='=') && (sgArgC == 0))
+                {
+                    *pch = 0x00;
+                    ch = 0;
+                    sgArgC ++;
+                }
+            //parser for ","
+		if ( (ch==1) && (*pch==',') && (sgArgC != 0))
+                {
+                    *pch = 0x00;
+                    ch = 0;
+                    sgArgC ++;
+                }
+            }
+            if ( ch == 1)
+            {
+                sgArgC ++;
+            }
+            else if ( sgArgC > 0 )
+            {
+                *(pch-1) = ' ';
+            }
 
-	            if ( sgArgC > 0 )
-	            {
-	            
+            if ( sgArgC > 0 )
+            {
+            
 #ifdef SUPPORT_CLI 
-	                /* Dispatch cli command */
-	                for( CmdPtr=gCliCmdTable; CmdPtr->Cmd; CmdPtr ++ )
-	                {            
-	                    if ( !strcmp(sgArgV[0], CmdPtr->Cmd) )
-	                    {
-	                        printf("\n");
-	                        CmdPtr->CmdHandler( sgArgC, sgArgV );
-	                        break;
-	                    }
-	                }
+                /* Dispatch cli command */
+                for( CmdPtr=gCliCmdTable; CmdPtr->Cmd; CmdPtr ++ )
+                {            
+                    if ( !strcmp(sgArgV[0], CmdPtr->Cmd) )
+                    {
+                        printf("\n");
+                        CmdPtr->CmdHandler( sgArgC, sgArgV );
+                        break;
+                    }
+                }
 
-	                 if ( NULL != CmdPtr->Cmd )
-	                {
-	                    goto cmd_exit;
-	                }
-	                
+                 if ( NULL != CmdPtr->Cmd )
+                {
+                    goto cmd_exit;
+                }
+                
 #endif     
 
 #ifdef SUPPORT_CUSTOM_CMD        
-	                /* Dispatch custom command */
-	                for( CmdPtr=gCustomCmdTable; CmdPtr->Cmd; CmdPtr ++ )
-	                {
-	                    if ( !strcmp(sgArgV[0], CmdPtr->Cmd) )
-	                    {
-	                        printf("\n");
-	                        CmdPtr->CmdHandler( sgArgC, sgArgV );
-	                        break;
-	                    }
-	                }
-	                
-	                if ( NULL != CmdPtr->Cmd )
-	                {
-	                    goto cmd_exit;
-	                }
+                /* Dispatch custom command */
+                for( CmdPtr=gCustomCmdTable; CmdPtr->Cmd; CmdPtr ++ )
+                {
+                    if ( !strcmp(sgArgV[0], CmdPtr->Cmd) )
+                    {
+                        printf("\n");
+                        CmdPtr->CmdHandler( sgArgC, sgArgV );
+                        break;
+                    }
+                }
+                
+                if ( NULL != CmdPtr->Cmd )
+                {
+                    goto cmd_exit;
+                }
 #endif
-	                
-	            }
+                
+            }
 
-	            if ( 0 !=sgCurPos )
-	            {
-	                printf("\nCommand not found!!\n");
-	            }
+            if ( 0 !=sgCurPos )
+            {
+                printf("\nCommand not found!!\n");
+            }
 #if defined (SUPPORT_ATCMD) || defined (SUPPORT_CLI) || defined (SUPPORT_CUSTOM_CMD)
-	cmd_exit:
+cmd_exit:
 #endif
-	            printf("\n%s", CLI_PROMPT);
+            printf("\n%s", CLI_PROMPT);
 
-	            memset(sgCmdBuffer, 0x00, sizeof(sgCmdBuffer));
-	            sgCurPos = 0;
-	            break;
+            memset(sgCmdBuffer, 0x00, sizeof(sgCmdBuffer));
+            sgCurPos = 0;
+            break;
 
-	        case '?': /* for help */
-	            if(sgCurPos == 0)
-	            {
-	            __put_char(ch);
-	            _CliCmdUsage();
-	            }
-	            else
-	            {
-	                if ( (cli_buffer_size-1) > sgCurPos )
-	                {
-	                    sgCmdBuffer[sgCurPos++] = ch;
-	                    sgCmdBuffer[sgCurPos] = 0x00;
-	                    __put_char(ch);
-	                }                
-	            }
-	            break;
+        case '?': /* for help */
+            if(sgCurPos == 0)
+            {
+            __put_char(ch);
+            _CliCmdUsage();
+            }
+            else
+            {
+                if ( (cli_buffer_size-1) > sgCurPos )
+                {
+                    sgCmdBuffer[sgCurPos++] = ch;
+                    sgCmdBuffer[sgCurPos] = 0x00;
+                    __put_char(ch);
+                }                
+            }
+            break;
 
 	        default: /* other characters */
 	            if ( (CLI_BUFFER_SIZE-1) > sgCurPos )

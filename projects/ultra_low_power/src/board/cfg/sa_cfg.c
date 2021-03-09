@@ -11,15 +11,15 @@ extern const struct sa_cfg g_sa_cfg __attribute__((section(".sa_mp_data")));
 const struct sa_cfg g_sa_cfg __attribute__((section(".sa_mp_data"))) = {
     .buf_mp = {
         /* rt_config */
-        8, 8, 8, 8, 8, 8, 8, 149, 149, 7, 9, 10, 7, 7, 7, 7, 7, 1,
+        9, 9, 9, 9, 9, 9, 9,0x98,0x98, 7, 9, 10, 7, 7, 7, 7, 7, 0,
         /* ht_config */
-        12, 12, 12, 12, 12, 12, 12, 180, 180, 7, 9, 10, 7, 7, 7, 7, 7, 1,
+        9, 9, 9, 9, 9, 9, 9,0x98,0x98, 7, 9, 10, 7, 7, 7, 7, 7, 0,
         /* lt_config */
-        7, 7, 7, 7, 7, 7, 7, 145, 145, 7, 9, 10, 7, 7, 7, 7, 7, 1,
+        9, 9, 9, 9, 9, 9, 9,0x98,0x98, 7, 9, 10, 7, 7, 7, 7, 7, 0,
         /* rf_gain */
         4,
         /* rate_gain_b */
-        5,
+        7,
         /* rate_config_g */
         15, 13, 11, 9,
         /* rate_config_20n */
@@ -27,11 +27,11 @@ const struct sa_cfg g_sa_cfg __attribute__((section(".sa_mp_data"))) = {
         /* rate_config_40n */
         15, 13, 11, 9,
         /* low_boundarty */
-        15,
+        35,
         /* high_boundary */
         90,
         /* boot flag*/
-        0x00,
+        0xFF,
         /* work mode */
         0xFF,
         /* rt_5g_config */
@@ -59,11 +59,11 @@ const struct sa_cfg g_sa_cfg __attribute__((section(".sa_mp_data"))) = {
         /* Tx lowpower setting */
         0x01,
         /* Ble normal config*/
-        14, 14,
+        9, 9,
         /* Ble high config*/
-        14, 14,
+        9, 9,
         /* Ble low config*/
-        14, 14,
+        9, 9,
 }
 };
 

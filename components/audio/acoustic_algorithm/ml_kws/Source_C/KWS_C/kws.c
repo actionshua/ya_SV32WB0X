@@ -26,6 +26,7 @@
 #include "nn.h"
 #include "kws.h"
 #include "dnn.h"
+#include "osal.h"
 
 int16_t* kws_audio_buffer;
 q7_t *kws_output;
@@ -58,10 +59,14 @@ static int kws_silence_threshold;
 
 static void kws_deinit()
 {
-  free(mfcc_buffer);
-  free(kws_output);
-  free(kws_predictions);
-  free(kws_averaged_output);
+  if(mfcc_buffer)
+    free(mfcc_buffer);
+  if(kws_output)
+    free(kws_output);
+  if(kws_predictions)
+    free(kws_predictions);
+  if(kws_averaged_output)
+    free(kws_averaged_output);
   mfcc_deinit();
 }
 
@@ -85,12 +90,28 @@ static void kws_init()
 
   mfcc_init(num_mfcc_features, kws_frame_len, mfcc_dec_bits);
   mfcc_buffer = malloc(sizeof(q7_t) * kws_num_frames*num_mfcc_features);
+  if(!mfcc_buffer) {
+    printf("[%d] %s malloc fail\n", __LINE__,  __func__);
+    configASSERT(mfcc_buffer);
+  }
   memset(mfcc_buffer, 0, sizeof(q7_t) * kws_num_frames*num_mfcc_features);
   kws_output = malloc(sizeof(q7_t) * kws_num_out_classes);
+  if(!kws_output) {
+    printf("[%d] %s malloc fail\n", __LINE__,  __func__);
+    configASSERT(kws_output);
+  }
   memset(kws_output, 0, sizeof(q7_t) * kws_num_out_classes);
   kws_averaged_output = malloc(sizeof(q7_t) * kws_num_out_classes);
+  if(!kws_averaged_output) {
+    printf("[%d] %s malloc fail\n", __LINE__,  __func__);
+    configASSERT(kws_averaged_output);
+  }
   memset(kws_averaged_output, 0, sizeof(q7_t) * kws_num_out_classes);
   kws_predictions = malloc(sizeof(q7_t) * sliding_window_len*kws_num_out_classes);
+  if(!kws_predictions) {
+    printf("[%d] %s malloc fail\n", __LINE__,  __func__);
+    configASSERT(kws_predictions);
+  }
   memset(kws_predictions, 0, sizeof(q7_t) * sliding_window_len*kws_num_out_classes);
   kws_audio_block_size = recording_win*kws_frame_shift;
   kws_audio_buffer_size = kws_audio_block_size + FRAME_TAIL;

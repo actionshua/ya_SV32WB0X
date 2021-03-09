@@ -97,6 +97,7 @@ IMPORT_DIR         +=  components/ble/ble_api
 IMPORT_DIR         +=  components/ble/bsp
 IMPORT_DIR         +=  components/ble/lib
 IMPORT_DIR         +=  components/ble/lestack
+IMPORT_DIR         +=  components/ble/lestack/ble/hci_ctrl
 IMPORT_DIR         +=  components/ble/application
 IMPORT_DIR         +=  components/ble/inc
 endif
@@ -371,6 +372,11 @@ IMPORT_DIR 		+= components/third_party/pvmp3decoder
 else
 ifeq ($(strip $(SETTING_MP3_DECODER)), 2)
 IMPORT_DIR 		+= components/third_party/helix_mp3d
+else
+ifeq ($(strip $(SETTING_MP3_DECODER)), 3)
+IMPORT_DIR 		+= components/third_party/pvmp3decoder
+IMPORT_DIR 		+= components/third_party/helix_mp3d
+endif
 endif
 endif
 

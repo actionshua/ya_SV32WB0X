@@ -446,8 +446,8 @@ int At_UartConfig (stParam *param)
     if(param->argc >=5 )
         nParity = atoi(param->argv[4]);    
 
-    if( uart_num == 1 )
-        drv_pinmux_manual_function_select_enable(SEL_UART1);
+    //if( uart_num == 1 )
+    //    drv_pinmux_manual_function_select_enable(SEL_UART1);
 
     drv_comport_init(uart_num);
     ret = drv_comport_set_format(nBaudrate, nDatabits, nStopbits, nParity);
@@ -696,7 +696,7 @@ void dormant_usage() {
     ATCMD_LOG_I("\tmin sleep time need over 2000us\n");
 }
 
-int At_sleep(stParam *param) ATTRIBUTE_SECTION_FAST;
+int At_sleep(stParam *param);
 int At_sleep(stParam *param) {
     DUT_wifi_start(DUT_NONE);
     DUT_wifi_OFF();
@@ -708,7 +708,7 @@ int At_sleep(stParam *param) {
     return 0;
 }
 
-int At_dormant(stParam *param) ATTRIBUTE_SECTION_FAST;
+int At_dormant(stParam *param);
 int At_dormant(stParam *param) {
     if (param->argc != 2) {
         dormant_usage();

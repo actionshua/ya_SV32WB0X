@@ -27,19 +27,19 @@ SETTING_PSRAM_HEAP_SIZE         := 0
 ################################################################
 SUPPORT_LOW_POWER               := 1
 
-#SYS_BUS_CLK                     := 40M
+SYS_BUS_CLK                     := 40M
 #SYS_BUS_CLK                     := 80M
-SYS_BUS_CLK                     := 160M
+#SYS_BUS_CLK                     := 160M
 
 #SYS_MCU_MAX_CLK                 := 80M
-#SYS_MCU_MAX_CLK                 := 160M
+SYS_MCU_MAX_CLK                 := 160M
 #SYS_MCU_MAX_CLK                 := 240M
 #SYS_MCU_MAX_CLK                 := 320M
 #SYS_MCU_MAX_CLK                 := 480M
-SYS_MCU_MAX_CLK                 := defined_by_chip
+#SYS_MCU_MAX_CLK                 := defined_by_chip
 
-#SYS_FLASH_CLK                   := 40M
-SYS_FLASH_CLK                    := 80M
+SYS_FLASH_CLK                   := 40M
+#SYS_FLASH_CLK                    := 80M
 
 #XIP_BIT                        := 2
 XIP_BIT                         := 4

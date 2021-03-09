@@ -2126,6 +2126,11 @@ ble_gatts_count_cfg(const struct ble_gatt_svc_def *defs)
     return 0;
 }
 
+uint16_t ble_gatts_get_att_total_count(void)
+{
+    return ble_hs_max_attrs;
+}
+
 void
 ble_gatts_lcl_svc_foreach(ble_gatt_svc_foreach_fn cb, void *arg)
 {

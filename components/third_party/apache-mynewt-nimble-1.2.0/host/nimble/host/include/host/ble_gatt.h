@@ -885,6 +885,12 @@ int ble_gatts_reset(void);
  */
 int ble_gatts_start(void);
 
+
+/**
+ * Get gatts att total count
+ */
+uint16_t ble_gatts_get_att_total_count(void);
+
 #ifdef __cplusplus
 }
 #endif

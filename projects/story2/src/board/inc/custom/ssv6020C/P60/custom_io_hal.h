@@ -62,7 +62,7 @@
 #define M_CUSTOM_P04_MODE       M_CUSTOM_ALT0
 
 //ALT0 : GPIO05     /ALT1 : NONE            /ALT2 : NONE                /ALT3 : NONE            /ALT4 : SPIMAS0_CSN     /ALT5 : SPISLV0_CSN         /ALT6 : NONE              /ALT7 : GPIO05
-#define M_CUSTOM_P05_MODE       M_CUSTOM_ALT0
+#define M_CUSTOM_P05_MODE       M_CUSTOM_ALT7
 
 //ALT0 : GPIO06     /ALT1 : I2C0_SDA        /ALT2 : PSRAM_SPI_CSN       /ALT3 : NONE            /ALT4 : NONE            /ALT5 : NONE                /ALT6 : NONE              /ALT7 : GPIO06
 #define M_CUSTOM_P06_MODE       M_CUSTOM_ALT0
@@ -83,16 +83,16 @@
 #define M_CUSTOM_P17_MODE       M_CUSTOM_ALT5
 
 //ALT0 : GPIO18     /ALT1 : SD_DATA3        /ALT2 : NONE                /ALT3 : DATASPIS_CSN    /ALT4 : SPISLV1_CSN     /ALT5 : SPIMAS1_CSN         /ALT6 : NONE              /ALT7 : GPIO18
-#define M_CUSTOM_P18_MODE       M_CUSTOM_ALT0
+#define M_CUSTOM_P18_MODE       M_CUSTOM_ALT5
 
 //ALT0 : GPIO19     /ALT1 : SD_CMD          /ALT2 : NONE                /ALT3 : DATASPIS_MOSI   /ALT4 : SPISLV1_MOSI    /ALT5 : SPIMAS1_MOSI        /ALT6 : NONE              /ALT7 : GPIO19
-#define M_CUSTOM_P19_MODE       M_CUSTOM_ALT0
+#define M_CUSTOM_P19_MODE       M_CUSTOM_ALT5
 
 //ALT0 : GPIO20     /ALT1 : SD_CLK          /ALT2 : NONE                /ALT3 : DATASPIS_SCLK   /ALT4 : SPISLV1_MISO    /ALT5 : SPIMAS1_MISO        /ALT6 : NONE              /ALT7 : GPIO20
-#define M_CUSTOM_P20_MODE       M_CUSTOM_ALT0
+#define M_CUSTOM_P20_MODE       M_CUSTOM_ALT7
 
 //ALT0 : GPIO21     /ALT1 : SD_DATA0        /ALT2 : NONE                /ALT3 : DATASPIS_MISO   /ALT4 : SPISLV1_SCLK    /ALT5 : SPIMAS1_SCLK        /ALT6 : NONE              /ALT7 : GPIO21
-#define M_CUSTOM_P21_MODE       M_CUSTOM_ALT0
+#define M_CUSTOM_P21_MODE       M_CUSTOM_ALT5
 
 //ALT0 : GPIO22     /ALT1 : SD_DATA1        /ALT2 : UART2_NRTS          /ALT3 : NONE            /ALT4 : I2S0_MCLK_iii   /ALT5 : NONE                /ALT6 : NONE              /ALT7 : GPIO22
 #define M_CUSTOM_P22_MODE       M_CUSTOM_ALT4
@@ -104,7 +104,7 @@
 #define M_CUSTOM_P24_MODE       M_CUSTOM_ALT3
 
 //ALT0 : GPIO25     /ALT1 : BTCX_WIFI_TX    /ALT2 : NONE                /ALT3 : NONE            /ALT4 : UART2_TXD_ii    /ALT5 : NONE                /ALT6 : NONE              /ALT7 : GPIO25
-#define M_CUSTOM_P25_MODE       M_CUSTOM_ALT0
+#define M_CUSTOM_P25_MODE       M_CUSTOM_ALT7
 
 //ALT0 : GPIO26     /ALT1 : BTCX_BT_IN_PROC /ALT2 : NONE                /ALT3 : I2S0_MCLK_ii    /ALT4 : UART2_RXD_ii    /ALT5 : SPIMA2_CSN_ii       /ALT6 : NONE              /ALT7 : GPIO26
 #define M_CUSTOM_P26_MODE       M_CUSTOM_ALT0
@@ -113,13 +113,13 @@
 #define M_CUSTOM_P27_MODE       M_CUSTOM_ALT5
 
 //ALT0 : SIO28      /ALT1 : NONE            /ALT2 : NONE                /ALT3 : NONE            /ALT4 : NONE            /ALT5 : I2S0_MCLK           /ALT6 : NONE              /ALT7 : SIO28
-#define M_CUSTOM_P28_MODE       M_CUSTOM_ALT0
+#define M_CUSTOM_P28_MODE       M_CUSTOM_ALT7
 
 //ALT0 : GPIO29     /ALT1 : ADC3            /ALT2 : UART1_NRTS          /ALT3 : PDMRX0_DIN_ii   /ALT4 : UART1_RXD_ii    /ALT5 : I2S1_SDI            /ALT6 : NONE              /ALT7 : GPIO29
 #define M_CUSTOM_P29_MODE       M_CUSTOM_ALT5
 
 //ALT0 : GPIO30     /ALT1 : ADC4            /ALT2 : UART1_RXD           /ALT3 : PDMRX1_CLK_ii   /ALT4 : PDMTX0_DOUT0_ii /ALT5 : I2S1_SDO            /ALT6 : NONE              /ALT7 : GPIO30
-#define M_CUSTOM_P30_MODE       M_CUSTOM_ALT5
+#define M_CUSTOM_P30_MODE       M_CUSTOM_ALT0
 
 //ALT0 : GPIO31     /ALT1 : ADC5            /ALT2 : UART1_TXD           /ALT3 : PDMRX1_DIN_ii   /ALT4 : PDMTX0_DOUT1_ii /ALT5 : I2S1_SCK            /ALT6 : NONE              /ALT7 : GPIO31
 #define M_CUSTOM_P31_MODE       M_CUSTOM_ALT5
@@ -134,7 +134,7 @@
 #define M_CUSTOM_P35_MODE       M_CUSTOM_ALT3
 
 //ALT0 : GPIO36     /ALT1 : ADC6            /ALT2 : I2C0_SCL_ii         /ALT3 : UART2_RXD_iii   /ALT4 : SPIMAS2_CSN     /ALT5 : BTCX_BT_IN_PROC_ii  /ALT6 : ANTSW_BT_SW       /ALT7 : GPIO36
-#define M_CUSTOM_P36_MODE       M_CUSTOM_ALT0
+#define M_CUSTOM_P36_MODE       M_CUSTOM_ALT7
 
 //ALT0 : GPIO37     /ALT1 : ADC7            /ALT2 : I2C0_SDA_ii         /ALT3 : UART2_TXD_iii   /ALT4 : NONE            /ALT5 : BTCX_BT_PTI3_ii     /ALT6 : ANTSW_WIFI_TX_SW  /ALT7 : GPIO37
 #define M_CUSTOM_P37_MODE       M_CUSTOM_ALT0

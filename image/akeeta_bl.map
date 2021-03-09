@@ -1,11 +1,11 @@
 Archive member included because of file (symbol)
 
 components/bsp/soc/boot/bootloader//libbootloader.a(ota_c.o)
-                              /tmp/ccVIQUBa.o (fota_fs_upgrade)
+                              /tmp/ccvEFWrp.o (fota_fs_upgrade)
 components/bsp/soc/boot/bootloader//libbootloader.a(ota_flash.o)
                               components/bsp/soc/boot/bootloader//libbootloader.a(ota_c.o) (ota_flash_sector_erase)
 components/bsp/soc/boot/bootloader//libbootloader.a(tiny_printf.o)
-                              /tmp/ccacfcQU.o (tiny_printf_display)
+                              /tmp/cc4QqPJX.o (tiny_printf_display)
 components/bsp/soc/boot/bootloader//libbootloader.a(tiny_do_printf.o)
                               components/bsp/soc/boot/bootloader//libbootloader.a(tiny_printf.o) (tiny_do_printf)
 components/bsp/soc/boot/bootloader//libbootloader.a(ota_ssv_littlefs.o)
@@ -200,18 +200,18 @@ base_addr           0x4               components/bsp/soc/boot/bootloader//libboo
 
 Discarded input sections
 
- .text          0x00000000        0x0 /tmp/ccacfcQU.o
- .data          0x00000000        0x0 /tmp/ccacfcQU.o
- .bss           0x00000000        0x0 /tmp/ccacfcQU.o
+ .text          0x00000000        0x0 /tmp/cc4QqPJX.o
+ .data          0x00000000        0x0 /tmp/cc4QqPJX.o
+ .bss           0x00000000        0x0 /tmp/cc4QqPJX.o
  .text._ota_use_fs
-                0x00000000        0x4 /tmp/ccacfcQU.o
+                0x00000000        0x4 /tmp/cc4QqPJX.o
  .note.v2abi_compatible
-                0x00000000        0x4 /tmp/ccacfcQU.o
- .text          0x00000000        0x0 /tmp/ccVIQUBa.o
- .data          0x00000000        0x0 /tmp/ccVIQUBa.o
- .bss           0x00000000        0x0 /tmp/ccVIQUBa.o
+                0x00000000        0x4 /tmp/cc4QqPJX.o
+ .text          0x00000000        0x0 /tmp/ccvEFWrp.o
+ .data          0x00000000        0x0 /tmp/ccvEFWrp.o
+ .bss           0x00000000        0x0 /tmp/ccvEFWrp.o
  .note.v2abi_compatible
-                0x00000000        0x4 /tmp/ccVIQUBa.o
+                0x00000000        0x4 /tmp/ccvEFWrp.o
  .text          0x00000000        0x0 components/bsp/soc/boot/bootloader//libbootloader.a(ota_c.o)
  .data          0x00000000        0x0 components/bsp/soc/boot/bootloader//libbootloader.a(ota_c.o)
  .bss           0x00000000        0x0 components/bsp/soc/boot/bootloader//libbootloader.a(ota_c.o)
@@ -816,8 +816,8 @@ FLASH_XIP2       0x300fc000         0x000d7000         xr
 Linker script and memory map
 
 LOAD /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/../../../../nds32le-elf/lib/mcmodel-large/mext-dsp/libdsp.a
-LOAD /tmp/ccacfcQU.o
-LOAD /tmp/ccVIQUBa.o
+LOAD /tmp/cc4QqPJX.o
+LOAD /tmp/ccvEFWrp.o
 LOAD components/bsp/soc/boot/bootloader//libbootloader.a
 LOAD /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/mcmodel-large/mext-dsp/libgcc.a
 START GROUP
@@ -863,7 +863,7 @@ LOAD /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/
                 0x30000038        0x4 LONG 0x4 __xip_bit
                 0x3000003c        0x4 LONG 0x50 __sys_flash_speed
 
-.ota_boot_hdr   0x30000040      0x234
+.ota_boot_hdr   0x30000040      0x268
  *(.ota_boot_hdr)
  .ota_boot_hdr  0x30000040      0x100 components/bsp/soc/boot/bootloader//libbootloader.a(ota.o)
                 0x30000040                _bootloader_start
@@ -887,18 +887,18 @@ LOAD /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/
                 0x300000fa                OS_Trap_Machine_Error
                 0x300000fa                OS_Trap_TLB_Fill
  *(.ota_boot)
- .ota_boot      0x30000140      0x10c components/bsp/soc/boot/bootloader//libbootloader.a(ota.o)
+ .ota_boot      0x30000140      0x140 components/bsp/soc/boot/bootloader//libbootloader.a(ota.o)
                 0x30000140                ota_boot
- *fill*         0x3000024c        0x0 
- .ota_boot      0x3000024c       0x28 components/bsp/soc/boot/bootloader//libbootloader.a(ota_init_mem.o)
-                0x3000024c                _ota_move_fast_boot_code
+ *fill*         0x30000280        0x0 
+ .ota_boot      0x30000280       0x28 components/bsp/soc/boot/bootloader//libbootloader.a(ota_init_mem.o)
+                0x30000280                _ota_move_fast_boot_code
                 0x00000000                . = 0x0
                 0x00000000                ILM_BEGIN = .
-                0x30000274                __ota_fast_boot_lmastart = LOADADDR (.ota_fast_boot_code)
+                0x300002a8                __ota_fast_boot_lmastart = LOADADDR (.ota_fast_boot_code)
                 0x00000000                __ota_fast_boot_start = ADDR (.ota_fast_boot_code)
 
 .ota_fast_boot_code
-                0x00000000       0xbc load address 0x30000274
+                0x00000000       0xbc load address 0x300002a8
  *(.ota_vector)
  .ota_vector    0x00000000       0x90 components/bsp/soc/boot/bootloader//libbootloader.a(ota.o)
  *(.ota_fast_boot_code)
@@ -906,20 +906,20 @@ LOAD /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/
                 0x00000090       0x2c components/bsp/soc/boot/bootloader//libbootloader.a(ota_init_mem.o)
                 0x00000090                _ota_move_fast_code
                 0x000000bc                __ota_fast_boot_end = .
-                0x30000330                __fast_lmastart = LOADADDR (.fast_code)
+                0x30000364                __fast_lmastart = LOADADDR (.fast_code)
                 0x000000c0                __fast_start = ADDR (.fast_code)
 
-.fast_code      0x000000c0     0xb408 load address 0x30000330
+.fast_code      0x000000c0     0xb408 load address 0x30000364
                 0x000000c0                . = ALIGN (0x4)
  *(.text .stub .text.* .gnu.linkonce.t.* .rodata .rodata.*)
  .text._boot_init
-                0x000000c0        0x8 /tmp/ccacfcQU.o
+                0x000000c0        0x8 /tmp/cc4QqPJX.o
                 0x000000c0                _boot_init
  .text.custom_upgrade
-                0x000000c8        0x4 /tmp/ccVIQUBa.o
+                0x000000c8        0x4 /tmp/ccvEFWrp.o
                 0x000000c8                custom_upgrade
  .text.custom_boot_addr
-                0x000000cc        0x4 /tmp/ccVIQUBa.o
+                0x000000cc        0x4 /tmp/ccvEFWrp.o
                 0x000000cc                custom_boot_addr
  .rodata.str1.4
                 0x000000d0       0x7d components/bsp/soc/boot/bootloader//libbootloader.a(ota_c.o)
@@ -1589,321 +1589,321 @@ LOAD /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/
                 0x0000b4c8                __fast_end = .
                 0x0000b4c8                ILM_SIZE = (. - ILM_BEGIN)
 
-.rela.dyn       0x0000b4c8        0x0 load address 0x3000b738
+.rela.dyn       0x0000b4c8        0x0 load address 0x3000b76c
  .rela.text._boot_init
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.custom_upgrade
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.chip_init
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.ota_c_code
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.fota_fs_upgrade
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.uart_fw_upgrade
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.tiny_vprintf_help
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.tiny_vprintf
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.tiny_printf
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.tiny_do_printf
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text._block_read
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.OTA_LITTLEFS_init
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.OTA_LITTLEFS_find_and_check
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.OTA_LIEELEFS_find_and_update
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.drv_uart_tx_0
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.Cli_Reset_Buf
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.Cli_Init
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.getDatafromUart
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.Cli_Start
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.comport_uart_register_isr
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.comport_uart_init
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.comport_uart_deinit
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.comport_uart_set_format
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.comport_uart_write_fifo
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.comport_uart_read_fifo
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.comport_uart_sw_rst
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.comport_uart_get_line_status
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.comport_uart_is_receiver_available
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.comport_uart_is_transmitter_idle
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.comport_uart_direct_read_byte
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.comport_hsuart_register_isr
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.comport_hsuart_init
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.comport_hsuart_deinit
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.comport_hsuart_set_format
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.comport_hsuart_write_fifo
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.comport_hsuart_read_fifo
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.comport_hsuart_sw_rst
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.comport_hsuart_get_line_status
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.comport_hsuart_is_receiver_available
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.comport_hsuart_is_transmitter_idle
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.comport_hsuart_direct_read_byte
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text._ntoa_long_long
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text._vsnprintf
-                0x00000000        0x0 /tmp/ccacfcQU.o
- .rela.text     0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
+ .rela.text     0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.ota_boot_hdr
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.ota_vector
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.ota_boot
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text._ota_nds32_init_mem
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.ota_fast_boot_code
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text._ota_soc_clk_init
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.serial_init
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.MD5_Update
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.MD5_Final
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text._inbyte
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.xmodemReceive
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.lfs_deinit
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.lfs_init
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.lfs_bd_read.isra.13
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.lfs_dir_fetchmatch
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.lfs_fs_preporphans.isra.14
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.lfs_bd_erase.isra.16
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.lfs_ctz_index.isra.23
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.lfs_bd_flush
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.lfs_bd_prog
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.lfs_dir_commitprog
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.lfs_dir_commitcrc
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.lfs_dir_getslice
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.lfs_dir_find
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.lfs_dir_getinfo
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.lfs_dir_getread.constprop.33
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.lfs_dir_read
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.lfs_file_tell
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.lfs_file_size
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.lfs_mount
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.lfs_fs_traverseraw
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.lfs_alloc
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.lfs_file_relocate
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.lfs_file_write
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.lfs_file_flush
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.lfs_file_read
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.lfs_file_seek
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.lfs_file_truncate
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.lfs_dir_compact
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.lfs_dir_commit
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.lfs_fs_forceconsistency
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.lfs_mkdir
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.lfs_file_sync
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.lfs_file_close
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.lfs_file_opencfg
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.lfs_rename
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.lfs_format
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.Cmd_WriteReg32
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.Cmd_test
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.Cmd_Meta_backup
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.Cmd_Meta_get
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.cfg_sa_write_cfg
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.flash_write_cfg
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.Cmd_Meta_restore
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.Cmd_ReadReg32
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.hal_uart_init
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.hal_uart_deinit
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.hal_uart_set_format
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.hal_hsuart_init
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.hal_hsuart_deinit
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.hal_hsuart_set_format
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.hal_hsuart_init_ex
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.hal_hsuart_deinit_ex
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.hal_hsuart_set_format_ex
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.intc_init
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.intc_register_isr
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.__assert_func
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.data.stderr
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.data.stdout
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.data.stdin
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.__sflush_r
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text._fflush_r
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.fflush
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text._cleanup_r
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.__sfmoreglue
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.__sinit
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.__sfp
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.__fp_lock_all
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.__fp_unlock_all
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text._fiprintf_r
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.fiprintf
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text._fwalk
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text._fwalk_reent
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.malloc
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.free
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text._free_r
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text._malloc_r
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text._sbrk_r
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.__sread
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.__swrite
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.__sseek
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.__sclose
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.strtol
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.strtol_common
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.__sprint_r
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text._vfiprintf_r
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text._write_r
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.__swsetup_r
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.abort
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text._close_r
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.data._NDS32_REENT___sglue
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.__sfvwrite_r
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text._lseek_r
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text.__smakebuf_r
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text._realloc_r
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text._read_r
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text._fstat_r
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
  .rela.text._isatty_r
-                0x00000000        0x0 /tmp/ccacfcQU.o
+                0x00000000        0x0 /tmp/cc4QqPJX.o
                 0x00100000                . = 0x100000
                 0x00100000                SDRAM_BEGIN = .
                 0x00100000                DLM_BEGIN = .
 
-.text           0x3000b738        0x0
-                0x3000b738                . = ALIGN (0x4)
-                0x3000b738                __XIP_TEXT_START = .
+.text           0x3000b76c        0x0
+                0x3000b76c                . = ALIGN (0x4)
+                0x3000b76c                __XIP_TEXT_START = .
  *(.text .stub .text.* .gnu.linkonce.t.*)
-                0x3000b738                . = ALIGN (0x4)
-                0x3000b738                __XIP_TEXT_END = .
-                0x3000b738                . = ALIGN (0x4)
+                0x3000b76c                . = ALIGN (0x4)
+                0x3000b76c                __XIP_TEXT_END = .
+                0x3000b76c                . = ALIGN (0x4)
 
 .rodata
 
@@ -1912,13 +1912,13 @@ LOAD /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/
 
 .eh_frame_hdr
  *(.eh_frame_hdr)
-                0x3000b738                __data_lmastart = LOADADDR (.eh_frame)
+                0x3000b76c                __data_lmastart = LOADADDR (.eh_frame)
                 0x00100000                __data_start = ADDR (.eh_frame)
 
-.eh_frame       0x00100000        0x0 load address 0x3000b738
+.eh_frame       0x00100000        0x0 load address 0x3000b76c
  *(.eh_frame)
 
-.data           0x00100000       0x88 load address 0x3000b738
+.data           0x00100000       0x88 load address 0x3000b76c
  *(.data .data.* .gnu.linkonce.d.*)
  .data._g_tiny_printf_enable
                 0x00100000        0x1 components/bsp/soc/boot/bootloader//libbootloader.a(tiny_printf.o)
@@ -1967,17 +1967,17 @@ LOAD /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/
 .sdata_b
  *(.sdata_b .sdata_b.*)
 
-.sdata_f        0x00100088        0x0 load address 0x3000b7c0
+.sdata_f        0x00100088        0x0 load address 0x3000b7f4
  *(.sdata_f .sdata_f.*)
                 0x00100088                . = ALIGN (0x4)
                 0x00100088                _edata = .
                 0x00100088                PROVIDE (edata, .)
-                0x0000b780                __check_main_size = ((LOADADDR (.sdata_f) + SIZEOF (.sdata_f)) - ORIGIN (REGION_BOOT))
+                0x0000b7b4                __check_main_size = ((LOADADDR (.sdata_f) + SIZEOF (.sdata_f)) - ORIGIN (REGION_BOOT))
                 0x00100088                __bss_start = .
                 0x00100088                PROVIDE (__sbss_start, .)
                 0x00100088                PROVIDE (___sbss_start, .)
 
-.bss            0x00100088     0x30e0 load address 0x3000b7c0
+.bss            0x00100088     0x30e0 load address 0x3000b7f4
                 0x00100088                . = ALIGN (0x4)
  *(.tbss .tbss.* .gnu.linkonce.tb.*)
  *(.tcommon)
@@ -2071,9 +2071,9 @@ LOAD /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/
                 0x00103180                _show_dlm_end = .
                 0x00103180                PROVIDE (_show_dlm_end, .)
 
-.fill           0x3000b7c0     0x4840
+.fill           0x3000b7f4     0x480c
                 0x3000fffe                . = ((ORIGIN (REGION_BOOT) + 0xffc0) - 0x2)
- *fill*         0x3000b7c0     0x483e d500
+ *fill*         0x3000b7f4     0x480a d500
                 0x3000fffe        0x2 SHORT 0xd5
                 0x00108000                PROVIDE (_stack, (ORIGIN (REGION_DATA_FAST) + 0x8000))
                 0x00108000                __OS_Exception_Stack = _stack
@@ -2081,7 +2081,7 @@ LOAD /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/
                 0x00107b00                __fence__ = (__OS_Int_Stack - 0x3c0)
                 0x00004980                dlm_remain = (__fence__ - _end)
                 0x2ff10000                SDRAM_SIZE = (. - SDRAM_BEGIN)
-                0x0000b7c0                FLASH_SIZE = (LOADADDR (.bss) - FLASH_BEGIN)
+                0x0000b7f4                FLASH_SIZE = (LOADADDR (.bss) - FLASH_BEGIN)
 
 .stab
  *(.stab)
@@ -2107,9 +2107,9 @@ LOAD /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/
 
 .comment        0x00000000       0x3b
  *(.comment)
- .comment       0x00000000       0x3b /tmp/ccacfcQU.o
+ .comment       0x00000000       0x3b /tmp/cc4QqPJX.o
                                  0x3c (size before relaxing)
- .comment       0x00000000       0x3c /tmp/ccVIQUBa.o
+ .comment       0x00000000       0x3c /tmp/ccvEFWrp.o
  .comment       0x00000000       0x3c components/bsp/soc/boot/bootloader//libbootloader.a(ota_c.o)
  .comment       0x00000000       0x3c components/bsp/soc/boot/bootloader//libbootloader.a(ota_flash.o)
  .comment       0x00000000       0x3c components/bsp/soc/boot/bootloader//libbootloader.a(tiny_printf.o)
@@ -2203,9 +2203,9 @@ LOAD /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/
 .debug_aranges  0x00000000      0x1f0
  *(.debug_aranges)
  .debug_aranges
-                0x00000000       0x28 /tmp/ccacfcQU.o
+                0x00000000       0x28 /tmp/cc4QqPJX.o
  .debug_aranges
-                0x00000028       0x28 /tmp/ccVIQUBa.o
+                0x00000028       0x28 /tmp/ccvEFWrp.o
  .debug_aranges
                 0x00000050       0x20 /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/mcmodel-large/mext-dsp/libgcc.a(_udivdi3.o)
  .debug_aranges
@@ -2238,8 +2238,8 @@ LOAD /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/
 
 .debug_info     0x00000000     0x1e9b
  *(.debug_info .gnu.linkonce.wi.*)
- .debug_info    0x00000000       0xdf /tmp/ccacfcQU.o
- .debug_info    0x000000df       0xbb /tmp/ccVIQUBa.o
+ .debug_info    0x00000000       0xdf /tmp/cc4QqPJX.o
+ .debug_info    0x000000df       0xbb /tmp/ccvEFWrp.o
  .debug_info    0x0000019a      0x165 /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/mcmodel-large/mext-dsp/libgcc.a(_udivdi3.o)
  .debug_info    0x000002ff      0x165 /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/mcmodel-large/mext-dsp/libgcc.a(_udivmoddi4.o)
  .debug_info    0x00000464      0x165 /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/mcmodel-large/mext-dsp/libgcc.a(_umoddi3.o)
@@ -2256,8 +2256,8 @@ LOAD /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/
 
 .debug_abbrev   0x00000000      0xa84
  *(.debug_abbrev)
- .debug_abbrev  0x00000000       0xa6 /tmp/ccacfcQU.o
- .debug_abbrev  0x000000a6       0x92 /tmp/ccVIQUBa.o
+ .debug_abbrev  0x00000000       0xa6 /tmp/cc4QqPJX.o
+ .debug_abbrev  0x000000a6       0x92 /tmp/ccvEFWrp.o
  .debug_abbrev  0x00000138       0x14 /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/mcmodel-large/mext-dsp/libgcc.a(_udivdi3.o)
  .debug_abbrev  0x0000014c       0x14 /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/mcmodel-large/mext-dsp/libgcc.a(_udivmoddi4.o)
  .debug_abbrev  0x00000160       0x14 /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/mcmodel-large/mext-dsp/libgcc.a(_umoddi3.o)
@@ -2274,8 +2274,8 @@ LOAD /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/
 
 .debug_line     0x00000000     0x1ec9
  *(.debug_line)
- .debug_line    0x00000000      0x19a /tmp/ccacfcQU.o
- .debug_line    0x0000019a       0xbe /tmp/ccVIQUBa.o
+ .debug_line    0x00000000      0x19a /tmp/cc4QqPJX.o
+ .debug_line    0x0000019a       0xbe /tmp/ccvEFWrp.o
  .debug_line    0x00000258       0xcc /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/mcmodel-large/mext-dsp/libgcc.a(_udivdi3.o)
  .debug_line    0x00000324      0x48c /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/mcmodel-large/mext-dsp/libgcc.a(_udivmoddi4.o)
  .debug_line    0x000007b0       0xf0 /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/mcmodel-large/mext-dsp/libgcc.a(_umoddi3.o)
@@ -2292,8 +2292,8 @@ LOAD /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/
 
 .debug_frame    0x00000000      0x1d4
  *(.debug_frame)
- .debug_frame   0x00000000       0x30 /tmp/ccacfcQU.o
- .debug_frame   0x00000030       0x30 /tmp/ccVIQUBa.o
+ .debug_frame   0x00000000       0x30 /tmp/cc4QqPJX.o
+ .debug_frame   0x00000030       0x30 /tmp/ccvEFWrp.o
  .debug_frame   0x00000060       0x20 /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/mcmodel-large/mext-dsp/libgcc.a(_popcountsi2.o)
  .debug_frame   0x00000080       0x30 /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/mcmodel-large/mext-dsp/libgcc.a(eqdf2.o)
  .debug_frame   0x000000b0       0x30 /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/mcmodel-large/mext-dsp/libgcc.a(gedf2.o)
@@ -2303,27 +2303,27 @@ LOAD /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/
  .debug_frame   0x00000188       0x2c /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/mcmodel-large/mext-dsp/libgcc.a(floatsidf.o)
  .debug_frame   0x000001b4       0x20 /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/mcmodel-large/mext-dsp/libgcc.a(floatunsidf.o)
 
-.debug_str      0x00000000      0xa18
+.debug_str      0x00000000      0xa32
  *(.debug_str)
- .debug_str     0x00000000      0x23d /tmp/ccacfcQU.o
-                                0x27a (size before relaxing)
- .debug_str     0x0000023d       0x6d /tmp/ccVIQUBa.o
-                                0x264 (size before relaxing)
- .debug_str     0x000002aa      0x225 /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/mcmodel-large/mext-dsp/libgcc.a(_popcountsi2.o)
+ .debug_str     0x00000000      0x257 /tmp/cc4QqPJX.o
+                                0x294 (size before relaxing)
+ .debug_str     0x00000257       0x6d /tmp/ccvEFWrp.o
+                                0x27e (size before relaxing)
+ .debug_str     0x000002c4      0x225 /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/mcmodel-large/mext-dsp/libgcc.a(_popcountsi2.o)
                                 0x2bb (size before relaxing)
- .debug_str     0x000004cf       0xe1 /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/mcmodel-large/mext-dsp/libgcc.a(eqdf2.o)
+ .debug_str     0x000004e9       0xe1 /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/mcmodel-large/mext-dsp/libgcc.a(eqdf2.o)
                                 0x2d3 (size before relaxing)
- .debug_str     0x000005b0       0x9e /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/mcmodel-large/mext-dsp/libgcc.a(gedf2.o)
+ .debug_str     0x000005ca       0x9e /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/mcmodel-large/mext-dsp/libgcc.a(gedf2.o)
                                 0x2eb (size before relaxing)
- .debug_str     0x0000064e       0x86 /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/mcmodel-large/mext-dsp/libgcc.a(ledf2.o)
+ .debug_str     0x00000668       0x86 /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/mcmodel-large/mext-dsp/libgcc.a(ledf2.o)
                                 0x2eb (size before relaxing)
- .debug_str     0x000006d4      0x13b /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/mcmodel-large/mext-dsp/libgcc.a(muldf3.o)
+ .debug_str     0x000006ee      0x13b /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/mcmodel-large/mext-dsp/libgcc.a(muldf3.o)
                                 0x383 (size before relaxing)
- .debug_str     0x0000080f       0xdc /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/mcmodel-large/mext-dsp/libgcc.a(subdf3.o)
+ .debug_str     0x00000829       0xdc /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/mcmodel-large/mext-dsp/libgcc.a(subdf3.o)
                                 0x32a (size before relaxing)
- .debug_str     0x000008eb       0x9b /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/mcmodel-large/mext-dsp/libgcc.a(floatsidf.o)
+ .debug_str     0x00000905       0x9b /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/mcmodel-large/mext-dsp/libgcc.a(floatsidf.o)
                                 0x2d4 (size before relaxing)
- .debug_str     0x00000986       0x92 /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/mcmodel-large/mext-dsp/libgcc.a(floatunsidf.o)
+ .debug_str     0x000009a0       0x92 /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/mcmodel-large/mext-dsp/libgcc.a(floatunsidf.o)
                                 0x2d1 (size before relaxing)
 
 .debug_loc      0x00000000     0x2ba2
@@ -2351,11 +2351,11 @@ LOAD /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/
 
 .debug_varnames
  *(.debug_varnames)
-OUTPUT(/home/yaguan/work/SV32WB0X_new/SSV.tiramisu.sv32wb0x.20Q2.2105.01.01R/image/akeeta_bl.elf elf32-nds32le)
+OUTPUT(/home/yaguan/work/SSV.tiramisu.sv32wb0x.20Q2.2110.01.01R/SSV.tiramisu.sv32wb0x.20Q2.2110.01.01R/image/akeeta_bl.elf elf32-nds32le)
 
 .debug_ranges   0x00000000      0x310
- .debug_ranges  0x00000000       0x18 /tmp/ccacfcQU.o
- .debug_ranges  0x00000018       0x18 /tmp/ccVIQUBa.o
+ .debug_ranges  0x00000000       0x18 /tmp/cc4QqPJX.o
+ .debug_ranges  0x00000018       0x18 /tmp/ccvEFWrp.o
  .debug_ranges  0x00000030       0x40 /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/mcmodel-large/mext-dsp/libgcc.a(eqdf2.o)
  .debug_ranges  0x00000070       0x58 /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/mcmodel-large/mext-dsp/libgcc.a(gedf2.o)
  .debug_ranges  0x000000c8       0x58 /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/mcmodel-large/mext-dsp/libgcc.a(ledf2.o)

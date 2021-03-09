@@ -201,8 +201,10 @@ static bool parseHeader(
 static int sourceReadAt(uint32_t offset, void *data, int size)
 {
     int nRead;
-    if(FS_lseek(fs_handle, g_mp3_file_handler, offset, SSV_SEEK_SET) !=offset) {
-        printf("fs lseek fail\n");
+    int off= 0;
+    off = FS_lseek(fs_handle, g_mp3_file_handler, offset, SSV_SEEK_SET);
+    if(off !=offset) {
+        printf("fs lseek fail: %d %d\n", off, offset);
         return 0;
     }
 

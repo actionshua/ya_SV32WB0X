@@ -94,6 +94,12 @@ const struct _pad_struct _pad_setting ATTRIBUTE_CFG_PAD = {
 #else
     .pad_5v_force_3v = IO_5V_PAD_LIMIT_TO_3V,
 #endif
+    .push_pull = {
+        [0] = 0xFFFFFFFF,
+        [1] = 0xFFFFFFFF,
+        [2] = 0xFFFFFFFF,
+        [3] = 0xFFFFFFFF,
+    },
 #elif (CHIP_SUB_ID == 1)
     // 6020B
     .pin_alt = {

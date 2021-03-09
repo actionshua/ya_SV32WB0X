@@ -10,6 +10,7 @@ LOCAL_AFLAGS :=
 LOCAL_INC := -Icomponents/bsp
 LOCAL_INC += -Icomponents/inc
 LOCAL_INC += -Icomponents/drv
+LOCAL_INC := -Icomponents/netstack_wrapper
 LOCAL_INC += -Icomponents/softmac
 LOCAL_INC += -Icomponents/inc/bsp/$(CHIP_NAME)
 

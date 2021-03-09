@@ -134,7 +134,7 @@ static void ya_start_akeeta_sdk(void)
 	test_light_main_para.sniffer_timeout = 180;
 	test_light_main_para.ap_timeout = 180;
 	test_light_main_para.ble_timeout = 180;
-	test_light_main_para.ya_init_mode = AP_MODE;
+	test_light_main_para.ya_init_mode = BLE_CFG_MODE;
 	test_light_main_para.mcu_ota_enable = 0;
 	test_light_main_para.enable_factory_uart = 0;
 	test_light_main_para.enable_factory_router_scan = 1;

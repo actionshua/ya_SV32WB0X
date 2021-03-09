@@ -553,10 +553,14 @@ void ya_ble_task(void *arg)
 	ya_hal_ble_set_rcv_cb(ya_ble_recv_data);
 	ya_hal_ble_set_connect_state_cb(ya_ble_connect_state_handle);
 	
-	ya_hal_ble_init();
+	ret = ya_hal_ble_init();
+	if (ret != 0) 
+		goto END;	
 	ya_delay(200);
 	
-	ya_hal_ble_start_adv(ble_ff_string, pos);
+	ret = ya_hal_ble_start_adv(ble_ff_string, pos);
+	if (ret != 0) 
+		goto END;	
 
 	ya_init_timer(&ya_ble_timer);
 	ya_countdown_ms(&ya_ble_timer, g_ble_param.timeout*1000);

@@ -181,6 +181,10 @@ void SSV_GATTS_HandleValueIndication (UINT16 conn_id, UINT16 attr_id, UINT16 dat
 #define BTC_GATTS_CHR_ACCESS_TIMEOUT 3000
 #define BTC_GATTS_CHR_ACCESS_BUF_SIZE 256
 
+ssv_gatts_attr_db_t *g_p_assign_attr_db = NULL;
+uint16_t g_db_max_num = 0;
+uint16_t g_db_start_handle = 0;
+
 uint32_t g_transfer_id = 0;
 uint16_t gatt_svr_val_handle = 0;
 uint8_t gatt_svr_buf[SSV_GATT_MAX_ATTR_LEN];
@@ -214,6 +218,7 @@ static int ssv_gatt_svr_chr_access_cb(uint16_t conn_handle, uint16_t attr_handle
             else if (ctxt->op == BLE_GATT_ACCESS_OP_READ_CHR)
                 printf("read dsc\n");
 
+
             memcpy(cb_data.req_data.remote_bda, desc.peer_id_addr.val, SSV_BD_ADDR_LEN);
             cb_data.req_data.conn_id = BTC_GATT_CREATE_CONN_ID(SERVER_IF_ID, conn_handle);
             cb_data.req_data.handle = attr_handle;
@@ -227,6 +232,23 @@ static int ssv_gatt_svr_chr_access_cb(uint16_t conn_handle, uint16_t attr_handle
             pgatt_data->read_req.need_rsp = 1;
             pgatt_data->read_req.offset = 0;
             cb_data.req_data.p_data = pgatt_data;
+
+            if (g_p_assign_attr_db &&  (attr_handle >= g_db_start_handle) && g_db_max_num) {//check is auto response
+                uint16_t db_num = attr_handle - g_db_start_handle;
+                if (db_num >= g_db_max_num) {
+                    printf("db_num(%d) >= g_db_max_num(%d)\n", db_num, g_db_max_num);
+                    return 0;
+                }
+
+                if (g_p_assign_attr_db[db_num].attr_control.auto_rsp == SSV_GATT_AUTO_RSP) {
+                    printf("db_num %d AUTO_RSP\n", db_num);
+                    rc = os_mbuf_append(ctxt->om, g_p_assign_attr_db[db_num].att_desc.value, g_p_assign_attr_db[db_num].att_desc.length);
+                    if (rc)
+                        printf("read chr os_mbuf_append fail %d", rc);
+
+                    return 0;
+                }
+            }
 
             btc_gatt_com_to_cb_handler((void*)&cb_data, sizeof(cb_data), BTA_GATTS_READ_EVT, BTC_PID_GATTS);
             osi_sem_take(&svr_chr_access_sem, BTC_GATTS_CHR_ACCESS_TIMEOUT);
@@ -359,12 +381,23 @@ static ble_uuid_t *_declare_uuid(uint8_t uuid_type, uint8_t *_uuid)
             break;
         case BLE_UUID_TYPE_32:
             uuid=OS_MemZalloc(sizeof(ble_uuid32_t));
-            printf("\33[31m%s():32bit is not implemented\33[0m\r\n",__FUNCTION__);
+            if(NULL!=uuid)
+            {
+                ((ble_uuid32_t *)(uuid))->u.type = BLE_UUID_TYPE_32;
+                ((ble_uuid32_t *)(uuid))->value = (_uuid[0]|_uuid[1]<<8|_uuid[2]<<16|_uuid[3]<<24);
+                printf("\33[31m%s(): 16bit %08x  \33[0m\r\n", __FUNCTION__, ((ble_uuid32_t *)(uuid))->value);
+            }
             break;
 
         case BLE_UUID_TYPE_128:
             uuid=OS_MemZalloc(sizeof(ble_uuid128_t));
-            printf("\33[31m%s():128bit is not implemented\33[0m\r\n",__FUNCTION__);
+            if(NULL!=uuid)
+            {
+                ((ble_uuid128_t *)(uuid))->u.type = BLE_UUID_TYPE_128;
+                for(int i = 0; i < 16;i++) {
+                    ((ble_uuid128_t *)(uuid))->value[i] = _uuid[i];
+                }
+            }
             break;
         default:
             printf("\33[31m%s(): !!! Inavlid case\33[0m\r\n",__FUNCTION__);
@@ -486,7 +519,15 @@ static int btc_gatts_gen_svc_def_by_attrdb(ssv_gatts_attr_db_t *attr_db, uint8_t
         if (ble_uuid_cmp(&db_uuid.u, &uuid_primary_service.u) == 0) {
             service_ind ++;
             svc_def[service_ind].type = BLE_GATT_SVC_TYPE_PRIMARY;
-            svc_def[service_ind].uuid = _declare_uuid(BLE_UUID_TYPE_16, attr_db[i].att_desc.value);
+            if (attr_db[i].att_desc.length == SSV_UUID_LEN_16) {
+                svc_def[service_ind].uuid = _declare_uuid(BLE_UUID_TYPE_16, attr_db[i].att_desc.value);
+            }
+            else if (attr_db[i].att_desc.length == SSV_UUID_LEN_32)
+                svc_def[service_ind].uuid = _declare_uuid(BLE_UUID_TYPE_32, attr_db[i].att_desc.value);
+            else if (attr_db[i].att_desc.length == SSV_UUID_LEN_128) {
+                svc_def[service_ind].uuid = _declare_uuid(BLE_UUID_TYPE_128, attr_db[i].att_desc.value);
+            }
+
             //printf("%s  assign primary_service uuid  %02x%02x\n", __FUNCTION__, attr_db[i].att_desc.value[1], attr_db[i].att_desc.value[0]);
             //printf("primary_service uuid %d  uuid %s\n",
             //    service_ind, ble_uuid_to_str(svc_def[service_ind].uuid, uuid_buf1));
@@ -607,6 +648,7 @@ static void btc_gatts_act_create_attr_tab(ssv_gatts_attr_db_t *gatts_attr_db,
     ssv_ble_gatts_cb_param_t param;
     uint16_t service_start_handle = 0;
     uint8_t svc_count = 0;
+    uint16_t *return_start_handles = NULL;
 
     printf("%s max_nb_attr %d\n", __FUNCTION__, max_nb_attr);
 
@@ -617,6 +659,15 @@ static void btc_gatts_act_create_attr_tab(ssv_gatts_attr_db_t *gatts_attr_db,
     svc_count = btc_gatts_find_chr_des_count(gatts_attr_db, 0, max_nb_attr, FIND_SERVICE);
 
     g_svc_defs = OS_MemZalloc(sizeof(struct ble_gatt_chr_def)*(svc_count + 1));
+
+    if (g_p_assign_attr_db)
+        OS_MemFree(g_p_assign_attr_db);
+
+    g_p_assign_attr_db = OS_MemZalloc(sizeof(ssv_gatts_attr_db_t)*max_nb_attr);
+    if (g_p_assign_attr_db) {
+        memcpy(g_p_assign_attr_db, gatts_attr_db, sizeof(ssv_gatts_attr_db_t)*max_nb_attr);
+    } else
+        printf("%s OS_MemZalloc g_p_assign_attr_db error\n", __FUNCTION__, ret);
 
     ret = btc_gatts_gen_svc_def_by_attrdb(gatts_attr_db, max_nb_attr,
         g_svc_defs);
@@ -644,9 +695,23 @@ static void btc_gatts_act_create_attr_tab(ssv_gatts_attr_db_t *gatts_attr_db,
     else
         param.add_attr_tab.status = SSV_GATT_OK;
 
-    param.add_attr_tab.num_handle = 0;
-    param.add_attr_tab.handles = &service_start_handle;
+    param.add_attr_tab.num_handle = ble_gatts_get_att_total_count() - service_start_handle + 1;
+
+    return_start_handles = OS_MemAlloc(sizeof(uint16_t) * param.add_attr_tab.num_handle);
+    if (!return_start_handles)
+        printf("%s ****return_start_handles OS_MemZalloc fail****\n", __FUNCTION__);
+
+    g_db_start_handle = service_start_handle;
+    g_db_max_num = max_nb_attr;
+
+    for (int i = 0; i < param.add_attr_tab.num_handle; i ++)
+        return_start_handles[i] = service_start_handle + i;
+
+    param.add_attr_tab.handles = return_start_handles;
+
     btc_gatts_cb_to_app(SSV_GATTS_CREAT_ATTR_TAB_EVT, gatts_if, &param);
+
+    OS_MemFree(return_start_handles);
 #if 0
     /*show svc_defs*/
     for (int i = 0; i < SSV_MAX_GATTS_SERVICE_COUNT; i++) {
@@ -762,9 +827,10 @@ void btc_gatts_startservice(UINT16 service_id, tBTA_GATT_TRANSPORT sup_transport
         printf("%s g_svc_defs is null, please add att tab first\n", __FUNCTION__);
     }
 
-    ret = ble_gatts_start();
-    if (ret)
-        printf("%s ble_gatts_start fail ret %d\n", __FUNCTION__, ret);
+    /*ble_gatts_start already called in btc_gatts_act_create_attr_tab*/
+    //ret = ble_gatts_start();
+    //if (ret)
+    //    printf("%s ble_gatts_start fail ret %d\n", __FUNCTION__, ret);
 
     if (ret)
         param.start.status = SSV_GATT_ERROR;

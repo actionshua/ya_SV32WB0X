@@ -1,26 +1,26 @@
 
 Discarded input sections
 
- .text          0x00000000        0x0 /tmp/ccx43HtD.o
- .data          0x00000000        0x0 /tmp/ccx43HtD.o
- .bss           0x00000000        0x0 /tmp/ccx43HtD.o
+ .text          0x00000000        0x0 /tmp/ccUJTpEn.o
+ .data          0x00000000        0x0 /tmp/ccUJTpEn.o
+ .bss           0x00000000        0x0 /tmp/ccUJTpEn.o
  .note.v2abi_compatible
-                0x00000000        0x4 /tmp/ccx43HtD.o
- .text          0x00000000        0x0 /tmp/cc3ZCE8m.o
- .data          0x00000000        0x0 /tmp/cc3ZCE8m.o
- .bss           0x00000000        0x0 /tmp/cc3ZCE8m.o
+                0x00000000        0x4 /tmp/ccUJTpEn.o
+ .text          0x00000000        0x0 /tmp/ccKbnOm6.o
+ .data          0x00000000        0x0 /tmp/ccKbnOm6.o
+ .bss           0x00000000        0x0 /tmp/ccKbnOm6.o
  .note.v2abi_compatible
-                0x00000000        0x4 /tmp/cc3ZCE8m.o
- .text          0x00000000        0x0 /tmp/ccikBbEx.o
- .data          0x00000000        0x0 /tmp/ccikBbEx.o
- .bss           0x00000000        0x0 /tmp/ccikBbEx.o
+                0x00000000        0x4 /tmp/ccKbnOm6.o
+ .text          0x00000000        0x0 /tmp/cc4G6ZCU.o
+ .data          0x00000000        0x0 /tmp/cc4G6ZCU.o
+ .bss           0x00000000        0x0 /tmp/cc4G6ZCU.o
  .note.v2abi_compatible
-                0x00000000        0x4 /tmp/ccikBbEx.o
- .text          0x00000000        0x0 /tmp/ccrZv4Ii.o
- .data          0x00000000        0x0 /tmp/ccrZv4Ii.o
- .bss           0x00000000        0x0 /tmp/ccrZv4Ii.o
+                0x00000000        0x4 /tmp/cc4G6ZCU.o
+ .text          0x00000000        0x0 /tmp/ccA4otvN.o
+ .data          0x00000000        0x0 /tmp/ccA4otvN.o
+ .bss           0x00000000        0x0 /tmp/ccA4otvN.o
  .note.v2abi_compatible
-                0x00000000        0x4 /tmp/ccrZv4Ii.o
+                0x00000000        0x4 /tmp/ccA4otvN.o
 
 Memory Configuration
 
@@ -33,17 +33,17 @@ FLASH_SIGN       0x30000000         0x00000000         xr
 FLASH_HEADER     0x30000000         0x00000040         xr
 FLASH_BOOT       0x30000040         0x0000ffc0         xr
 FLASH_PARAM      0x30010000         0x00007000         xr
-FLASH_XIP1       0x30017000         0x000a0000         xr
-FLASH_XIP2       0x300b7000         0x000a0000         xr
+FLASH_XIP1       0x30017000         0x000d7000         xr
+FLASH_XIP2       0x300ee000         0x000d7000         xr
 *default*        0x00000000         0xffffffff
 
 Linker script and memory map
 
 LOAD /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/../../../../nds32le-elf/lib/mcmodel-large/mext-dsp/libdsp.a
-LOAD /tmp/ccx43HtD.o
-LOAD /tmp/cc3ZCE8m.o
-LOAD /tmp/ccikBbEx.o
-LOAD /tmp/ccrZv4Ii.o
+LOAD /tmp/ccUJTpEn.o
+LOAD /tmp/ccKbnOm6.o
+LOAD /tmp/cc4G6ZCU.o
+LOAD /tmp/ccA4otvN.o
 LOAD /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/mcmodel-large/mext-dsp/libgcc.a
 START GROUP
 LOAD /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/nds32le-elf/4.9.4/../../../../nds32le-elf/lib/mcmodel-large/mext-dsp/libc.a
@@ -58,12 +58,12 @@ LOAD /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/
                 0x0000001a                __xtal = 0x1a
                 0x000000a0                __sys_bus_speed = 0xa0
                 0x00000004                __xip_bit = 0x4
-                0x000a0000                __setting_partition_main_size = 0xa0000
+                0x000d7000                __setting_partition_main_size = 0xd7000
                 0x00200000                __setting_flash_total_size = 0x200000
                 0x80000000                __setting_psram_heap_base = 0x80000000
                 0x00000000                __setting_psram_heap_size = 0x0
                 0x30017000                __app_xip1 = ORIGIN (REGION_MAIN1)
-                0x300b7000                __app_xip2 = ORIGIN (REGION_MAIN2)
+                0x300ee000                __app_xip2 = ORIGIN (REGION_MAIN2)
                 0x30010000                . = ORIGIN (REGION_PARAM)
 
 .fix_table_section
@@ -81,7 +81,7 @@ LOAD /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/
                 0x30011000                . = ALIGN (0x1000)
                 0x30011000                __lds_sa_mp_data_start = .
  *(.sa_mp_data)
- .sa_mp_data    0x30011000     0x1000 /tmp/ccx43HtD.o
+ .sa_mp_data    0x30011000     0x1000 /tmp/ccUJTpEn.o
                 0x30011000                g_sa_cfg
                 0x30012000                __lds_sa_mp_data_end = .
                 0x30012000                . = ALIGN (0x1000)
@@ -91,7 +91,7 @@ LOAD /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/
                 0x30012000                . = ALIGN (0x1000)
                 0x30012000                __lds_cfg_data_start = .
  *(.cfg_mac_data)
- .cfg_mac_data  0x30012000     0x1000 /tmp/cc3ZCE8m.o
+ .cfg_mac_data  0x30012000     0x1000 /tmp/ccKbnOm6.o
                 0x30012000                g_wifi_cfg
                 0x30013000                __lds_cfg_data_end = .
                 0x30013000                . = ALIGN (0x1000)
@@ -101,11 +101,11 @@ LOAD /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/
                 0x30013000                . = ALIGN (0x1000)
                 0x30013000                __lds_pad_data_start = .
  *(.cfg_pad_data)
- .cfg_pad_data  0x30013000      0x1e0 /tmp/ccrZv4Ii.o
+ .cfg_pad_data  0x30013000      0x1f0 /tmp/ccA4otvN.o
                 0x30013000                _pad_setting
-                0x300131e0                __lds_pad_data_end = .
+                0x300131f0                __lds_pad_data_end = .
                 0x30014000                . = ALIGN (0x1000)
- *fill*         0x300131e0      0xe20 
+ *fill*         0x300131f0      0xe10 
 
 .boot_info_section
                 0x30014000     0x1000
@@ -120,7 +120,7 @@ LOAD /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/
                 0x3001400c        0x4 LONG 0x1
                 0x30014010        0x4 LONG 0x200000
                 0x30014014        0x4 LONG 0x2000
-                0x30014018        0x4 LONG 0xa0000
+                0x30014018        0x4 LONG 0xd7000
                 0x3001401c        0x4 LONG 0x0
                 0x30014020                __lds_bootinfo_end = .
                 0x30015000                . = ALIGN (0x1000)
@@ -131,7 +131,7 @@ LOAD /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/
                 0x30015000                . = ALIGN (0x1000)
                 0x30015000                __lds_user_data_start = .
  *(.user_data)
- .user_data     0x30015000        0x0 /tmp/ccikBbEx.o
+ .user_data     0x30015000        0x0 /tmp/cc4G6ZCU.o
                 0x30015000                g_user_cfg
                 0x30015000                __lds_user_data_end = .
                 0x30016ffe                . = (((((((ORIGIN (REGION_PARAM) + 0x1000) + 0x1000) + 0x1000) + 0x1000) + 0x1000) + 0x2000) - 0x2)
@@ -250,11 +250,11 @@ LOAD /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/
 
 .comment        0x00000000       0x3b
  *(.comment)
- .comment       0x00000000       0x3b /tmp/ccx43HtD.o
+ .comment       0x00000000       0x3b /tmp/ccUJTpEn.o
                                  0x3c (size before relaxing)
- .comment       0x00000000       0x3c /tmp/cc3ZCE8m.o
- .comment       0x00000000       0x3c /tmp/ccikBbEx.o
- .comment       0x00000000       0x3c /tmp/ccrZv4Ii.o
+ .comment       0x00000000       0x3c /tmp/ccKbnOm6.o
+ .comment       0x00000000       0x3c /tmp/cc4G6ZCU.o
+ .comment       0x00000000       0x3c /tmp/ccA4otvN.o
 
 .debug
  *(.debug)
@@ -271,51 +271,51 @@ LOAD /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/
 .debug_aranges  0x00000000       0x60
  *(.debug_aranges)
  .debug_aranges
-                0x00000000       0x18 /tmp/ccx43HtD.o
+                0x00000000       0x18 /tmp/ccUJTpEn.o
  .debug_aranges
-                0x00000018       0x18 /tmp/cc3ZCE8m.o
+                0x00000018       0x18 /tmp/ccKbnOm6.o
  .debug_aranges
-                0x00000030       0x18 /tmp/ccikBbEx.o
+                0x00000030       0x18 /tmp/cc4G6ZCU.o
  .debug_aranges
-                0x00000048       0x18 /tmp/ccrZv4Ii.o
+                0x00000048       0x18 /tmp/ccA4otvN.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000      0x631
+.debug_info     0x00000000      0x63e
  *(.debug_info .gnu.linkonce.wi.*)
- .debug_info    0x00000000       0xb3 /tmp/ccx43HtD.o
- .debug_info    0x000000b3       0xb3 /tmp/cc3ZCE8m.o
- .debug_info    0x00000166       0xb0 /tmp/ccikBbEx.o
- .debug_info    0x00000216      0x41b /tmp/ccrZv4Ii.o
+ .debug_info    0x00000000       0xb3 /tmp/ccUJTpEn.o
+ .debug_info    0x000000b3       0xb3 /tmp/ccKbnOm6.o
+ .debug_info    0x00000166       0xb0 /tmp/cc4G6ZCU.o
+ .debug_info    0x00000216      0x428 /tmp/ccA4otvN.o
 
 .debug_abbrev   0x00000000      0x1e8
  *(.debug_abbrev)
- .debug_abbrev  0x00000000       0x6e /tmp/ccx43HtD.o
- .debug_abbrev  0x0000006e       0x6e /tmp/cc3ZCE8m.o
- .debug_abbrev  0x000000dc       0x6c /tmp/ccikBbEx.o
- .debug_abbrev  0x00000148       0xa0 /tmp/ccrZv4Ii.o
+ .debug_abbrev  0x00000000       0x6e /tmp/ccUJTpEn.o
+ .debug_abbrev  0x0000006e       0x6e /tmp/ccKbnOm6.o
+ .debug_abbrev  0x000000dc       0x6c /tmp/cc4G6ZCU.o
+ .debug_abbrev  0x00000148       0xa0 /tmp/ccA4otvN.o
 
 .debug_line     0x00000000      0x2a9
  *(.debug_line)
- .debug_line    0x00000000       0x6f /tmp/ccx43HtD.o
- .debug_line    0x0000006f       0x4b /tmp/cc3ZCE8m.o
- .debug_line    0x000000ba       0x5a /tmp/ccikBbEx.o
- .debug_line    0x00000114      0x195 /tmp/ccrZv4Ii.o
+ .debug_line    0x00000000       0x6f /tmp/ccUJTpEn.o
+ .debug_line    0x0000006f       0x4b /tmp/ccKbnOm6.o
+ .debug_line    0x000000ba       0x5a /tmp/cc4G6ZCU.o
+ .debug_line    0x00000114      0x195 /tmp/ccA4otvN.o
 
 .debug_frame
  *(.debug_frame)
 
-.debug_str      0x00000000      0x7b9
+.debug_str      0x00000000      0x7dd
  *(.debug_str)
- .debug_str     0x00000000      0x1fd /tmp/ccx43HtD.o
-                                0x23d (size before relaxing)
- .debug_str     0x000001fd       0x41 /tmp/cc3ZCE8m.o
-                                0x246 (size before relaxing)
- .debug_str     0x0000023e       0x40 /tmp/ccikBbEx.o
-                                0x245 (size before relaxing)
- .debug_str     0x0000027e      0x53b /tmp/ccrZv4Ii.o
-                                0x740 (size before relaxing)
+ .debug_str     0x00000000      0x217 /tmp/ccUJTpEn.o
+                                0x257 (size before relaxing)
+ .debug_str     0x00000217       0x41 /tmp/ccKbnOm6.o
+                                0x260 (size before relaxing)
+ .debug_str     0x00000258       0x40 /tmp/cc4G6ZCU.o
+                                0x25f (size before relaxing)
+ .debug_str     0x00000298      0x545 /tmp/ccA4otvN.o
+                                0x764 (size before relaxing)
 
 .debug_loc
  *(.debug_loc)
@@ -334,4 +334,4 @@ LOAD /home/yaguan/work/SV32WB0X/toolchain/nds32le-elf-mculib-v3s/bin/../lib/gcc/
 
 .debug_varnames
  *(.debug_varnames)
-OUTPUT(/home/yaguan/work/SV32WB0X_new/SSV.tiramisu.sv32wb0x.20Q2.2105.01.01R/image/mac_atcmd_cfg.elf elf32-nds32le)
+OUTPUT(/home/yaguan/work/SSV.tiramisu.sv32wb0x.20Q2.2110.01.01R/SSV.tiramisu.sv32wb0x.20Q2.2110.01.01R/image/mac_atcmd_cfg.elf elf32-nds32le)

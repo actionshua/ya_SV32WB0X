@@ -66,6 +66,25 @@ SUPPORT_ISR_USAGE               := 0
 # BLE option
 ################################################################
 BLE_EN                          := 0
+BLE_DEBUG_ONLY                  := 0
+
+# Thirdparty
+MESH_BLE_EN                     := 0
+##if enable GATTS or GATTC, GAP must be enabled
+BLE_GAP_EN                      := 0
+BLE_GATTS_EN                    := 0
+BLE_GATTC_EN                    := 0
+BLE_GATTS_API_TEST_EN           := 0
+BLE_GATTC_API_TEST_EN           := 0
+BLE_GAP_ATCMD_EN                := 0
+BLE_GATTS_ATCMD_EN              := 0
+BLE_GATTC_ATCMD_EN              := 0
+SETTING_BLE_UART                := 0
+BLE_GPIO_PROFILE                := 0
+MESH_BLE_OTHER_MODEL_EN         := 0
+MESH_BLE_AUTO_RUN_EN            := 0
+#BLE_AGGR_ADV_REPORT ONLY support MESH(HCI_RAM_MODE)
+BLE_AGGR_ADV_REPORT             := 0
 
 ################################################################
 # WIFI feature option
@@ -87,6 +106,8 @@ COUNTRY_CODE                    := 0
 # DEF=0, TW=1, CN=2, HK=3, US=4, JP=5 Please check the COUNTRY_CODE in wificonf.h
 SAE_EN                          := 1
 PMF_EN                          := 1
+AMPDU_RX_EN                     := 0
+CSI_EN                          := 0
 
 ################################################################
 # Third_Party feature option
@@ -104,15 +125,12 @@ RTLINK_EN                       := 1
 PING_EN                         := 1
 TFTP_EN                         := 1
 JD_CLOUD_EN                     := 0
-MESH_BLE_EN                     := 0
-MESH_BLE_AUTO_RUN_EN            := 0
-#BLE_AGGR_ADV_REPORT ONLY support MESH(HCI_RAM_MODE)
-BLE_AGGR_ADV_REPORT             := 0
 CMSIS_EN                        := 0
 
 ###################################################################
 # Filesystem feature
 ###################################################################
+# 0 ==> disable FFS, 1 ==> use spiffs, 2 ==> use littlefs
 SUPPORT_FFS                     := 2
 # SD Card
 SUPPORT_SDC                     := 0
@@ -126,6 +144,9 @@ UART_BAUD_RATE                  := 115200
 BOOTLOADER_ENABLE_QE            := 0
 SUPPORT_CXX						:= 0
 ISR_STACK_SIZE                  := 2048
+SUPPORT_LOG_RINGBUFFER          := 0
+SUPPORT_LOG_RX_BUF_SIZE         := 512
+SUPPORT_LOG_TX_BUF_SIZE         := 4096
 
 ################################################################
 # Security setting

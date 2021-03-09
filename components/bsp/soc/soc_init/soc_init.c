@@ -18,8 +18,7 @@ extern struct _pad_struct _pad_setting;
 uint32_t _soc_io_init(void)
 {
     if ((_pad_setting.pre_magic == 0x50414453) && (_pad_setting.post_magic ==0x50414445)) {
-        //printf("manual io = 0x%x, func sel = 0x%x, gpio enable mask = 0x%x\n", _pad_setting.pin_mode[0], _pad_setting.func_sel[0], _pad_setting.gpio_startup_setting_enable_mask);        
-
+        //printf("manual io = 0x%x, func sel = 0x%x, gpio enable mask = 0x%x\n", _pad_setting.pin_mode[0], _pad_setting.func_sel[0], _pad_setting.gpio_startup_setting_enable_mask);
 #if (CHIP_ID == 6020)
         hal_pinmux_set_force_gpio(_pad_setting.force_gpio[0]);
 		hal_pinmux_set_force_gpio_32(_pad_setting.force_gpio[1]);
@@ -28,6 +27,9 @@ uint32_t _soc_io_init(void)
 #else
         hal_pinmux_set_raw_ex(_pad_setting.pin_mode[0], _pad_setting.pin_mode[1], _pad_setting.func_sel[0], _pad_setting.func_sel[1]);
         hal_pinmux_set_5v_pad(_pad_setting.pad_5v_force_3v);
+#endif
+#if (CHIP_SUB_ID == 2)
+        hal_pinmux_push_pull(_pad_setting.push_pull);
 #endif
 #if defined(M_CUSTOM_PWM0_PIN)
         hal_pinmux_set_specify_pwm(0, _M_CUSTOM_PWM0_PIN);

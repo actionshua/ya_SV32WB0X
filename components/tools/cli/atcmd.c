@@ -17,6 +17,9 @@
 #if BLE_GAP_ATCMD_EN
 #include "atcmd_ble.h"
 #endif
+#if defined(SETTING_BLE_UART) && (SETTING_BLE_UART == 1)
+#include "atcmd_ble_uart.h"
+#endif
 
 #if MESH_BLE_EN
 #include "atcmd_ble_mesh.h"
@@ -201,6 +204,9 @@ const at_cmd_info atcmdicomm_info_tbl[] =
     {ATCMD_RCINFO,             At_RCINFO,             0},
     {ATCMD_RC_MASK,            At_RCMASK,             0},
     {ATCMD_RC_FIXRATE,       At_fixrate,            0},
+#if 0 //AMPDU_RX_EN
+    {ATCMD_AMPDURX_INFO,       At_AMPDURX_INFO,         0},
+#endif
     {ATCMD_NOW_TEST,            At_TestNow,             0},
     {ATCMD_SETTXQCONFIG,        At_SetTxQConfig,        2},
     {ATCMD_SETAMPDUCONFIG,      At_SetAmpduConfig,      3},
@@ -245,7 +251,7 @@ const at_cmd_info atcmdicomm_info_tbl[] =
     {ATCMD_TCPLISTEN6,          At_TCPListen6,          0},
 #endif
 #ifdef MBEDTLS_EN
-    //{ATCMD_SSLTEST,            At_SSLTest,            0},
+    //{ATCMD_SSLTEST,            At_SSLTest,            0},//modify by hua
 #endif
 #ifdef SMARTCONFIG_EN
     {ATCMD_SMARTCONFIG,      At_SmartConfig,      0},
@@ -374,6 +380,10 @@ const at_cmd_info atcmdicomm_info_tbl[] =
     {ATCMD_DORMANT           , At_dormant, 2},
 #endif
 
+#if defined(SETTING_BLE_UART) && (SETTING_BLE_UART == 1)
+    {ATCMD_BLE_UART_START    , At_ble_uart_init, 0},
+    {ATCMD_BLE_UART_TX       , At_ble_uart_send, 1},
+#endif
 #if BLE_GAP_ATCMD_EN
     {ATCMD_BLEINIT              , At_ble_init, 0},
     {ATCMD_BLESETSCANPARAMS     , At_ble_set_scan_params, 6},

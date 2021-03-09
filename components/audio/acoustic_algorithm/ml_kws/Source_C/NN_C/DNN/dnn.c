@@ -18,6 +18,8 @@
 
 #include "dnn.h"
 #include "stdlib.h"
+#include <stdio.h>
+#include "osal.h"
 
 static int frame_len;
 static int frame_shift;
@@ -69,6 +71,10 @@ int dnn_get_in_dec_bits() {
 void dnn_init()
 {
   scratch_pad = malloc(sizeof(q7_t) * SCRATCH_BUFFER_SIZE);
+  if(!scratch_pad) {
+    printf("[%d] %s malloc fail\n", __LINE__,  __func__);
+    configASSERT(scratch_pad);
+  }
   buffer1 = scratch_pad;
   buffer2 = buffer1 +IP1_OUT_DIM;
   buffer3 = buffer1;
@@ -84,7 +90,9 @@ void dnn_init()
 
 void dnn_deinit()
 {
-  free(scratch_pad);
+  if(scratch_pad) {
+    free(scratch_pad);
+  }
 }
 
 void dnn_run_nn(q7_t* in_data, q7_t* out_data)

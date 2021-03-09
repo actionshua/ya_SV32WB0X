@@ -4,6 +4,10 @@ LIB_SRC += cli_cmd.c
 LIB_SRC += atcmd.c
 LIB_SRC += sysconf_api.c
 
+ifeq ($(strip $(SETTING_BLE_UART)),1)
+LIB_SRC += atcmd_ble_uart.c
+endif
+
 ifeq ($(strip $(WAC_EN)), 1)
 LIB_SRC += atcmd_homekit.c
 endif
@@ -112,6 +116,16 @@ ifeq ($(strip $(BLE_GAP_ATCMD_EN)), 1)
 LOCAL_INC += -Icomponents/third_party/apache-mynewt-nimble-1.2.0/common/include
 LOCAL_INC += -Icomponents/third_party/apache-mynewt-nimble-1.2.0/host/bluedroid/api/include
 endif
+
+# BLE
+BLE_DIR := $(TOPDIR)/components/third_party/apache-mynewt-nimble-1.2.0
+LOCAL_INC += -I$(BLE_DIR)/host/nimble/include
+LOCAL_INC += -I$(BLE_DIR)/porting/nimble/include
+LOCAL_INC += -I$(BLE_DIR)/porting/npl/freertos/include
+LOCAL_INC += -I$(BLE_DIR)/host/nimble/host/include
+LOCAL_INC += -I$(BLE_DIR)/host/nimble/host/services/gap/include
+LOCAL_INC += -I$(BLE_DIR)/host/nimble/host/services/gatt/include
+LOCAL_INC += -I$(BLE_DIR)/host/nimble/host/services/bleuart/include
 
 LOCAL_INC += -Icomponents/bsp/soc/lowpower
 

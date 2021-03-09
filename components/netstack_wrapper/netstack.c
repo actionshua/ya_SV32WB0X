@@ -25,7 +25,7 @@
 extern IEEE80211STATUS gwifistatus;
 extern void mgmt_msg_post(u8 wsid, u8 action, u8 reconnect);
 
-static struct netif *_netif_find(char *name)
+struct netif *_netif_find(char *name)
 {    
     if(name == NULL)
     {
@@ -39,7 +39,7 @@ void netdev_status_change_cb(struct netif *netif)
 {
     u8 id;
     
-#ifdef CONFIG_OS_RHINO
+#if defined(CONFIG_OS_RHINO) || defined(CONFIG_LWIP_VER2_x_x)
     id = netif->num;
 #else
     if(strcmp(netif->name, IF0_NAME) == 0)
@@ -54,7 +54,7 @@ void netdev_status_change_cb(struct netif *netif)
     
     if (netif->flags & NETIF_FLAG_UP)
     {
-#ifdef CONFIG_OS_RHINO
+#if defined(CONFIG_OS_RHINO) || defined(CONFIG_LWIP_VER2_x_x)
         if(gwifistatus.connAP[id].status == IEEE80211_GETIP)
 #endif
         {
@@ -173,7 +173,11 @@ int netstack_get_ipv4dnsaddr(u32 *dnsserver, u32 numdnssvr)
     {        
 #if defined(CONFIG_OS_RHINO) || defined(CONFIG_LWIP_VER2_x_x)
         tmpdnsaddr = dns_getserver(i);
+#if LWIP_IPV6
+        *dnsserver = tmpdnsaddr->u_addr.ip4.addr;
+#else
         *dnsserver = tmpdnsaddr->addr;
+#endif
 #else
         tmpaddr = dns_getserver(i);
         *dnsserver = tmpaddr.addr;
@@ -377,13 +381,21 @@ int netdev_getipv4info(const char *ifname, u32 *ip, u32 *gw, u32 *netmask)
     pwlan = _netif_find((char *)ifname);
     if (NULL == pwlan)        
         return NS_ERR_ARG;
-    
+#if LWIP_IPV6    
+    if (NULL != ip)
+        *ip = pwlan->ip_addr.u_addr.ip4.addr;
+    if (NULL != gw)
+        *gw = pwlan->gw.u_addr.ip4.addr;
+    if (NULL != netmask)
+        *netmask = pwlan->netmask.u_addr.ip4.addr;
+#else
     if (NULL != ip)
         *ip = pwlan->ip_addr.addr;
     if (NULL != gw)
         *gw = pwlan->gw.addr;
     if (NULL != netmask)
         *netmask = pwlan->netmask.addr;
+#endif
     
     return NS_OK;
 }
@@ -508,9 +520,15 @@ u32 netdev_getallnetdev(struct netdev *pdev, u32 num_of_pdev)
         MEMCPY((void *)&pdev[num].name, (void *)&netif->name, sizeof(netif->name));
         MEMCPY((void *)&pdev[num].hwmac, (void *)&netif->hwaddr, sizeof(netif->hwaddr));
         pdev[num].flags = netif->flags;
+#if LWIP_IPV6
+        pdev[num].ipaddr = netif->ip_addr.u_addr.ip4.addr;
+        pdev[num].gw = netif->gw.u_addr.ip4.addr;
+        pdev[num].netmask = netif->netmask.u_addr.ip4.addr;
+#else
         pdev[num].ipaddr = netif->ip_addr.addr;
         pdev[num].gw = netif->gw.addr;
         pdev[num].netmask = netif->netmask.addr;
+#endif
         pdev[num].mtu = netif->mtu;
         num++;
     }

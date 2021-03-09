@@ -36,7 +36,7 @@ int At_TCPSend6 (stParam *param);
 int At_TCPListen6(stParam *param);
 #endif
 #ifdef MBEDTLS_EN
-//int At_SSLTest(stParam *param);
+int At_SSLTest(stParam *param);
 #endif
 #ifdef SMARTCONFIG_EN
 int At_SmartConfig(stParam *param);

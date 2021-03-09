@@ -318,7 +318,7 @@ typedef struct ble_ll_master_info {
 
     //llcp
     ble_llcp_info_st llcp_info;
-    ble_llcp_tx_st llcp_tx;
+//    ble_llcp_tx_st llcp_tx;
     ble_llcp_master_update_timing_info_st update_timing_info;
     ble_llcp_master_update_ch_info_st update_ch_info;
     ble_llcp_master_encrypt_info_st encrypt_info;

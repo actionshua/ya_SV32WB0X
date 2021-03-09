@@ -614,7 +614,10 @@
 	#define _M_P06_GPIO_MODE    (0x0 << GPIO_06)
     #define PERI_IO_I2C0        (0)
 #elif ((M_CUSTOM_P06_MODE) == (M_CUSTOM_ALT2))
-    #error M_CUSTOM_P06_MODE define NONE!
+    #define _M_P06_MODE         (0x1 << GPIO_06)
+    #define _M_P06_FUNC_SEL     (0)
+    #define _M_P06_FUNC1_SEL    (0x1 << SEL_PSRAM_CSN)
+    #define _M_P06_GPIO_MODE    (0x0 << GPIO_06)
 #elif ((M_CUSTOM_P06_MODE) == (M_CUSTOM_ALT3))
     #error M_CUSTOM_P06_MODE define NONE!
 #elif ((M_CUSTOM_P06_MODE) == (M_CUSTOM_ALT4))

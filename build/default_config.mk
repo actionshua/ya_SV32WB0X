@@ -17,6 +17,7 @@ TCPIPSTACK_EN                                    ?= 1
 # BLE option
 ################################################################
 BLE_EN                                           ?= 0
+SUPPORT_BLE_UART                                 ?= 0
 
 ################################################################
 # Wifi option
@@ -188,6 +189,10 @@ SUPPORT_ILOG                                     ?= 0
 SUPPORT_HCILOG                                   ?= 0
 SUPPORT_FULL_LITTLEVGL                           ?= 0
 SUPPORT_SPI_LCM                                  ?= 0
+SUPPORT_LOG_RINGBUFFER                           ?= 0
+SUPPORT_LOG_RX_BUF_SIZE                          ?= 0
+SUPPORT_LOG_TX_BUF_SIZE                          ?= 0
+
 
 ################################################################
 # Peripheral setting

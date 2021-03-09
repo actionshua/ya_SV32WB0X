@@ -168,6 +168,7 @@ static void btc_ble_set_adv_data(ssv_ble_adv_data_t *adv_data,
     int err = 0;
     uint8_t buf[BLE_HS_ADV_MAX_SZ];
     uint8_t buf_len = 0;
+    char *dev_name = NULL;
 
     //tBTA_BLE_AD_MASK data_mask = 0;
     g_adv_param.options = 0U;/* todo */
@@ -207,15 +208,25 @@ static void btc_ble_set_adv_data(ssv_ble_adv_data_t *adv_data,
     //service_uuid
     if (adv_data->service_uuid_len) {
         if (adv_data->service_uuid_len == 2)/*16 bit*/
-            ad[ad_count].type = 0x16;
+            ad[ad_count].type = 0x03;
         else if (adv_data->service_uuid_len == 4)/*32 bit*/
-           ad[ad_count].type = 0x20;
+           ad[ad_count].type = 0x05;
         else/*128 bit*/
-            ad[ad_count].type = 0x21;
+            ad[ad_count].type = 0x07;
 
         ad[ad_count].data_len = adv_data->service_uuid_len;
         ad[ad_count].data = adv_data->p_service_uuid;
         ad_count++;
+    }
+
+    if (adv_data->include_name) {
+        dev_name = ble_svc_gap_device_name_get();
+        if(dev_name && strlen(dev_name)) {
+            ad[ad_count].type = 0x9;
+            ad[ad_count].data_len = strlen(dev_name);
+            ad[ad_count].data = (u8_t*)dev_name;
+            ad_count++;
+        }
     }
 
     err = set_ad(ad, ad_count, buf, &buf_len);

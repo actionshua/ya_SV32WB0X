@@ -384,7 +384,11 @@ int FAST_FUNC udhcp_str2nip(const char *str, void *arg)
 //	if (!lsa)
 //		return 0;
 	/* arg maybe unaligned */
+#if LWIP_IPV6
+	move_to_unaligned32((u32_t*)arg, lsa.u_addr.ip4.addr);
+#else
 	move_to_unaligned32((u32_t*)arg, lsa.addr);
+#endif
 //	free(lsa);
 	return 1;
     #if 0

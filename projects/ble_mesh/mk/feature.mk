@@ -31,7 +31,6 @@ SUPPORT_LOW_POWER               := 1
 #SYS_BUS_CLK                     := 80M
 SYS_BUS_CLK                      := 160M
 
-# in fpga SYS_MCU_MAX_CLK is not useful.
 #SYS_MCU_MAX_CLK                 := 80M
 #SYS_MCU_MAX_CLK                 := 160M
 #SYS_MCU_MAX_CLK                 := 240M
@@ -71,6 +70,22 @@ MESH_BLE_AUTO_RUN_EN            := 1
 BLE_AGGR_ADV_REPORT             := 1
 BLE_GPIO_PROFILE                := 0
 BLE_DEBUG_ONLY                  := 1
+
+################################################################
+# BLE third party
+################################################################
+MESH_BLE_EN                     := 0
+##if enable GATTS or GATTC, GAP must be enabled
+BLE_GAP_EN                      := 1
+BLE_GATTS_EN                    := 1
+BLE_GATTC_EN                    := 1
+BLE_GATTS_API_TEST_EN           ?= 0
+BLE_GATTC_API_TEST_EN           ?= 0
+BLE_GAP_ATCMD_EN                := 1
+BLE_GATTS_ATCMD_EN              := 1
+BLE_GATTC_ATCMD_EN              := 1
+SETTING_BLE_UART                := 1
+MESH_BLE_OTHER_MODEL_EN         := 0
 ################################################################
 # WIFI feature option
 ################################################################
@@ -92,7 +107,6 @@ COUNTRY_CODE                    := 0
 # DEF=0, TW=1, CN=2, HK=3, US=4, JP=5 Please check the COUNTRY_CODE in wificonf.h
 SAE_EN                          := 1
 PMF_EN                          := 1
-EXTPA_EN                        := 0
 AMPDU_RX_EN                     := 0
 CSI_EN                          := 0
 
@@ -111,17 +125,7 @@ AIRKISS_EN                      := 0
 PING_EN                         := 0
 TFTP_EN                         := 0
 JD_CLOUD_EN                     := 0
-MESH_BLE_EN                     := 0
-##if enable GATTS or GATTC, GAP must be enabled
-BLE_GAP_EN                      := 1
-BLE_GATTS_EN                    := 1
-BLE_GATTC_EN                    := 1
-BLE_GATTS_API_TEST_EN           ?= 0
-BLE_GATTC_API_TEST_EN           ?= 0
-BLE_GAP_ATCMD_EN                := 1
-BLE_GATTS_ATCMD_EN              := 1
-BLE_GATTC_ATCMD_EN              := 1
-MESH_BLE_OTHER_MODEL_EN         := 0
+
 ################################################################
 # Misc setting
 ################################################################
@@ -130,6 +134,9 @@ UART_IO_NUM                     := defined_by_chip
 UART_BAUD_RATE                  := 115200
 SUPPORT_CXX                     := 0
 ISR_STACK_SIZE                  := 4096
+SUPPORT_LOG_RINGBUFFER          := 0
+SUPPORT_LOG_RX_BUF_SIZE         := 512
+SUPPORT_LOG_TX_BUF_SIZE         := 4096
 
 ################################################################
 # Security setting

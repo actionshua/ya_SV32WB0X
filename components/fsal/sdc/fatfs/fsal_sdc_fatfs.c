@@ -167,34 +167,34 @@ SSV_FILE _SDC_open(const char* path, uint32_t mode) {
     file->path[FSAL_PATH_MAX_LEN-1] = '\0';
 
     /* Any write to the filehandle is appended to end of the file */
-    if (mode & SPIFFS_APPEND || mode & SPIFFS_O_APPEND || mode & SSV_O_APPEND) {
+    if (mode & SSV_O_APPEND) {
         fatfs_mode |= FA_OPEN_APPEND;
     }
     /* If the opened file exists, it will be truncated to zero length before opened */
-    if (mode & SPIFFS_TRUNC || mode & SPIFFS_O_TRUNC || mode & SSV_O_TRUNC) {
+    if (mode & SSV_O_TRUNC) {
         fatfs_mode |= FA_CREATE_ALWAYS;
     }
     /* If the opened file does not exist, it will be created before opened */
-    if (mode & SPIFFS_CREAT || mode & SPIFFS_O_CREAT || mode & SSV_O_CREAT) {
+    if (mode & SSV_O_CREAT) {
         /* If SPIFFS_O_CREAT and SPIFFS_O_EXCL are set, SPIFFS_open() shall fail if the file exists */
-        if (mode & SPIFFS_EXCL || mode & SPIFFS_O_EXCL || mode & SSV_O_EXCL) {
+        if (mode & SSV_O_EXCL) {
             fatfs_mode |= FA_CREATE_NEW;
         } else {
             fatfs_mode |= FA_OPEN_ALWAYS;
         }
     }
     /* The opened file may only be read */
-    if (mode & SPIFFS_RDONLY || mode & SPIFFS_O_RDONLY || mode & SSV_O_RDONLY) {
+    if (mode & SSV_O_RDONLY) {
         fatfs_mode |= FA_READ;
         fatfs_mode &= ~FA_WRITE;
     }
     /* The opened file may only be written */
-    if (mode & SPIFFS_WRONLY || mode & SPIFFS_O_WRONLY || mode & SSV_O_WRONLY) {
+    if (mode & SSV_O_WRONLY) {
         fatfs_mode &= ~FA_READ;
         fatfs_mode |= FA_WRITE;
     }
     /* The opened file may be both read and written */
-    if (mode & SPIFFS_RDWR || mode & SPIFFS_O_RDWR || mode & SSV_O_RDWR) {
+    if (mode & SSV_O_RDWR) {
         fatfs_mode |= FA_READ;
         fatfs_mode |= FA_WRITE;
     }
