@@ -58,7 +58,8 @@ enum
 static ble_rcv_call_back_func_t p_rcv_fun = NULL;
 static ya_ble_connected_state p_connect_state = NULL;
 static uint16_t ble_akeeta_handle_table[BLE_AKEETA_IDX_NB] = {0};
-
+static ssv_bd_addr_t st_ble_bda;
+static uint8_t sg_ble_start = 0;
 struct gatts_profile_inst
 {
     ssv_gatts_cb_t gatts_cb;
@@ -226,6 +227,7 @@ static void gatts_ble_akeeta_profile_event_handler(ssv_gatts_cb_event_t event,ss
             printf("[%s] SSV_GATTS_CONNECT_EVT: %d\n", __func__, gatts_if);
             sg_gatts_if = gatts_if;
             sg_conn_id = param->connect.conn_id;
+			memcpy(&st_ble_bda,&param->connect.remote_bda,sizeof(ssv_bd_addr_t));
 			p_connect_state(1);
             break;
 
@@ -242,14 +244,16 @@ static void gatts_ble_akeeta_profile_event_handler(ssv_gatts_cb_event_t event,ss
             }
             else 
 			{
+				memset(ble_akeeta_handle_table,0,BLE_AKEETA_IDX_NB);
                 memcpy(ble_akeeta_handle_table, param->add_attr_tab.handles, sizeof(ble_akeeta_handle_table));
                 ssv_ble_gatts_start_service(ble_akeeta_handle_table[BLE_AKEETA_IDX_SVC]);
             }
             break;
         case SSV_GATTS_DISCONNECT_EVT:
 			printf("[%s] SSV_GATTS_DISCONNECT_EVT, reason = 0x%x\n", __func__, param->disconnect.reason);
-			p_connect_state(1);
-			ssv_ble_gap_start_advertising(&akeeta_adv_params);
+			p_connect_state(0);
+			if(sg_ble_start)
+				ssv_ble_gap_start_advertising(&akeeta_adv_params);
             break;
 
         case SSV_GATTS_WRITE_EVT:
@@ -345,36 +349,42 @@ char *ya_hal_ble_get_name(void)
 
 int ya_hal_ble_start_adv(uint8_t *adv_ff_string, uint8_t len)
 {
-	int ret ;
-	if(len > 0)
+	int ret = 0;
+	if(sg_ble_start == 0)
 	{
-		akeeta_scan_rsp_data.manufacturer_len = len;
-		memcpy(akeeta_scan_rsp_data.p_manufacturer_data,adv_ff_string,len);	
+		if(len > 0)
+		{
+			akeeta_scan_rsp_data.manufacturer_len = len;
+			memcpy(akeeta_scan_rsp_data.p_manufacturer_data,adv_ff_string,len); 
+		}
+		ret = ssv_ble_gatts_app_register(SSV_BLE_AKEETA_APP_ID);
+		if (ret)
+		{
+			ya_printf(C_LOG_INFO,"[%s] failed in line %d gatts app register error, error code = %x\n", __func__, __LINE__, ret);
+			return -1;
+		}
+		
+		ssv_err_t ssv_ret = ssv_ble_gatt_set_local_mtu(BLE_AKEETA_GATTC_MTU_SIZE);
+		if (ssv_ret)
+		{
+			ya_printf(C_LOG_INFO,"[%s] line %d, set local MTU failed, error code = %x", __func__, __LINE__, ssv_ret);
+			return -1;
+		}
+		sg_ble_start = 1;		
 	}
-    ret = ssv_ble_gatts_app_register(SSV_BLE_AKEETA_APP_ID);
-    if (ret)
-	{
-        ya_printf(C_LOG_INFO,"[%s] failed in line %d gatts app register error, error code = %x\n", __func__, __LINE__, ret);
-        return -1;
-    }
-
-    ssv_err_t ssv_ret = ssv_ble_gatt_set_local_mtu(BLE_AKEETA_GATTC_MTU_SIZE);
-    if (ssv_ret)
-	{
-        ya_printf(C_LOG_INFO,"[%s] line %d, set local MTU failed, error code = %x", __func__, __LINE__, ssv_ret);
-		return -1;
-	}
-
+	return ret;
 }
 
 void ya_hal_disconnect_ble_conn(void)
 {
-	
+	ssv_ble_gap_disconnect(st_ble_bda);
 }
 
 void ya_hal_stop_ble(void)
 {
-	
+    sg_ble_start = 0;
+    ssv_ble_gap_disconnect(st_ble_bda);
+    ssv_ble_gap_stop_advertising();
 }
 
 static void ssv_ble_akeeta_gap_event_cb(ssv_gap_ble_cb_event_t event, ssv_ble_gap_cb_param_t *param)
@@ -450,6 +460,11 @@ static void akeeta_gatts_event_handler(ssv_gatts_cb_event_t event, ssv_gatt_if_t
 int ya_hal_ble_init(void)
 {
 	int ret = 0;
+	
+	ya_printf(C_LOG_INFO,"\r\nble device name ====%s\r\n", ya_hal_ble_get_name());
+	
+	adv_config_done = 0;
+	sg_ble_start = 0;
 
     ret = ssv_ble_gap_register_callback(ssv_ble_akeeta_gap_event_cb);
     if (ret)
@@ -471,6 +486,7 @@ int ya_hal_ble_init(void)
         ya_printf(C_LOG_INFO,"[%s] failed in line %d gatts register error, error code = %x\n", __func__, __LINE__, ret);
         return -1;
     }
+	
 	return 0;
 }
 
