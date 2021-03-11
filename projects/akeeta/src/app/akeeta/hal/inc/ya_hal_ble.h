@@ -20,8 +20,6 @@
 #ifndef _YA_HAL_BLE_H__
 #define _YA_HAL_BLE_H__
 
-#define YA_ENABLE_BLE_LE		0
-
 typedef void (*ble_rcv_call_back_func_t)(uint8_t *, uint16_t);
 
 typedef void (*ya_ble_connected_state)(uint8_t);

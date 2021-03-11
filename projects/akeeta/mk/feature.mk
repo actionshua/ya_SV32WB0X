@@ -76,7 +76,7 @@ BLE_GATTC_API_TEST_EN           := 0
 BLE_GAP_ATCMD_EN                := 1
 BLE_GATTS_ATCMD_EN              := 1
 BLE_GATTC_ATCMD_EN              := 1
-SETTING_BLE_UART                := 1
+SETTING_BLE_UART                := 0
 
 ################################################################
 # WIFI feature option
@@ -137,9 +137,6 @@ UART_BAUD_RATE                  := 115200
 BOOTLOADER_ENABLE_QE            := 0
 SUPPORT_CXX						:= 0
 ISR_STACK_SIZE                  := 2048
-SUPPORT_LOG_RINGBUFFER          := 0
-SUPPORT_LOG_RX_BUF_SIZE         := 512
-SUPPORT_LOG_TX_BUF_SIZE         := 4096
 
 ################################################################
 # Security setting

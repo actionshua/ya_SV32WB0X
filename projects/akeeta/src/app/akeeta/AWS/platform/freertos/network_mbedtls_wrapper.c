@@ -262,7 +262,7 @@ IoT_Error_t iot_tls_connect(Network *pNetwork, TLSConnectParams *params) {
 	printf("ok\r\n");
 	printf("SSL state connect : %d\r\n", tlsDataParams->ssl.state);
 	printf("Performing the SSL/TLS handshake...\r\n");
-	
+	printf("remain heap: %d\r\n", xPortGetFreeHeapSize());
 	while ((ret = mbedtls_ssl_handshake(&(tlsDataParams->ssl))) != 0) {
 		
 		if (ret != MBEDTLS_ERR_SSL_WANT_READ && ret != MBEDTLS_ERR_SSL_WANT_WRITE) {
