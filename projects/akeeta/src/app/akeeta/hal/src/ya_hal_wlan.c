@@ -54,9 +54,12 @@ static void wlan_connect_event(void *arg)
 			{
 				if(wlan_disconnected_flag == 0)
 				{
-					wlan_disconnected_flag = 1;
-					wlan_connected_flag = 0;
-					hEventHandler(YA_HAL_EVT_LINK_LOST, NULL);
+					if(wlan_connected_flag == 1)
+					{
+						wlan_connected_flag = 0;
+						hEventHandler(YA_HAL_EVT_LINK_LOST, NULL);
+						wlan_disconnected_flag = 1;
+					}
 				}
 			}
 		}
