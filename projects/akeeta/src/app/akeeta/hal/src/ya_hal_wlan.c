@@ -73,7 +73,7 @@ int32_t ya_hal_wlan_start(ya_hal_wlan_event_handler_t event_handler)
 {	
 	hEventHandler = event_handler;	
 	int ret;
-	ret = ya_hal_os_thread_create(&wlan_connect_event_thread, "wlan_connect_event_thread", wlan_connect_event, 0, (1024), 3);
+	ret = ya_hal_os_thread_create(&wlan_connect_event_thread, "ya_wlan_connect", wlan_connect_event, 0, (1024), 3);
 	if(ret != C_OK)
 	{
 		ya_printf(C_LOG_ERROR, "create wlan_connect_event_thread error\r\n");
