@@ -1192,7 +1192,11 @@ void ya_wifi_ota_download(void)
 				if(ya_wifi_ota_para.eror_code < 0)
 					ya_report_ota_result(ya_wifi_ota_para.eror_code);
 				if(1 == ya_check_enter_ota_test_mode())
+				{
 					ya_cal_ota_test_num(0);
+					ya_printf(C_LOG_INFO,"\r\nreboot to enter OTA test mode again\r\n");
+					ya_hal_sys_reboot();
+				}
 			}
 	
 			ya_ota_hal_free();
