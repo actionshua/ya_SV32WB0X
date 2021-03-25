@@ -14,7 +14,7 @@
 
 #define LIGHT_TYPE		0//0:5 PWM (R,G,B,C,W)   1:2 PWM (C,W)
 
-#define FLOAT_SUPPORT	1//0:not support float  1:support float
+#define FLOAT_SUPPORT	0//0:not support float  1:support float
 
 #define MIN_BRIGHT_PERCENT		5
 
@@ -23,7 +23,7 @@
 #define YA_LIGHT_DATA_ADDR 	  	  (YA_LIGHT_FLASH_PARA_ADDR + 0x1000)
 
 #if (LIGHT_TYPE == 0) //5pwm
-#define TEST_WIFI_LIGHT_VERSION	"SV.light.db5.001"
+#define TEST_WIFI_LIGHT_VERSION	"SV.light.001.024"
 #else
 #define TEST_WIFI_LIGHT_VERSION	"SV.light.db2.001"
 #endif

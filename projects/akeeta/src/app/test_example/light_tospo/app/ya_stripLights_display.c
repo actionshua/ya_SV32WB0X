@@ -254,19 +254,30 @@ void ya_stripLightsDisplay_CWtoRGB(unsigned char*r, unsigned char*g, unsigned ch
 void  ya_stripLightsDisplay_writePwm(unsigned int r,unsigned int g,unsigned int b,unsigned int c,unsigned int w)
 {
 #if (FLOAT_SUPPORT == 1)
-	ya_hal_pwm_write(PWM_R_INDEX,(float)(r/255.0));
-	ya_hal_pwm_write(PWM_G_INDEX,(float)(g/255.0));
-	ya_hal_pwm_write(PWM_B_INDEX,(float)(b/255.0));
-	ya_hal_pwm_write(PWM_COOL_INDEX,(float)(c/255.0));
-	ya_hal_pwm_write(PWM_WARM_INDEX,(float)(w/255.0));
+#if (LIGHT_TYPE == 0)
+	   ya_hal_pwm_write(PWM_R_INDEX,(float)(r/255.0));
+	   ya_hal_pwm_write(PWM_G_INDEX,(float)(g/255.0));
+	   ya_hal_pwm_write(PWM_B_INDEX,(float)(b/255.0));
+	   ya_hal_pwm_write(PWM_COOL_INDEX,(float)(c/255.0));
+	   ya_hal_pwm_write(PWM_WARM_INDEX,(float)(w/255.0));
 #else
-	ya_hal_pwm_write(PWM_R_INDEX,(float)(r/255));
-	ya_hal_pwm_write(PWM_G_INDEX,(float)(g/255));
-	ya_hal_pwm_write(PWM_B_INDEX,(float)(b/255));
-	ya_hal_pwm_write(PWM_COOL_INDEX,(float)(c/255));
-	ya_hal_pwm_write(PWM_WARM_INDEX,(float)(w/255));
-
+	   ya_hal_pwm_write(PWM_COOL_INDEX,(float)(c/255.0));
+	   ya_hal_pwm_write(PWM_WARM_INDEX,(float)(w/255.0));
 #endif
+#else
+#if (LIGHT_TYPE == 0)
+	   ya_hal_pwm_write(PWM_R_INDEX,(uint32_t)(r/255));
+	   ya_hal_pwm_write(PWM_G_INDEX,(uint32_t)(g/255));
+	   ya_hal_pwm_write(PWM_B_INDEX,(uint32_t)(b/255));
+	   ya_hal_pwm_write(PWM_COOL_INDEX,(uint32_t)(c/255));
+	   ya_hal_pwm_write(PWM_WARM_INDEX,(uint32_t)(w/255));
+#else
+	   ya_hal_pwm_write(PWM_COOL_INDEX,(uint32_t)(c/255));
+	   ya_hal_pwm_write(PWM_WARM_INDEX,(uint32_t)(w/255));
+#endif
+#endif
+
+
 }
 
 
@@ -442,7 +453,7 @@ void ya_stripLightsDisplay_start(ya_display_stripsLight_t *pcolorInfo)
 		pChannelInfo = &pCrlInfo->pwmChannelInfo[PWM_WARM_INDEX];
 		pChannelInfo->pwmDutyNew= pcolorInfo->colorInfo[i].white_bright*100;
 	}
-	
+
 	pCtrlInfoGroup->displayState = PWM_DISPLAY_START;
 }
 

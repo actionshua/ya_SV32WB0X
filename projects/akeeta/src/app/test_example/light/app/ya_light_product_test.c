@@ -51,7 +51,7 @@ void ya_pwm_led_write(unsigned int r,unsigned int g,unsigned int b,unsigned int 
 #if (LIGHT_TYPE == 0)
 	ya_hal_pwm_write(PWM_R_INDEX,(uint32_t)(r/255));
 	ya_hal_pwm_write(PWM_G_INDEX,(uint32_t)(g/255));
-	ya_hal_pwm_write(PWM_B_INDEX,(uint32_t)(b*/255));
+	ya_hal_pwm_write(PWM_B_INDEX,(uint32_t)(b/255));
 	ya_hal_pwm_write(PWM_COOL_INDEX,(uint32_t)(c/255));
 	ya_hal_pwm_write(PWM_WARM_INDEX,(uint32_t)(w/255));
 #else

@@ -44,7 +44,12 @@ void ya_hal_pwm_init(void)
 
 void ya_hal_pwm_write(uint8_t index, uint32_t percent)
 {
-	drv_pwm_config(ya_pwm_para[index].pwm_channel,ya_pwm_para[index].pwm_period, percent*4096/100,0);
+	uint32_t percent_tmp = percent*4096/100;
+	if(percent_tmp == 0)
+		percent_tmp = 1;
+	if(percent_tmp >= 4096)
+		percent_tmp = 4095;
+	drv_pwm_config(ya_pwm_para[index].pwm_channel,ya_pwm_para[index].pwm_period, percent_tmp,0);
 	drv_pwm_enable(ya_pwm_para[index].pwm_channel);
 }
 

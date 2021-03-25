@@ -1,6 +1,6 @@
 #include "ya_common.h"
 #include "ya_app_main.h"
-#include "ya_light_io.h"
+#include "ya_hal_pwm.h"
 #include "ya_light_product_test.h"
 #include "ya_light_example.h"
 #include "ya_api_thing_uer_define.h"
@@ -30,6 +30,39 @@ typedef struct
 
 
 ya_light_test_para_t ya_light_test_para;
+
+void ya_pwm_led_write(unsigned int r,unsigned int g,unsigned int b,unsigned int c,unsigned int w)
+{
+#if (FLOAT_SUPPORT == 1)
+
+#if (LIGHT_TYPE == 0)
+	ya_hal_pwm_write(PWM_R_INDEX,(float)(r/255.0));
+	ya_hal_pwm_write(PWM_G_INDEX,(float)(g/255.0));
+	ya_hal_pwm_write(PWM_B_INDEX,(float)(b/255.0));
+	ya_hal_pwm_write(PWM_COOL_INDEX,(float)(c/255.0));
+	ya_hal_pwm_write(PWM_WARM_INDEX,(float)(w/255.0));
+#else 
+	ya_hal_pwm_write(PWM_COOL_INDEX,(float)(c/255.0));
+	ya_hal_pwm_write(PWM_WARM_INDEX,(float)(w/255.0));
+#endif
+
+#else
+
+#if (LIGHT_TYPE == 0)
+	ya_hal_pwm_write(PWM_R_INDEX,(uint32_t)(r/255));
+	ya_hal_pwm_write(PWM_G_INDEX,(uint32_t)(g/255));
+	ya_hal_pwm_write(PWM_B_INDEX,(uint32_t)(b/255));
+	ya_hal_pwm_write(PWM_COOL_INDEX,(uint32_t)(c/255));
+	ya_hal_pwm_write(PWM_WARM_INDEX,(uint32_t)(w/255));
+#else
+	ya_hal_pwm_write(PWM_COOL_INDEX,(uint32_t)(c/255));
+	ya_hal_pwm_write(PWM_WARM_INDEX,(uint32_t)(w/255));
+#endif
+
+#endif
+
+}
+
 
 int32_t ya_rgbcw_test(uint8_t test_type)
 {
