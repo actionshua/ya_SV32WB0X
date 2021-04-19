@@ -20,6 +20,7 @@
 #include "ya_common.h"
 #include "cJSON.h"
 #include "ya_config.h"
+#include "ya_log_update.h"
 
 #if (CLOUD_SUPPORT == US_CN_CLOUD_SUPPORT || CLOUD_SUPPORT == CN_CLOUD_SUPPORT)
 
@@ -571,7 +572,14 @@ void ya_aly_cloud_event_handle(void *pcontext, void *pclient, iotx_mqtt_event_ms
 			{
 				ya_cloud_connected = ALY_CONNECTED_CLOUD;
 				if (send_connect_flag == 1)
+				{
 					ya_send_cloud_status(YA_CLOUD_ONLINE);
+					ya_updata_log_string("ali-cloud ok");
+					ya_updata_log_string_value("heap", xPortGetFreeHeapSize());
+					ya_update_log();
+					ya_update_flash_log();
+
+				}
 			}
 			ya_printf(C_LOG_INFO, "Successfully connected to cloud\r\n");
 			break;
@@ -581,6 +589,8 @@ void ya_aly_cloud_event_handle(void *pcontext, void *pclient, iotx_mqtt_event_ms
 				ya_cloud_connected = ALY_UNCONNECTED_CLOUD;
 				ya_send_cloud_status(YA_CLOUD_OFFLINE);
 			}
+			ya_updata_log_string("ali-cloud-disconn");
+			printf("ali-cloud-disconn\r\n");
 			break;
 		default:
 			break;
@@ -635,6 +645,7 @@ static void *ya_aly_cloud_start(void)
     if (NULL == pclient) 
 	{	
         ya_printf(C_LOG_ERROR,"MQTT construct failed\r\n");
+		ya_updata_log_string("ali-construct-fail");
         return NULL;
     }
 	
@@ -642,6 +653,7 @@ static void *ya_aly_cloud_start(void)
     if (ret < 0)
 	{
 		ya_printf(C_LOG_ERROR,"subscribe failed, ret = %d\r\n", ret);
+		ya_updata_log_string("ali-sub-fail");
         IOT_MQTT_Destroy(&pclient);
         return NULL;
     }
@@ -669,6 +681,11 @@ static void ya_cloud_loop(void *pclient){
 			ya_updata_random_information();
 			ya_updata_device_version();
 			ya_send_cloud_status(YA_CLOUD_ONLINE);
+			ya_updata_log_string("ali-cloud ok");
+			ya_updata_log_string_value("heap", xPortGetFreeHeapSize());
+			ya_update_log();
+			ya_update_flash_log();
+
 			send_connect_flag = 1;
 		}
 
@@ -739,7 +756,7 @@ int32_t ya_start_cloud_aly_app()
 		return C_ERROR;
 	}
 
-	ret = ya_hal_os_thread_create(&ya_app_cloud, "ya_aly_app_main_thread", ya_cloud_app, 0, (6*1024), 5);
+	ret = ya_hal_os_thread_create(&ya_app_cloud, "ya_aly_app_main_thread", ya_cloud_app, 0, (8*1024), 5);
 	if(ret != C_OK)
 	{
 		ya_printf(C_LOG_ERROR, "create ya_aly_app_main error\r\n");

@@ -32,6 +32,7 @@
 #include "ya_common_func.h"
 #include "ya_ble_app.h"
 #include "ya_api_thing_uer_define.h"
+#include "ya_log_update.h"
 
 #define TEST_WIFI_1_SSID 	"akeeta_mdev_test1"
 #define TEST_WIFI_2_SSID 	"akeeta_mdev_test2"
@@ -77,9 +78,9 @@ typedef struct{
 	uint8_t factory_get_rssi_flag;
 	uint8_t factory_get_rssi_name[33];
 	uint8_t wlan_token[16];
-	uint8_t download_license_mode;
-	uint8_t license_mode_in;
-	uint8_t check_license_mode;
+	uint8_t reser1;
+	uint8_t reser2;
+	uint8_t reser3;
 	uint8_t reboot_check_license_mode_tick;
 	char 	ota_test_url[TEST_URL_LEN];
 	uint32_t ota_test_all_num;
@@ -97,6 +98,7 @@ ya_hal_os_thread_t ya_app_main_thread = NULL;
 ya_hal_os_queue_t ya_main_msg_queue = NULL;
 
 ya_user_data_t ya_user_data;
+uint8_t ya_timer_watchdog_flag = 0;
 uint8_t sniffer_ap_mode = 0;
 uint8_t ble_ap_mode = 0;
 uint8_t debine_enable = 1;
@@ -250,6 +252,7 @@ int32_t ya_read_user_data(void)
 	if(read_error)
 	{
 		ya_printf(C_LOG_INFO, "read error, then init\r\n");
+		ya_updata_log_string("flash data error");
 		memset(&ya_user_data, 0, sizeof(ya_user_data_t));
 		ya_user_data.mode = ya_app_main_para_obj.ya_init_mode;
 		ya_save_user_data();
@@ -482,12 +485,14 @@ void ya_start_cloud_apps(uint8_t cloud_type)
 	if(ret != C_OK)
 	{
 		ya_printf(C_LOG_ERROR, "start aws cloud error\r\n");
+		ya_delay(50);
 		ya_hal_sys_reboot();
 	}		
 	ret = ya_start_ota_app();
 	if(ret != C_OK)
 	{
 		ya_printf(C_LOG_ERROR, "ya_start_ota_app error\r\n");
+		ya_delay(50);
 		ya_hal_sys_reboot();
 	}
 	ya_printf(C_LOG_INFO, "cloud type is %d\r\n", cloud_type);
@@ -503,6 +508,7 @@ void ya_start_other_apps(void)
 		if(ret != C_OK)
 		{
 			ya_printf(C_LOG_ERROR, "ya_start_uart_app error\r\n");
+			ya_delay(50);
 			ya_hal_sys_reboot();
 		}	
 	}
@@ -511,6 +517,7 @@ void ya_start_other_apps(void)
 	if(ret != C_OK)
 	{
 		ya_printf(C_LOG_ERROR, "ya_start_hardware_app error\r\n");
+		ya_delay(50);
 		ya_hal_sys_reboot();
 	}
 
@@ -644,7 +651,6 @@ void ya_app_ble_start_para_init(ble_conf_param_st *ble_para)
 	memset(buf_zero, 0, 16);
 	ble_para->timeout = ya_app_main_para_obj.ble_timeout;
 	ble_para->p_ble_config_cb = ya_ble_conf_callback;
-	memcpy(ble_para->ble_token, ya_user_data.wlan_token, 16);
 
 	if (memcmp(ble_para->ble_token, buf_zero, 16) != 0)
 	{
@@ -775,7 +781,6 @@ void ya_init_start_mode(void)
 #if (YA_BLE_CONFIG_ENABLE == 1)
 	if(ya_get_ble_ap_mode())
 	{
-		memset(ya_user_data.wlan_token, 0, 16);
 
 
 		if (ya_user_data.mode == BLE_CFG_MODE)
@@ -792,7 +797,9 @@ void ya_init_start_mode(void)
 				ya_user_data.mode = BLE_CFG_MODE;
 		}
 		
+		ya_user_data.reser1 = 1;
 		ya_save_user_data();
+		ya_save_flash_log_string("num-reach");
 	}
 #elif (YA_SMART_CONFIG_ENABLE == 1)
 	if(ya_get_sniffer_ap_mode())
@@ -811,6 +818,7 @@ void ya_init_start_mode(void)
 				ya_user_data.mode = AP_MODE;
 		}
 		ya_save_user_data();
+		ya_save_flash_log_string("num-reach");
 	}
 #endif
 
@@ -864,8 +872,10 @@ void ya_set_idle_internal(void)
 void ya_set_mode_internal(uint8_t obj_mode, uint8_t flag)
 {
 	uint8_t mode_toggle = ya_user_data.mode;
-	
+
+	#if (CONFIG_OLD_ROUTER == 0)
 	memset(&ya_user_data, 0, sizeof(ya_user_data_t));
+	#endif
 
 	if (flag)
 	{
@@ -1117,10 +1127,70 @@ int ya_check_enter_factory_mode(void)
 }
 
 
+void ya_config_fail_handle(void)
+{
+	#if CONFIG_OLD_ROUTER
+	if (ya_user_data.ssid_len > 0 && ya_user_data.ssid_len <= 32 && ya_user_data.pwd_len <= 64)
+	{
+		ya_app_state = YA_APP_TO_CONNECT;
+		ya_thing_handle_router(MODULE_CONNECT, NULL);
+		
+		if (ya_check_cloud_support(ya_user_data.cloud_select) == 0)
+			ya_start_cloud_apps(ya_app_main_para_obj.cloud_type);
+
+		if (ya_user_data.mode != CONNECT_MODE)
+		{
+			ya_user_data.mode = CONNECT_MODE;
+			ya_save_user_data();
+		}
+
+	} else
+	{
+		ya_app_state = YA_APP_IDLE;
+		ya_thing_handle_router(MODULE_IDLE, NULL);
+
+		if (ya_user_data.mode != IDLE_MODE)
+		{
+			ya_user_data.mode = IDLE_MODE;
+			ya_save_user_data();
+		}
+	}
+
+	#else
+	ya_app_state = YA_APP_IDLE;
+	ya_thing_handle_router(MODULE_IDLE, NULL);
+	#endif
+}
+
+void ya_clear_app_main_flag_callback( TimerHandle_t xTimer )
+{
+	static uint8_t flag = 0;
+	if (ya_timer_watchdog_flag == 0 && flag == 0)
+	{
+		ya_printf(C_LOG_INFO, "sys error!!!\r\n");
+		ya_save_flash_log_string("sys error!!!");
+		flag = 1;
+		//ya_hal_sys_reboot();
+	}
+
+	ya_timer_watchdog_flag = 0;
+}
+
+void ya_timer_watchdog()
+{
+	TimerHandle_t xTimer2;
+	xTimer2 = xTimerCreate("power_on_clear_flag", ya_hal_os_msec_to_ticks(30000), pdTRUE, (void * )0, ya_clear_app_main_flag_callback);
+	if( xTimer2 != NULL )
+	{
+		xTimerStart(xTimer2, 0);
+	}
+}
+
 extern int32_t ya_disable_wifi_power_saving(void);
 
 void ya_app_main(void *arg)
 {
+	uint8_t flash_ble_flag = 0;
 	uint8_t link_connect = 0, ya_sniffer_broadcast_enable = INIT_MODE;
 	int32_t ret = -1; 
 	uint32_t app_main_cur_timer = 0;
@@ -1209,13 +1279,15 @@ void ya_app_main(void *arg)
 	
 	//init other para
 	ya_start_other_apps();
-	ya_printf(C_LOG_INFO, "\r\n start ya_aws_main == state is: %d\r\n", ya_app_state);
+	ya_printf(C_LOG_INFO, "\r\nmain state is: %d\r\n", ya_app_state);
 
-	if (ya_app_main_para_obj.enable_low_power == 0)
+	#if 0
+	if (ya_app_main_para_obj.enable_low_power == 1)
 	{
-		ya_printf(C_LOG_INFO, "do not enable low power\r\n");
-		ya_disable_wifi_power_saving();
+		ya_printf(C_LOG_INFO, "enable low power\r\n");
+		ya_enable_wifi_power_saving();
 	}
+	#endif
 
 	if(ya_app_state == YA_APP_TO_CONNECT || ya_app_main_para_obj.enable_debind == 0)
 		ya_debind_disable();
@@ -1227,21 +1299,35 @@ void ya_app_main(void *arg)
 	//enable watch-dog
 	ret = ya_hal_wdt_set_timeout(4000);
 	if(ret != C_OK)
+	{
+		ya_printf(C_LOG_ERROR, "ya_hal_wdt_set_timeout error\r\n");
+		ya_delay(50);
 		ya_hal_sys_reboot();
-
+	}
+	
 	ya_hal_wdt_start();
 
 
 	while(1)
 	{
+		ya_timer_watchdog_flag = 1;
 		app_main_cur_timer = ya_hal_os_ticks_to_msec();
 
 		if (ya_timer_compare(check_memmory_timer, app_main_cur_timer, 5000) == C_OK)
 		{
-			check_memmory_timer = ya_hal_os_ticks_to_msec();
-			if (ya_get_remain_heap() < (4*1024))
-				ya_hal_sys_reboot();
+			check_memmory_timer = ya_hal_os_ticks_to_msec();			
+			if (ya_get_remain_heap() < (25*1024) && flash_ble_flag == 0)
+			{
+				ya_save_flash_log_string("heap error!!!");
+				flash_ble_flag = 1;
+			}
 			
+			if (ya_get_remain_heap() < (6*1024))
+			{
+				ya_printf(C_LOG_ERROR, "ya_get_remain_heap error\r\n");
+				ya_delay(50);
+				ya_hal_sys_reboot();
+			}
 		}
 	
 		switch(ya_app_state)
@@ -1254,8 +1340,10 @@ void ya_app_main(void *arg)
 				if(ret != C_OK)
 				{
 					ya_printf(C_LOG_ERROR, "start_smnt error\r\n");
+					ya_delay(50);
 					ya_hal_sys_reboot();
 				}
+				ya_updata_log_string("sniffer");
 				ya_app_state = YA_APP_SNIFFER;
 				#endif
 
@@ -1268,6 +1356,7 @@ void ya_app_main(void *arg)
 			case YA_APP_AP_START:
 				#if (YA_SOFTAP_CONFIG_ENABLE == 1)
 				ya_thing_handle_router(MODULE_AP, NULL);
+				ya_updata_log_string("ap");
 				ya_start_softap(&softap_param);
 				ya_app_state = YA_APP_AP_STATE;
 				#endif
@@ -1279,6 +1368,7 @@ void ya_app_main(void *arg)
 
 			case YA_APP_BLE_CFG_START:
 				#if (YA_BLE_CONFIG_ENABLE == 1)
+				ya_updata_log_string("ble");
 				ya_start_ble_app(&ya_ble_conf_param);
 				ya_app_state = YA_APP_BLE_STATE;
 				#endif
@@ -1289,6 +1379,8 @@ void ya_app_main(void *arg)
 
 			case YA_APP_TO_CONNECT:
 				ya_thing_handle_router(MODULE_CONNECTING, NULL);
+				ya_updata_log_string("connect ssid");
+				ya_updata_log_string((char *)ya_user_data.ssid);
 				
 				memset(&y_sta_param, 0, sizeof(ya_hal_wlan_ap_connect_param_t));
 				memcpy(y_sta_param.ssid, ya_user_data.ssid, ya_user_data.ssid_len);
@@ -1302,6 +1394,7 @@ void ya_app_main(void *arg)
 				if(ret != C_OK)
 				{
 					ya_printf(C_LOG_ERROR, "connect ap error\r\n");
+					ya_delay(50);
 					ya_hal_sys_reboot();
 				}
 				ya_app_state = YA_APP_CONNECTING;
@@ -1349,6 +1442,7 @@ void ya_app_main(void *arg)
 			{
 				case YA_SNIFFER_SUCCESS:
 					ya_printf(C_LOG_INFO,"sniffer success\r\n");
+					ya_updata_log_string("sniffer ok");
 					//then save the user data into flash
 					ya_save_user_data();
 					ya_clear_timer_flash_into_hardware_queue();
@@ -1368,8 +1462,7 @@ void ya_app_main(void *arg)
 				case YA_SNIFFER_FAIL:
 					ya_printf(C_LOG_ERROR, "sniffer fail\r\n");
 					ya_hal_set_sta_mode();
-					ya_app_state = YA_APP_IDLE;
-					ya_thing_handle_router(MODULE_IDLE, NULL);
+					ya_config_fail_handle();
 				break;
 
 				case YA_CONNECT_SUCCESS:
@@ -1395,6 +1488,7 @@ void ya_app_main(void *arg)
 
 				case YA_AP_CONFIG_SUCCESS:
 					ya_printf(C_LOG_INFO,"YA_AP_CONFIG_SUCCESS\r\n");
+					ya_updata_log_string("ap ok");
 					ya_save_user_data();
 					ya_clear_timer_flash_into_hardware_queue();
 					ya_hal_wlan_stop_ap();
@@ -1410,13 +1504,14 @@ void ya_app_main(void *arg)
 
 				case YA_AP_CONFIG_FAIL:
 					ya_printf(C_LOG_INFO,"connect fail\r\n");
+					ya_hal_wlan_stop_ap();
 					ya_hal_set_sta_mode();
-					ya_app_state = YA_APP_IDLE;
-					ya_thing_handle_router(MODULE_IDLE, NULL);
+					ya_config_fail_handle();
 				break;
 
 				case YA_BLE_CONFIG_SUCCESS:
 					ya_printf(C_LOG_INFO,"YA_BLE_CONFIG_SUCCESS\r\n");
+					ya_updata_log_string("ble ok");
 					ya_save_user_data();
 					ya_clear_timer_flash_into_hardware_queue();
 
@@ -1430,8 +1525,7 @@ void ya_app_main(void *arg)
 				break;
 				
 				case YA_BLE_CONFIG_FAIL:
-					ya_app_state = YA_APP_IDLE;
-					ya_thing_handle_router(MODULE_IDLE, NULL);
+					ya_config_fail_handle();
 				break;
 
 				case YA_CHANGE_TOGGLE_MODE:
@@ -1489,6 +1583,9 @@ void ya_app_main(void *arg)
 void ya_start_app_main(ya_app_main_para_t *ya_app_main_para)
 {
 	int32_t ret = 0;
+
+	ya_update_log_init();
+	ya_timer_watchdog();
 
 	memset(&ya_app_main_para_obj, 0, sizeof(ya_app_main_para_t));
 	memcpy(&ya_app_main_para_obj, ya_app_main_para, sizeof(ya_app_main_para_t));

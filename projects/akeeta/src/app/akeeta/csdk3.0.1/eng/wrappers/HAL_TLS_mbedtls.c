@@ -28,6 +28,7 @@
 #include "mbedtls/debug.h"
 #include "mbedtls/platform.h"
 #include "ya_common.h"
+#include "ya_log_update.h"
 #include "wrappers_defs.h"
 //#include "sockets.h"
 
@@ -472,6 +473,7 @@ static int _TLSConnectNetwork(TLSDataParams_t *pTlsData, const char *addr, const
 #else
     if (0 != (ret = mbedtls_net_connect(&(pTlsData->fd), addr, port, MBEDTLS_NET_PROTO_TCP))) {
         printf(" failed ! net_connect returned -0x%04x\n", -ret);
+		ya_updata_log_string_value("ali-tls", ret);
         return ret;
     }
 #endif
@@ -772,8 +774,11 @@ static int _network_ssl_write(TLSDataParams_t *pTlsData, const char *buffer, int
 
 static void _network_ssl_disconnect(TLSDataParams_t *pTlsData)
 {
+	printf("_network_ssl_disconnect\r\n");
     mbedtls_ssl_close_notify(&(pTlsData->ssl));
+	printf("mbedtls_ssl_close_notify\r\n");
     mbedtls_net_free(&(pTlsData->fd));
+	printf("mbedtls_net_free\r\n");
 #if defined(MBEDTLS_X509_CRT_PARSE_C)
     mbedtls_x509_crt_free(&(pTlsData->cacertl));
     if ((pTlsData->pkey).pk_info != NULL) {
@@ -784,6 +789,8 @@ static void _network_ssl_disconnect(TLSDataParams_t *pTlsData)
 #endif
     }
 #endif
+
+	printf("mbedtls_x509_crt_free\r\n");
     mbedtls_ssl_free(&(pTlsData->ssl));
     mbedtls_ssl_config_free(&(pTlsData->conf));
     printf("ssl_disconnect\n");

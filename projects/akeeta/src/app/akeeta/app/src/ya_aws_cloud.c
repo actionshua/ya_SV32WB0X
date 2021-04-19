@@ -23,6 +23,7 @@
 #include "aws_iot_log.h"
 #include "aws_iot_version.h"
 #include "aws_iot_mqtt_client_interface.h"
+#include "ya_log_update.h"
 
 
 #if (CLOUD_SUPPORT == US_CN_CLOUD_SUPPORT || CLOUD_SUPPORT == US_CLOUD_SUPPORT)
@@ -226,6 +227,7 @@ int32_t ya_trigger_aws_cloud_event_listener(uint8_t event_type, uint8_t *data, u
 
 void ya_aws_disconnectCallbackHandler(AWS_IoT_Client *pClient, void *data)
 {
+	ya_updata_log_string("aws-cloud disconn");
 	ya_aws_cloud_state = AWS_CONNECT_ERROR;	
 }
 
@@ -375,6 +377,7 @@ int ya_aws_subscribe(AWS_IoT_Client* client)
 	rc = aws_iot_mqtt_subscribe(client, subscribe_topic, strlen(subscribe_topic), QOS0, ya_subscribe_callback_handler, NULL);
 	if(0 != rc) {
 		ya_printf(C_LOG_ERROR, "Error subscribing : %d\r\n", rc);
+		ya_updata_log_string("aws-sub error");
 	}
 
 	return rc;
@@ -737,8 +740,9 @@ int ya_aws_cloud_connect(AWS_IoT_Client* client)
 
 	ya_printf(C_LOG_INFO, "Connecting...\r\n");
 	rc = aws_iot_mqtt_connect(client, &connectParams);
-	if(SUCCESS != rc) {
+	if (SUCCESS != rc) {
 		ya_printf(C_LOG_ERROR, "Error(%d) connecting to %s:%d\r\n", rc, mqttInitParams.pHostURL, mqttInitParams.port);
+		ya_updata_log_string_value("aws conn-failed", rc);
 		return rc;
 	}
 	/*
@@ -818,6 +822,8 @@ static void ya_cloud_app(void *arg)
 				{
 					ya_cloud_connected = 1;
 					ya_aws_cloud_state = AWS_CONNECTED_CLOUD;
+					ya_updata_log_string("aws-conn ok");
+					ya_updata_log_string_value("heap", xPortGetFreeHeapSize());
 
 					//update the device version
 					if(ya_get_debind_enable())
@@ -832,6 +838,9 @@ static void ya_cloud_app(void *arg)
 					ya_send_cloud_status(YA_CLOUD_ONLINE);					
 					ya_printf_remain_heap();					
 					ya_printf(C_LOG_INFO, "connect aws cloud success\r\n");
+
+					ya_update_log();
+					ya_update_flash_log();
 
 					#if 0
 					if(flag == 0)
@@ -882,6 +891,7 @@ static void ya_cloud_app(void *arg)
 			ret = aws_iot_mqtt_yield(&aws_client, 100);
 			if(ret != 0) 
 			{
+				ya_updata_log_string_value("yeild error", ret);
 				ya_printf(C_LOG_ERROR, "yield error: %d\r\n", ret);
 				ya_aws_cloud_state = AWS_CONNECT_ERROR;
 			}else

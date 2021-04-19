@@ -789,3 +789,18 @@ void ya_clear_timer_flash(void)
 	device_save_timer_into_flash();
 }
 
+int32_t ya_thing_get_server_timer(uint16_t *year, uint8_t *month, uint8_t *day, uint8_t *hour, uint8_t *minute, uint8_t *second, uint8_t *week)
+{
+	(*year) = sys_time.year;
+	(*month) = sys_time.month;
+	(*day) = sys_time.day;
+	(*hour) = sys_time.hour;
+	(*minute) = sys_time.minute;
+	(*second) = sys_time.second;
+	(*week) = sys_time.week;
+
+	return 0;
+}
+
+
+

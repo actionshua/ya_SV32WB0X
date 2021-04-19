@@ -311,7 +311,7 @@ void ya_stripLightsDisplay_getChangeStep(void)
 	if (pCrlInfo->pwmChannelInfo[PWM_WARM_INDEX].pwmDutyNew == 0)
 	{
 		pCrlInfo->pwmChannelInfo[PWM_COOL_INDEX].pwmDutyStep = 0;
-		pCtrlInfoGroup->pwmDutyCur[PWM_COOL_INDEX] = pCrlInfo->pwmChannelInfo[PWM_COOL_INDEX].pwmDutyNew;
+		pCrlInfo->pwmChannelInfo[PWM_COOL_INDEX].pwmDutyNew = pCtrlInfoGroup->pwmDutyCur[PWM_COOL_INDEX];
 	}
 	#endif
 }
@@ -347,7 +347,7 @@ void ya_stripLightsDisplay_getcloseStep(void)
 	if (pCrlInfo->pwmChannelInfo[PWM_WARM_INDEX].pwmDutyNew == 0)
 	{
 		pCrlInfo->pwmChannelInfo[PWM_COOL_INDEX].pwmDutyStep = 0;
-		pCtrlInfoGroup->pwmDutyCur[PWM_COOL_INDEX] = pCrlInfo->pwmChannelInfo[PWM_COOL_INDEX].pwmDutyNew;
+		pCrlInfo->pwmChannelInfo[PWM_COOL_INDEX].pwmDutyNew = pCtrlInfoGroup->pwmDutyCur[PWM_COOL_INDEX];
 	}
 #endif
 

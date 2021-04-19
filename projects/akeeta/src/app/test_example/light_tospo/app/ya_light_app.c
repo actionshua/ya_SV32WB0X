@@ -589,8 +589,6 @@ void ya_light_app_init(void)
 	}
 
 	ya_light_app_updatePwm(&ya_light_workData, 0);
-
-	ya_printf(C_LOG_INFO, "end ya_light_app_updatePwm\n");
 }
 
 

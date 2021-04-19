@@ -29,6 +29,8 @@ typedef enum
 	SOCKET,
 }YA_PRODUCT_LIST_t;
 
+#define CONFIG_OLD_ROUTER		1
+#define LOG_UPLOAD_ENABLE		1
 
 #define US_CLOUD_SUPPORT   		 0
 #define CN_CLOUD_SUPPORT   		 1
@@ -64,6 +66,8 @@ typedef enum
 #define YA_LICENSE_DEVICE_ADDR								(YA_USER_DATA_BACK_ADDR + 0x1000)
 #define YA_OTA_DATA_ADDR 									(YA_LICENSE_DEVICE_ADDR + 0x3000)
 #define YA_DEVICE_TIMER_ADDR								(YA_OTA_DATA_ADDR + 0x1000)   //size 8K
+
+#define YA_FLASH_ERROR_LOG									(YA_DEVICE_TIMER_ADDR + 0x2000)
 #endif
 
 #define 	WIF_SDK_VERSION			"akeeta.sdk.300"

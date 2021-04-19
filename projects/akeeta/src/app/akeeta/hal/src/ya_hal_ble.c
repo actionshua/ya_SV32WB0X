@@ -380,12 +380,13 @@ void ya_hal_disconnect_ble_conn(void)
 	ssv_ble_gap_disconnect(st_ble_bda);
 }
 
-void ya_hal_stop_ble(void)
+int32_t ya_hal_stop_ble(void)
 {
     sg_ble_start = 0;
     ssv_ble_gap_disconnect(st_ble_bda);
     ssv_ble_gap_stop_advertising();
 	ya_printf(C_LOG_INFO,"\r\nya_hal_stop_ble\r\n");
+	return 0;
 }
 
 static void ssv_ble_akeeta_gap_event_cb(ssv_gap_ble_cb_event_t event, ssv_ble_gap_cb_param_t *param)

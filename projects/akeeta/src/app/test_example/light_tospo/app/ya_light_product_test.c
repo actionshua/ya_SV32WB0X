@@ -397,6 +397,7 @@ void ya_light_factory_test(int32_t router_rssi, uint8_t test_type, CLOUD_T cloud
 		ya_light_test_para.test_state = LICENSE_TEST;
 
 	ya_light_test_para.aging_time = 0;
+
 	ya_delay(200);
 	
 	while(1)

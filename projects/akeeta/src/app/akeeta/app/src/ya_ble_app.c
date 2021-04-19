@@ -601,18 +601,29 @@ void ya_ble_task(void *arg)
 
 				case BLE_MSG_DISCONNECT:
 					ya_printf(C_LOG_INFO, "BLE_MSG_DISCONNECT\r\n");
-					msg_rece_sn = 0xFF;
-					ble_buffer_index = 0;
-					ya_ble_secure_stage = YA_BLE_SESSION_CONSULT;
-					ya_hal_ble_start_adv(ble_ff_string, pos);
-					connect_flag = 0;
+					if (flag_terminate == 0)
+					{
+						msg_rece_sn = 0xFF;
+						ble_buffer_index = 0;
+						ya_ble_secure_stage = YA_BLE_SESSION_CONSULT;
+						ya_hal_ble_start_adv(ble_ff_string, pos);
+						connect_flag = 0;
+					} else
+					{
+						ret = ya_hal_stop_ble();
+						goto END;
+					}
 					break;
 					
 				case BLE_MSG_CLOSE:
 					flag_terminate = 1;
-					ya_hal_stop_ble();
+					ret = ya_hal_stop_ble();
+						
 					if (ble_router_info.code)
 						g_ble_param.p_ble_config_cb(BLE_CONFIG_FINISH, &ble_router_info);
+
+					if (ret == 0)
+						goto END;
 
 					break;
 				default:
@@ -626,14 +637,15 @@ void ya_ble_task(void *arg)
 			}
 		}
 
-		if (flag_terminate == 1) break;
-
-		if (ya_has_timer_expired(&ya_ble_timer) == 0)
+		if (flag_terminate == 0 && ya_has_timer_expired(&ya_ble_timer) == 0)
 		{
 			printf("ble timeout stop\r\n");
+			flag_terminate = 1;
+			ret = ya_hal_stop_ble();
+			
 			g_ble_param.p_ble_config_cb(BLE_TIME_OUT, NULL);
-			ya_hal_stop_ble();
-			break;
+			if (ret == 0)
+				goto END;				
 		}
 	}
 

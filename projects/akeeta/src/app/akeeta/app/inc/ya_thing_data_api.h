@@ -34,6 +34,12 @@ extern int32_t ya_thing_report_to_cloud(uint8_t *buf, uint16_t len);
  */
 extern int32_t ya_thing_request_server_timer(void);
 
+/**
+ * @brief This function is used to handle request the server time.
+ *
+ * @return 0: sucess, -1: failed
+ */
+extern int32_t ya_thing_get_server_timer(uint16_t *year, uint8_t *month, uint8_t *day, uint8_t *hour, uint8_t *minute, uint8_t *second, uint8_t *week);
 
 /**
  * @brief This function is used to put data into queue, and wait the task to send it

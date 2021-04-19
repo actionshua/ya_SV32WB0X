@@ -36,7 +36,7 @@ extern int ya_hal_ble_start_adv(uint8_t *adv_ff_string, uint8_t len);
 
 extern int ya_hal_ble_init(void);
 
-extern void ya_hal_stop_ble(void);
+extern int32_t ya_hal_stop_ble(void);
 
 extern void ya_hal_disconnect_ble_conn(void);
 

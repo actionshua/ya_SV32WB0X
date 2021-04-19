@@ -1158,6 +1158,18 @@ void ya_wifi_ota_download(void)
 		break;
 
 		case YA_ERROR_HANDLE:
+
+			ret = ya_hal_wdt_set_timeout(4000);
+			if(ret != C_OK)
+			{
+				ya_printf(C_LOG_ERROR, "ya_hal_wdt_set_timeout error\r\n");
+				ya_delay(50);
+				ya_hal_sys_reboot();
+			}
+
+			ya_hal_wdt_start();
+
+		
 			if(ya_wifi_ota_para.ota_server_socket >= 0)
 			{
 				close(ya_wifi_ota_para.ota_server_socket);

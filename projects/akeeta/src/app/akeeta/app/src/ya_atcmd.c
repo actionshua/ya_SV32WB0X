@@ -757,6 +757,7 @@ void at_cmd_thread_create(void)
 
 int ya_atcmd_handler(char *cmd)
 {
+	uint16_t buf_len = 0;
 
 	#ifdef UART_POLLING_DATA
 	static uint8_t init_ya_at_flag = 0;
@@ -773,9 +774,14 @@ int ya_atcmd_handler(char *cmd)
 		init_ya_at_flag = 1;
 	}
 
+	if (ya_at_config_flag)
+		buf_len = CMD_BUFFER_SIZE;
+	else
+		buf_len = 1024;
+
 	if (pcmd_buffer == NULL)
 	{
-		pcmd_buffer = (char *)ya_hal_os_memory_alloc(CMD_BUFFER_SIZE);
+		pcmd_buffer = (char *)ya_hal_os_memory_alloc(buf_len);
 		pcmd_buffer_index = 0;
 		if (!pcmd_buffer)
 		{
@@ -802,7 +808,7 @@ int ya_atcmd_handler(char *cmd)
 		pcmd_buffer_index = 0;
 	}
 
-	if (pcmd_buffer_index >= CMD_BUFFER_SIZE)
+	if (pcmd_buffer_index >= buf_len)
 		pcmd_buffer_index = 0;
 
 	if (ya_at_config_flag)

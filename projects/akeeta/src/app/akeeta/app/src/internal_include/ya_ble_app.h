@@ -31,6 +31,7 @@ typedef enum
 	BLE_MSG_CONNECT,
 	BLE_MSG_DISCONNECT,
 	BLE_MSG_CLOSE,
+	BLE_RELEASE_REOURCE,
 }ya_ble_msg_type_t;
 
 typedef enum

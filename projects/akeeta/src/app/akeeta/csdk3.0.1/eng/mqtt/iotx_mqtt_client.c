@@ -1730,7 +1730,7 @@ static int iotx_mc_attempt_reconnect(iotx_mc_client_t *pClient)
     if (pClient == NULL) {
         return NULL_VALUE_ERROR;
     }
-
+	printf("iotx_mc_attempt_reconnect\r\n");
     pClient->ipstack.disconnect(&pClient->ipstack);
 
     mqtt_info("reconnect params: MQTTVersion=%d, clientID=%s, keepAliveInterval=%d, username=%s",
@@ -1870,7 +1870,7 @@ static void iotx_mc_keepalive(iotx_mc_client_t *pClient)
 
         /* If network suddenly interrupted, stop pinging packet, try to reconnect network immediately */
         if (IOTX_MC_STATE_DISCONNECTED == currentState) {
-            mqtt_err("network is disconnected!");
+            printf("network is disconnected!");
             iotx_mc_disconnect_callback(pClient);
 
             pClient->reconnect_param.reconnect_time_interval_ms = IOTX_MC_RECONNECT_INTERVAL_MIN_MS;

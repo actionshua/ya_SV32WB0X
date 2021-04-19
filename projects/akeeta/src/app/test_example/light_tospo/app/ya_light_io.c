@@ -40,7 +40,7 @@ void ya_light_read_power_on_flag(void)
 
 	ya_printf(C_LOG_INFO,"power flag: %d\r\n", buf[0]); 	
 
-	if (buf[0] >= 3)
+	if (buf[0] >= 5)
 	{
 		ya_clear_user_data();
 		ya_set_toggle_mode(1);

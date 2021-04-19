@@ -410,7 +410,7 @@ void ya_light_app_cloud_handle(uint8_t *buf, uint16_t len)
 				ya_light_thing_mode.work_mode = WORKMODE_WHITE;
 				ya_light_thing_mode.switchstate = 1;
 			}
-		} 
+		} 	
 
 		#if (LIGHT_TYPE == 0)
 		json_key = cJSON_GetObjectItem(root, "Hue");
@@ -589,8 +589,6 @@ void ya_light_app_init(void)
 	}
 
 	ya_light_app_updatePwm(&ya_light_workData, 0);
-
-	ya_printf(C_LOG_INFO, "end ya_light_app_updatePwm\n");
 }
 
 

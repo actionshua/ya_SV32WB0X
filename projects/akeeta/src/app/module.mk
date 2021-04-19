@@ -32,6 +32,7 @@ LIB_SRC += akeeta/app/src/ya_ota.c
 LIB_SRC += akeeta/app/src/ya_smartconfig.c
 LIB_SRC += akeeta/app/src/ya_sniffer_broadcast.c
 LIB_SRC += akeeta/app/src/ya_uart_app.c
+LIB_SRC += akeeta/app/src/ya_log_update.c
 LIB_SRC += akeeta/csdk3.0.1/eng/certs/root_ca.c
 LIB_SRC += akeeta/csdk3.0.1/eng/dev_sign/dev_sign_mqtt.c 
 LIB_SRC += akeeta/csdk3.0.1/eng/infra/infra_compat.c
